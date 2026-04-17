@@ -113,7 +113,7 @@
       display: grid;
       grid-template-columns: 1.08fr 0.92fr;
       gap: 28px;
-      align-items: stretch;
+      align-items: start;
     }
 
     .hero-card,
@@ -178,11 +178,11 @@
 
     .hero-visual {
       position: relative;
-      min-height: 520px;
-      padding: 34px;
+      min-height: 440px;
+      padding: 28px;
       display: grid;
-      grid-template-rows: auto 1fr auto;
-      gap: 18px;
+      grid-template-rows: auto auto auto;
+      gap: 14px;
       overflow: hidden;
       background:
         radial-gradient(circle at top right, rgba(216, 184, 156, 0.5), transparent 34%),
@@ -234,9 +234,9 @@
       position: relative;
       z-index: 1;
       display: grid;
-      grid-template-columns: 1.28fr 0.92fr;
-      gap: 16px;
-      align-items: stretch;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 12px;
+      align-items: start;
     }
 
     .visual-main,
@@ -249,20 +249,20 @@
     }
 
     .visual-main {
-      min-height: 280px;
-      padding: 26px;
+      min-height: 0;
+      padding: 22px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
       background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(246, 235, 223, 0.96)),
         repeating-linear-gradient(90deg, transparent 0 30px, rgba(138, 88, 65, 0.04) 30px 31px);
     }
 
     .visual-main h2 {
-      margin: 0 0 12px;
-      font-size: 1.9rem;
-      line-height: 1.15;
+      margin: 0 0 10px;
+      font-size: 1.65rem;
+      line-height: 1.18;
     }
 
     .visual-main p,
@@ -281,13 +281,13 @@
     .visual-stats {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 20px;
+      gap: 8px;
+      margin-top: 16px;
     }
 
     .visual-stat {
-      padding: 14px 12px;
-      border-radius: 18px;
+      padding: 12px 10px;
+      border-radius: 16px;
       background: rgba(154, 77, 58, 0.08);
       text-align: center;
     }
@@ -305,14 +305,14 @@
     }
 
     .visual-side {
-      padding: 18px;
+      padding: 14px;
       display: grid;
-      gap: 12px;
+      gap: 10px;
       align-content: start;
     }
 
     .mini-card {
-      padding: 16px;
+      padding: 14px;
       border-radius: 18px;
       background: rgba(255, 255, 255, 0.82);
       border: 1px solid rgba(120, 78, 58, 0.1);
@@ -327,11 +327,11 @@
     }
 
     .visual-note {
-      padding: 18px 20px;
+      padding: 16px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 12px;
       background: rgba(255, 255, 255, 0.82);
     }
 
@@ -490,8 +490,8 @@
       <div class="eyebrow">Official Introduction</div>
       <h1>在艾歐澤亞裡<br>慢慢吃一頓飯</h1>
       <p>
-        這份首頁先走正式介紹站的方向，不再硬塞那張你不喜歡的吧檯圖片。
-        先用乾淨的版型、溫暖的色調和清楚的資訊區塊，把餐廳的氣氛、世界觀與點餐入口整理好。
+        先用乾淨的首頁把餐廳氣氛、世界觀和點餐入口整理好，
+        不再硬塞你不喜歡的吧檯圖片。
       </p>
       <div class="hero-actions">
         <a class="button primary" href="#reserve">前往點餐</a>
@@ -504,10 +504,10 @@
       <div class="visual-grid">
         <div class="visual-main">
           <div>
-            <h2>先認識餐廳氣氛，再決定今天想吃什麼。</h2>
+            <h2>先看風格，再決定今天吃什麼。</h2>
             <p>
-              這裡不是單純的點餐首頁，而是一個帶有品牌感的介紹頁。
-              客人可以先看主打餐點、環境與店內風格，再從 Google 表單進入點餐流程。
+              這裡是餐廳介紹頁，先看主打餐點與環境，
+              再從 Google 表單進入點餐。
             </p>
           </div>
           <div class="visual-stats">
@@ -529,11 +529,11 @@
         <div class="visual-side">
           <div class="mini-card">
             <strong>第一眼更乾淨</strong>
-            <p>現在的首頁先把門面穩住，視線會先落在品牌標題、區塊介紹和點餐按鈕上。</p>
+            <p>先把視線集中在標題、介紹和點餐按鈕。</p>
           </div>
           <div class="mini-card">
-            <strong>之後還能再升級</strong>
-            <p>等你有更滿意的環境照、員工照或活動圖，我們可以再把首頁升級成更完整的官方網站。</p>
+            <strong>之後再補圖片</strong>
+            <p>有更好的環境照後，再把首頁升級成正式官網。</p>
           </div>
         </div>
       </div>
@@ -541,7 +541,7 @@
       <div class="visual-note">
         <div>
           <strong>目前先走穩定、耐看的官方感</strong>
-          <p>先讓首頁乾淨好看，之後再慢慢補更多世界觀細節和圖片素材。</p>
+          <p>先把首頁做好看，之後再慢慢補細節和素材。</p>
         </div>
         <a class="button secondary" href="#space">看環境介紹</a>
       </div>
