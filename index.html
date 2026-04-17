@@ -72,7 +72,9 @@
       flex-wrap: wrap;
       gap: 14px;
       align-items: center;
-      font-size: 0.96rem;
+      font-size: 1.08rem;
+      font-weight: 800;
+      letter-spacing: 0.01em;
     }
 
     .nav a {
@@ -311,6 +313,11 @@
       align-content: start;
     }
 
+    .announcement-stack {
+      display: grid;
+      gap: 10px;
+    }
+
     .mini-card {
       padding: 14px;
       border-radius: 18px;
@@ -324,6 +331,35 @@
       margin-bottom: 8px;
       color: var(--accent-deep);
       font-size: 0.95rem;
+    }
+
+    .announcement-label {
+      margin-bottom: 4px;
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .announcement-card {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(120, 78, 58, 0.12);
+    }
+
+    .announcement-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.02rem;
+      color: var(--accent-deep);
+    }
+
+    .announcement-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 0.92rem;
     }
 
     .visual-note {
@@ -527,13 +563,16 @@
         </div>
 
         <div class="visual-side">
-          <div class="mini-card">
-            <strong>第一眼更乾淨</strong>
-            <p>先把視線集中在標題、介紹和點餐按鈕。</p>
-          </div>
-          <div class="mini-card">
-            <strong>之後再補圖片</strong>
-            <p>有更好的環境照後，再把首頁升級成正式官網。</p>
+          <div class="announcement-label">Announcement</div>
+          <div class="announcement-stack">
+            <div class="announcement-card">
+              <h3>本日公告</h3>
+              <p>今天的營業時間、臨時休息、活動通知，都可以放在這裡。</p>
+            </div>
+            <div class="announcement-card">
+              <h3>店內狀況</h3>
+              <p>例如吧檯額滿、餐桌保留中，或晚一點才開放入場，也可以直接更新在這裡。</p>
+            </div>
           </div>
         </div>
       </div>
