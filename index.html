@@ -72,7 +72,7 @@
       flex-wrap: wrap;
       gap: 14px;
       align-items: center;
-      font-size: 1.08rem;
+      font-size: 1.9rem;
       font-weight: 800;
       letter-spacing: 0.01em;
     }
@@ -80,6 +80,12 @@
     .nav a {
       color: var(--muted);
       transition: color 0.2s ease;
+      line-height: 1;
+    }
+
+    .nav .cta-link {
+      padding: 14px 22px;
+      font-size: 1.55rem;
     }
 
     .nav a:hover {
@@ -313,19 +319,6 @@
       align-content: start;
     }
 
-    .announcement-stack {
-      display: grid;
-      gap: 10px;
-    }
-
-    .mini-card {
-      padding: 14px;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.82);
-      border: 1px solid rgba(120, 78, 58, 0.1);
-    }
-
-    .mini-card strong,
     .visual-note strong {
       display: block;
       margin-bottom: 8px;
@@ -334,32 +327,45 @@
     }
 
     .announcement-label {
-      margin-bottom: 4px;
-      color: var(--accent);
-      font-size: 0.8rem;
-      font-weight: 800;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
+      margin: 0 0 12px;
+      color: var(--ink);
+      font-size: 2rem;
+      font-weight: 900;
+      text-align: center;
     }
 
-    .announcement-card {
-      padding: 16px;
-      border-radius: 18px;
+    .announcement-board {
+      overflow: hidden;
+      border-radius: 22px;
       background: rgba(255, 255, 255, 0.86);
       border: 1px solid rgba(120, 78, 58, 0.12);
     }
 
-    .announcement-card h3 {
-      margin: 0 0 8px;
-      font-size: 1.02rem;
-      color: var(--accent-deep);
+    .announcement-item {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      gap: 14px;
+      align-items: start;
+      padding: 14px 16px;
+      border-top: 1px solid rgba(120, 78, 58, 0.1);
     }
 
-    .announcement-card p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.75;
-      font-size: 0.92rem;
+    .announcement-item:first-child {
+      border-top: 0;
+    }
+
+    .announcement-date {
+      color: #8b837d;
+      font-size: 0.82rem;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .announcement-text {
+      color: var(--accent-deep);
+      font-size: 0.98rem;
+      font-weight: 700;
+      line-height: 1.7;
     }
 
     .visual-note {
@@ -563,15 +569,19 @@
         </div>
 
         <div class="visual-side">
-          <div class="announcement-label">Announcement</div>
-          <div class="announcement-stack">
-            <div class="announcement-card">
-              <h3>本日公告</h3>
-              <p>今天的營業時間、臨時休息、活動通知，都可以放在這裡。</p>
+          <div class="announcement-label">最新消息</div>
+          <div class="announcement-board">
+            <div class="announcement-item">
+              <div class="announcement-date">2026/04/17</div>
+              <div class="announcement-text">本日營業時間可在這裡更新，臨時延後開店也能直接公告。</div>
             </div>
-            <div class="announcement-card">
-              <h3>店內狀況</h3>
-              <p>例如吧檯額滿、餐桌保留中，或晚一點才開放入場，也可以直接更新在這裡。</p>
+            <div class="announcement-item">
+              <div class="announcement-date">2026/04/17</div>
+              <div class="announcement-text">如果吧檯區額滿、餐桌保留中，也可以在這裡同步通知客人。</div>
+            </div>
+            <div class="announcement-item">
+              <div class="announcement-date">2026/04/17</div>
+              <div class="announcement-text">活動日、限定餐點、特別時段與店內提醒，都能集中放在公告區。</div>
             </div>
           </div>
         </div>
