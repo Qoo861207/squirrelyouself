@@ -1,0 +1,64 @@
+﻿GitHub Pages 發布說明
+====================
+
+目標資料夾：
+D:\ff14-restaurant\github-pages-site
+
+你有兩種網址模式：
+
+1. 最漂亮的固定網址
+   https://你的GitHub帳號.github.io
+
+   這種情況下：
+   你必須把 GitHub 帳號名稱本身設成你想要的名字。
+   例如你帳號如果就叫 squirrelyouself，倉庫名稱也要叫：
+   squirrelyouself.github.io
+
+2. 一般專案網址
+   https://你的GitHub帳號.github.io/squirrelyouself
+
+   這種最容易做，不用改帳號名稱。
+   倉庫名稱可以直接叫：
+   squirrelyouself
+
+建議你先用第 2 種，最快。
+
+--------------------
+操作步驟
+--------------------
+
+1. 到 GitHub 建立一個新的公開倉庫
+   如果你想先簡單完成，倉庫名稱請用：
+   squirrelyouself
+
+2. 把這個資料夾裡的內容上傳到倉庫根目錄：
+   D:\ff14-restaurant\github-pages-site
+
+3. GitHub 倉庫上傳完成後，進入：
+   Settings -> Pages
+
+4. 在 Build and deployment 裡設定：
+   Source = Deploy from a branch
+   Branch = main
+   Folder = / (root)
+
+5. 存檔後等幾分鐘，網站就會出來。
+
+--------------------
+網址範例
+--------------------
+
+如果倉庫叫 squirrelyouself，帳號不是 squirrelyouself：
+https://你的帳號.github.io/squirrelyouself/
+
+如果你帳號就是 squirrelyouself，且倉庫也叫 squirrelyouself.github.io：
+https://squirrelyouself.github.io/
+
+--------------------
+目前首頁檔案
+--------------------
+
+首頁：index.html
+圖片：menu-assets 資料夾
+
+這份已經調整成比較適合 GitHub Pages 的版本。

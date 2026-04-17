@@ -1,0 +1,690 @@
+﻿<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Squirrelyouself Cafe</title>
+  <style>
+    :root {
+      --bg: #f6efe7;
+      --bg-deep: #eadccf;
+      --paper: rgba(255, 251, 246, 0.92);
+      --paper-strong: rgba(255, 248, 241, 0.98);
+      --ink: #2f241f;
+      --muted: #6d5c53;
+      --accent: #97503d;
+      --accent-deep: #713322;
+      --line: rgba(73, 45, 34, 0.12);
+      --shadow: 0 24px 55px rgba(56, 34, 25, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Segoe UI", "Noto Sans TC", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(182, 132, 98, 0.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(132, 85, 62, 0.12), transparent 26%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 24px;
+      background: rgba(246, 239, 231, 0.84);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .brand-sub {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      font-size: 0.96rem;
+    }
+
+    .nav a {
+      color: var(--muted);
+      transition: color 0.2s ease;
+    }
+
+    .nav a:hover {
+      color: var(--accent-deep);
+    }
+
+    .cta-link,
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      font-weight: 700;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .cta-link:hover,
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .cta-link {
+      padding: 10px 16px;
+      background: var(--accent);
+      color: #fff !important;
+      box-shadow: 0 10px 20px rgba(122, 54, 38, 0.22);
+    }
+
+    .hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 52px 24px 34px;
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .hero-card,
+    .panel,
+    .menu-card,
+    .staff-card {
+      background: var(--paper);
+      border: 1px solid rgba(108, 77, 61, 0.12);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 42px;
+    }
+
+    .eyebrow {
+      margin-bottom: 14px;
+      color: var(--accent);
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0 0 16px;
+      font-size: clamp(2.4rem, 5vw, 4.7rem);
+      line-height: 1.04;
+      letter-spacing: -0.04em;
+    }
+
+    .hero p {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 1.03rem;
+      line-height: 1.9;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .button {
+      padding: 13px 20px;
+      border: 1px solid transparent;
+    }
+
+    .button.primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(122, 54, 38, 0.24);
+    }
+
+    .button.secondary {
+      background: transparent;
+      border-color: rgba(100, 69, 53, 0.2);
+      color: var(--accent-deep);
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 520px;
+      padding: 34px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 18px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top right, rgba(216, 184, 156, 0.5), transparent 34%),
+        linear-gradient(145deg, rgba(255, 248, 240, 0.95), rgba(238, 226, 213, 0.96));
+    }
+
+    .hero-visual::before,
+    .hero-visual::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      background: rgba(154, 77, 58, 0.08);
+      pointer-events: none;
+    }
+
+    .hero-visual::before {
+      width: 220px;
+      height: 220px;
+      top: -60px;
+      right: -30px;
+    }
+
+    .hero-visual::after {
+      width: 180px;
+      height: 180px;
+      bottom: -50px;
+      left: -20px;
+    }
+
+    .visual-tag,
+    .visual-main,
+    .visual-side,
+    .visual-note {
+      position: relative;
+      z-index: 1;
+    }
+
+    .visual-tag {
+      width: fit-content;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.82);
+      color: var(--accent-deep);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .visual-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.28fr 0.92fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .visual-main,
+    .visual-side,
+    .visual-note {
+      border-radius: 24px;
+      border: 1px solid rgba(120, 78, 58, 0.12);
+      background: var(--paper-strong);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62);
+    }
+
+    .visual-main {
+      min-height: 280px;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(246, 235, 223, 0.96)),
+        repeating-linear-gradient(90deg, transparent 0 30px, rgba(138, 88, 65, 0.04) 30px 31px);
+    }
+
+    .visual-main h2 {
+      margin: 0 0 12px;
+      font-size: 1.9rem;
+      line-height: 1.15;
+    }
+
+    .visual-main p,
+    .mini-card p,
+    .visual-note p,
+    .environment-card p,
+    .staff-card p,
+    .menu-card p,
+    .section-head p,
+    .footer-box p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.85;
+    }
+
+    .visual-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .visual-stat {
+      padding: 14px 12px;
+      border-radius: 18px;
+      background: rgba(154, 77, 58, 0.08);
+      text-align: center;
+    }
+
+    .visual-stat strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--accent-deep);
+      font-size: 1.15rem;
+    }
+
+    .visual-stat span {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .visual-side {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .mini-card {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(120, 78, 58, 0.1);
+    }
+
+    .mini-card strong,
+    .visual-note strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--accent-deep);
+      font-size: 0.95rem;
+    }
+
+    .visual-note {
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: rgba(255, 255, 255, 0.82);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px 24px 72px;
+    }
+
+    section {
+      margin-top: 28px;
+    }
+
+    .panel {
+      padding: 30px;
+    }
+
+    .section-head {
+      margin-bottom: 18px;
+    }
+
+    .section-head h2,
+    .footer-box h2 {
+      margin: 0 0 8px;
+      font-size: clamp(1.7rem, 2vw, 2.35rem);
+    }
+
+    .grid.two {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .grid.three {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .environment-card,
+    .staff-card {
+      padding: 24px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.46);
+    }
+
+    .environment-card h3,
+    .staff-card h3,
+    .menu-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .menu-card {
+      overflow: hidden;
+    }
+
+    .menu-card img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+    }
+
+    .menu-body {
+      padding: 18px 18px 20px;
+    }
+
+    .price {
+      margin-top: 12px;
+      color: var(--accent);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .staff-role {
+      margin-bottom: 10px;
+      color: var(--accent);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .footer-box {
+      margin-top: 32px;
+      padding: 28px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(154, 77, 58, 0.96), rgba(113, 51, 34, 0.96));
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .footer-box p {
+      margin-bottom: 16px;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    footer {
+      padding: 28px 24px 50px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .visual-grid,
+      .menu-grid,
+      .grid.three,
+      .grid.two,
+      .visual-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        min-height: auto;
+      }
+
+      .visual-note {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-title">Squirrelyouself Cafe</div>
+      <div class="brand-sub">FF14 風格餐廳介紹頁</div>
+    </div>
+    <nav class="nav">
+      <a href="#about">餐廳介紹</a>
+      <a href="#menu">菜單</a>
+      <a href="#space">環境</a>
+      <a href="#staff">員工介紹</a>
+      <a class="cta-link" href="#reserve">立即點餐</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-card">
+      <div class="eyebrow">Official Introduction</div>
+      <h1>在艾歐澤亞裡<br>慢慢吃一頓飯</h1>
+      <p>
+        這份首頁先走正式介紹站的方向，不再硬塞那張你不喜歡的吧檯圖片。
+        先用乾淨的版型、溫暖的色調和清楚的資訊區塊，把餐廳的氣氛、世界觀與點餐入口整理好。
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href="#reserve">前往點餐</a>
+        <a class="button secondary" href="#menu">查看菜單</a>
+      </div>
+    </div>
+
+    <div class="hero-card hero-visual">
+      <div class="visual-tag">Squirrelyouself Cafe Official Page</div>
+      <div class="visual-grid">
+        <div class="visual-main">
+          <div>
+            <h2>先認識餐廳氣氛，再決定今天想吃什麼。</h2>
+            <p>
+              這裡不是單純的點餐首頁，而是一個帶有品牌感的介紹頁。
+              客人可以先看主打餐點、環境與店內風格，再從 Google 表單進入點餐流程。
+            </p>
+          </div>
+          <div class="visual-stats">
+            <div class="visual-stat">
+              <strong>Menu</strong>
+              <span>主打餐點展示</span>
+            </div>
+            <div class="visual-stat">
+              <strong>Space</strong>
+              <span>環境與座位介紹</span>
+            </div>
+            <div class="visual-stat">
+              <strong>Order</strong>
+              <span>Google 表單串接</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="visual-side">
+          <div class="mini-card">
+            <strong>第一眼更乾淨</strong>
+            <p>現在的首頁先把門面穩住，視線會先落在品牌標題、區塊介紹和點餐按鈕上。</p>
+          </div>
+          <div class="mini-card">
+            <strong>之後還能再升級</strong>
+            <p>等你有更滿意的環境照、員工照或活動圖，我們可以再把首頁升級成更完整的官方網站。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="visual-note">
+        <div>
+          <strong>目前先走穩定、耐看的官方感</strong>
+          <p>先讓首頁乾淨好看，之後再慢慢補更多世界觀細節和圖片素材。</p>
+        </div>
+        <a class="button secondary" href="#space">看環境介紹</a>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <section id="about" class="panel">
+      <div class="section-head">
+        <h2>餐廳介紹</h2>
+        <p>
+          以 FF14 世界觀為靈感，整理出一個兼具角色感、氛圍感與實際點餐功能的餐廳網站。
+          客人可以先認識風格與菜單，再透過 Google 表單完成點餐。
+        </p>
+      </div>
+      <div class="grid two">
+        <div class="environment-card">
+          <h3>點餐流程</h3>
+          <p>客人透過 Google 表單填寫名稱、人數、餐點與座位，系統會自動同步後台並鎖定座位，減少重複選位的機率。</p>
+        </div>
+        <div class="environment-card">
+          <h3>品牌氛圍</h3>
+          <p>這頁會比一般菜單頁更像角色餐廳或工作室官網，重點放在餐廳形象、主打餐點與整體世界觀的呈現。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="menu">
+      <div class="section-head">
+        <h2>菜單精選</h2>
+        <p>先用目前已經整理好的餐點圖做展示。之後你補更多圖片，我們可以再擴成完整菜單頁。</p>
+      </div>
+      <div class="menu-grid">
+        <article class="menu-card">
+          <img src="menu-assets/起司鍋.png" alt="起司火鍋">
+          <div class="menu-body">
+            <h3>起司火鍋</h3>
+            <p>濃厚又有節慶感的主餐，適合放在首頁最前排當主打招牌。</p>
+            <div class="price">8000 G</div>
+          </div>
+        </article>
+
+        <article class="menu-card">
+          <img src="menu-assets/大河狸漢堡組合.png" alt="大河狸漢堡組合">
+          <div class="menu-body">
+            <h3>大河狸漢堡組合</h3>
+            <p>形象鮮明、辨識度高，很適合作為介紹頁上的代表性套餐。</p>
+            <div class="price">8000 G</div>
+          </div>
+        </article>
+
+        <article class="menu-card">
+          <img src="menu-assets/蛋包飯.png" alt="早餐蛋包飯">
+          <div class="menu-body">
+            <h3>早餐蛋包飯</h3>
+            <p>色調柔和、畫面舒服，能讓整份首頁看起來更溫暖親切。</p>
+            <div class="price">8000 G</div>
+          </div>
+        </article>
+
+        <article class="menu-card">
+          <img src="menu-assets/捲餅.png" alt="新世界午餐組合：卷餅">
+          <div class="menu-body">
+            <h3>新世界午餐組合：卷餅</h3>
+            <p>適合作為中段主打餐點，也很適合後續搭配一句推薦文案。</p>
+            <div class="price">8000 G</div>
+          </div>
+        </article>
+
+        <article class="menu-card">
+          <img src="menu-assets/鐵鍋番茄燉蛋.png" alt="鐵鍋番茄燉蛋">
+          <div class="menu-body">
+            <h3>鐵鍋番茄燉蛋</h3>
+            <p>熱食感很夠，能把整個菜單區的層次和份量感補得更完整。</p>
+            <div class="price">8000 G</div>
+          </div>
+        </article>
+
+        <article class="menu-card">
+          <img src="menu-assets/下午茶.png" alt="哈利卡納蘇斯午茶組合">
+          <div class="menu-body">
+            <h3>哈利卡納蘇斯午茶組合</h3>
+            <p>作為甜點與飲品代表很合適，能讓首頁尾段收得更柔和一些。</p>
+            <div class="price">6000 G</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="space" class="panel">
+      <div class="section-head">
+        <h2>環境介紹</h2>
+        <p>首頁先不放你不滿意的吧檯圖，改成用介紹文字建立想像。之後有更好的店內照片，我再幫你換上去。</p>
+      </div>
+      <div class="grid three">
+        <div class="environment-card">
+          <h3>吧檯區</h3>
+          <p>適合單人客人或想快速入座的訪客。系統會依人數分流，讓選位流程更順，也能降低重複點位的情況。</p>
+        </div>
+        <div class="environment-card">
+          <h3>餐桌區</h3>
+          <p>提供多人入座，適合朋友同行或想慢慢用餐的客人，後台也能同步確認當前座位狀況。</p>
+        </div>
+        <div class="environment-card">
+          <h3>整體氛圍</h3>
+          <p>目標不是做成商城型網站，而是像一個有世界觀、有角色感的正式餐廳介紹頁。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="staff">
+      <div class="section-head">
+        <h2>員工介紹</h2>
+        <p>這裡先保留正式版型。你之後只要給我員工名字、職位或一句描述，我就能直接幫你換成正式內容。</p>
+      </div>
+      <div class="grid three">
+        <article class="staff-card">
+          <div class="staff-role">Front Guide</div>
+          <h3>迎賓角色</h3>
+          <p>負責接待、說明點餐方式與帶位，讓第一次來的客人也能快速進入狀況。</p>
+        </article>
+        <article class="staff-card">
+          <div class="staff-role">Dining Support</div>
+          <h3>餐點協助</h3>
+          <p>負責確認餐點、備註與現場應對，必要時也能在後台補充內部備註與折扣說明。</p>
+        </article>
+        <article class="staff-card">
+          <div class="staff-role">Workshop Mood</div>
+          <h3>角色氛圍</h3>
+          <p>之後可以把每位員工包裝成店內角色，讓這個首頁更像真正的品牌官網。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="reserve" class="footer-box">
+      <h2>前往 Google 表單點餐</h2>
+      <p>這裡先保留正式點餐按鈕的位置。你把公開用的 Google 表單連結丟給我後，我就能直接幫你接上。</p>
+      <a class="button primary" href="#" onclick="return false;">Google 表單連結待加入</a>
+    </section>
+  </main>
+
+  <footer>
+    Squirrelyouself Cafe Official Page Draft
+  </footer>
+</body>
+</html>
