@@ -340,12 +340,68 @@
       grid-template-columns: 112px 1fr;
       gap: 14px;
       align-items: start;
+      min-height: 96px;
       padding: 16px 18px;
       border-top: 1px solid rgba(120, 78, 58, 0.1);
     }
 
     .announcement-item:first-child {
       border-top: 0;
+    }
+
+    .announcement-link {
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .announcement-link:hover {
+      background: rgba(255, 247, 241, 0.92);
+    }
+
+    .announcement-search {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin: 0 0 16px;
+    }
+
+    .announcement-search-input {
+      flex: 1;
+      min-width: 0;
+      border: 1px solid rgba(120, 78, 58, 0.16);
+      border-radius: 999px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--ink);
+      font-size: 0.98rem;
+      outline: none;
+    }
+
+    .announcement-search-input:focus {
+      border-color: rgba(154, 77, 58, 0.42);
+      box-shadow: 0 0 0 4px rgba(154, 77, 58, 0.08);
+    }
+
+    .announcement-search-clear {
+      border: 1px solid rgba(120, 78, 58, 0.16);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--ink);
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .announcement-search-clear:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 247, 241, 1);
+    }
+
+    .announcement-empty {
+      padding: 28px 24px;
+      color: var(--muted);
+      text-align: center;
     }
 
     .announcement-date {
@@ -360,6 +416,12 @@
       font-size: 1rem;
       font-weight: 700;
       line-height: 1.7;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      max-height: calc(1.7em * 2);
+      word-break: break-word;
     }
 
     .news-pagination {
@@ -610,9 +672,11 @@
       opacity: 0;
       transform: scale(1.06);
       transition: opacity 0.55s ease, transform 1.4s ease;
-      background-size: cover;
-      background-position: center;
-      filter: saturate(1.15) contrast(1.08);
+      background-size: cover, contain;
+      background-position: center, center;
+      background-repeat: no-repeat, no-repeat;
+      background-color: #f5eee8;
+      filter: saturate(1.08) contrast(1.03);
     }
 
     .environment-slide.is-active {
@@ -621,87 +685,51 @@
     }
 
     .environment-slide.bar-1 {
-      background:
-        linear-gradient(135deg, rgba(58, 28, 18, 0.42), rgba(58, 28, 18, 0.08)),
-        radial-gradient(circle at top right, rgba(255, 201, 151, 0.55), transparent 28%),
-        linear-gradient(145deg, #aa673f, #f0d1b3);
+      background-image:
+        linear-gradient(135deg, rgba(58, 28, 18, 0.18), rgba(58, 28, 18, 0.04)),
+        url("background/bar/1.png");
     }
 
     .environment-slide.bar-2 {
-      background:
-        linear-gradient(160deg, rgba(72, 43, 28, 0.36), rgba(72, 43, 28, 0.05)),
-        radial-gradient(circle at left center, rgba(255, 223, 190, 0.58), transparent 24%),
-        linear-gradient(135deg, #6c3f28, #dfb089);
-    }
-
-    .environment-slide.bar-3 {
-      background:
-        linear-gradient(145deg, rgba(83, 46, 32, 0.34), rgba(83, 46, 32, 0.04)),
-        radial-gradient(circle at top left, rgba(255, 214, 170, 0.5), transparent 26%),
-        linear-gradient(135deg, #d99866, #fff0e2);
+      background-image:
+        linear-gradient(160deg, rgba(72, 43, 28, 0.18), rgba(72, 43, 28, 0.04)),
+        url("background/bar/2.png");
     }
 
     .environment-slide.table-1 {
-      background:
-        linear-gradient(135deg, rgba(73, 49, 38, 0.28), rgba(73, 49, 38, 0.04)),
-        radial-gradient(circle at top center, rgba(255, 244, 223, 0.52), transparent 26%),
-        linear-gradient(145deg, #9d7d5f, #f1dbc3);
+      background-image:
+        linear-gradient(135deg, rgba(73, 49, 38, 0.14), rgba(73, 49, 38, 0.04)),
+        url("background/table/1.png");
     }
 
     .environment-slide.table-2 {
-      background:
-        linear-gradient(160deg, rgba(83, 53, 40, 0.26), rgba(83, 53, 40, 0.04)),
-        radial-gradient(circle at right center, rgba(255, 228, 198, 0.5), transparent 26%),
-        linear-gradient(135deg, #dbc1a4, #fff4e8);
-    }
-
-    .environment-slide.table-3 {
-      background:
-        linear-gradient(145deg, rgba(86, 56, 41, 0.24), rgba(86, 56, 41, 0.03)),
-        radial-gradient(circle at left top, rgba(255, 248, 230, 0.52), transparent 28%),
-        linear-gradient(135deg, #6f5742, #ead6bf);
+      background-image:
+        linear-gradient(160deg, rgba(83, 53, 40, 0.14), rgba(83, 53, 40, 0.04)),
+        url("background/table/2.png");
     }
 
     .environment-slide.flow-1 {
-      background:
-        linear-gradient(135deg, rgba(74, 47, 35, 0.24), rgba(74, 47, 35, 0.04)),
-        radial-gradient(circle at top left, rgba(255, 230, 201, 0.52), transparent 24%),
-        linear-gradient(145deg, #ead2b5, #fff7ef);
+      background-image:
+        linear-gradient(135deg, rgba(74, 47, 35, 0.14), rgba(74, 47, 35, 0.04)),
+        url("background/order/1.png");
     }
 
     .environment-slide.flow-2 {
-      background:
-        linear-gradient(155deg, rgba(81, 50, 38, 0.26), rgba(81, 50, 38, 0.04)),
-        radial-gradient(circle at center, rgba(255, 245, 223, 0.56), transparent 24%),
-        linear-gradient(135deg, #b7865d, #f1d4b8);
-    }
-
-    .environment-slide.flow-3 {
-      background:
-        linear-gradient(145deg, rgba(85, 53, 39, 0.28), rgba(85, 53, 39, 0.04)),
-        radial-gradient(circle at bottom right, rgba(255, 216, 184, 0.5), transparent 26%),
-        linear-gradient(135deg, #8e6345, #f6e5d6);
+      background-image:
+        linear-gradient(155deg, rgba(81, 50, 38, 0.14), rgba(81, 50, 38, 0.04)),
+        url("background/order/2.png");
     }
 
     .environment-slide.restroom-1 {
-      background:
-        linear-gradient(135deg, rgba(88, 111, 120, 0.24), rgba(88, 111, 120, 0.04)),
-        radial-gradient(circle at top right, rgba(255, 255, 255, 0.65), transparent 24%),
-        linear-gradient(145deg, #b6c8cf, #f8fcff);
+      background-image:
+        linear-gradient(135deg, rgba(88, 111, 120, 0.14), rgba(88, 111, 120, 0.04)),
+        url("background/wc/1.png");
     }
 
     .environment-slide.restroom-2 {
-      background:
-        linear-gradient(155deg, rgba(94, 120, 128, 0.26), rgba(94, 120, 128, 0.04)),
-        radial-gradient(circle at left center, rgba(255, 255, 255, 0.64), transparent 24%),
-        linear-gradient(135deg, #dfe8ec, #ffffff);
-    }
-
-    .environment-slide.restroom-3 {
-      background:
-        linear-gradient(145deg, rgba(102, 124, 132, 0.24), rgba(102, 124, 132, 0.03)),
-        radial-gradient(circle at top left, rgba(255, 255, 255, 0.68), transparent 24%),
-        linear-gradient(135deg, #aebdc4, #eef5f8);
+      background-image:
+        linear-gradient(155deg, rgba(94, 120, 128, 0.14), rgba(94, 120, 128, 0.04)),
+        url("background/wc/2.png");
     }
 
     .environment-body {
@@ -723,6 +751,19 @@
       color: var(--muted);
       line-height: 1.9;
       font-size: 1.12rem;
+    }
+
+    #staff .environment-body h3 {
+      font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif;
+      font-size: 1.85rem;
+      letter-spacing: 0.04em;
+      margin-bottom: 14px;
+    }
+
+    #staff .environment-body p {
+      font-size: 1.02rem;
+      line-height: 1.95;
+      color: #5f4e46;
     }
 
     .environment-nav {
@@ -940,62 +981,94 @@
       text-transform: uppercase;
     }
 
-    .staff-guide-1 {
-      background:
-        radial-gradient(circle at 25% 24%, rgba(255, 255, 255, 0.92) 0 9%, transparent 10%),
-        radial-gradient(circle at 56% 52%, rgba(255, 241, 214, 0.66) 0 18%, transparent 19%),
-        linear-gradient(135deg, rgba(201, 154, 121, 0.92), rgba(127, 83, 62, 0.9));
+    .staff-lilei-1 {
+      background-image:
+        linear-gradient(135deg, rgba(48, 30, 22, 0.16), rgba(48, 30, 22, 0.04)),
+        url("employee/lilei/1.png");
     }
 
-    .staff-guide-2 {
-      background:
-        linear-gradient(120deg, rgba(255, 239, 222, 0.32) 15%, transparent 15% 34%, rgba(255, 239, 222, 0.24) 34% 37%, transparent 37%),
-        radial-gradient(circle at 74% 28%, rgba(255, 248, 235, 0.82) 0 12%, transparent 13%),
-        linear-gradient(135deg, rgba(180, 128, 98, 0.92), rgba(109, 64, 48, 0.9));
+    .staff-lilei-2 {
+      background-image:
+        linear-gradient(150deg, rgba(48, 30, 22, 0.16), rgba(48, 30, 22, 0.04)),
+        url("employee/lilei/2.png");
     }
 
-    .staff-guide-3 {
-      background:
-        radial-gradient(circle at 50% 70%, rgba(255, 245, 231, 0.78) 0 15%, transparent 16%),
-        linear-gradient(150deg, rgba(218, 174, 136, 0.9), rgba(112, 76, 57, 0.92));
+    .staff-lilei-3 {
+      background-image:
+        linear-gradient(165deg, rgba(48, 30, 22, 0.16), rgba(48, 30, 22, 0.04)),
+        url("employee/lilei/3.png");
     }
 
-    .staff-support-1 {
-      background:
-        radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.86) 0 11%, transparent 12%),
-        linear-gradient(135deg, rgba(185, 112, 91, 0.9), rgba(106, 56, 47, 0.92));
+    .staff-rainrain-1 {
+      background-image:
+        linear-gradient(135deg, rgba(42, 28, 36, 0.16), rgba(42, 28, 36, 0.04)),
+        url("employee/rainrain/1.png");
     }
 
-    .staff-support-2 {
-      background:
-        linear-gradient(90deg, rgba(255, 233, 218, 0.28) 0 14%, transparent 14% 27%, rgba(255, 233, 218, 0.18) 27% 31%, transparent 31%),
-        radial-gradient(circle at 68% 62%, rgba(255, 248, 235, 0.75) 0 16%, transparent 17%),
-        linear-gradient(145deg, rgba(171, 107, 82, 0.92), rgba(91, 49, 39, 0.9));
+    .staff-rainrain-2 {
+      background-image:
+        linear-gradient(150deg, rgba(42, 28, 36, 0.16), rgba(42, 28, 36, 0.04)),
+        url("employee/rainrain/2.png");
     }
 
-    .staff-support-3 {
-      background:
-        radial-gradient(circle at 72% 28%, rgba(255, 244, 226, 0.82) 0 13%, transparent 14%),
-        linear-gradient(160deg, rgba(205, 139, 110, 0.9), rgba(99, 58, 46, 0.92));
+    .staff-rainrain-3 {
+      background-image:
+        linear-gradient(165deg, rgba(42, 28, 36, 0.16), rgba(42, 28, 36, 0.04)),
+        url("employee/rainrain/3.png");
     }
 
-    .staff-mood-1 {
-      background:
-        radial-gradient(circle at 24% 68%, rgba(255, 247, 234, 0.8) 0 13%, transparent 14%),
-        linear-gradient(135deg, rgba(160, 117, 152, 0.9), rgba(86, 57, 91, 0.92));
+    .staff-bigpot-1 {
+      background-image:
+        linear-gradient(135deg, rgba(54, 34, 22, 0.16), rgba(54, 34, 22, 0.04)),
+        url("employee/bigpot/1.png");
     }
 
-    .staff-mood-2 {
-      background:
-        linear-gradient(115deg, rgba(244, 225, 243, 0.24) 0 15%, transparent 15% 32%, rgba(244, 225, 243, 0.18) 32% 36%, transparent 36%),
-        radial-gradient(circle at 72% 34%, rgba(255, 247, 255, 0.72) 0 12%, transparent 13%),
-        linear-gradient(145deg, rgba(145, 100, 138, 0.9), rgba(73, 47, 80, 0.92));
+    .staff-bigpot-2 {
+      background-image:
+        linear-gradient(150deg, rgba(54, 34, 22, 0.16), rgba(54, 34, 22, 0.04)),
+        url("employee/bigpot/2.png");
     }
 
-    .staff-mood-3 {
-      background:
-        radial-gradient(circle at 54% 54%, rgba(255, 240, 250, 0.72) 0 15%, transparent 16%),
-        linear-gradient(155deg, rgba(174, 128, 170, 0.88), rgba(89, 58, 95, 0.92));
+    .staff-bigpot-3 {
+      background-image:
+        linear-gradient(165deg, rgba(54, 34, 22, 0.16), rgba(54, 34, 22, 0.04)),
+        url("employee/bigpot/3.png");
+    }
+
+    .staff-soltar-1 {
+      background-image:
+        linear-gradient(135deg, rgba(36, 31, 48, 0.16), rgba(36, 31, 48, 0.04)),
+        url("employee/soltar/1.png");
+    }
+
+    .staff-soltar-2 {
+      background-image:
+        linear-gradient(150deg, rgba(36, 31, 48, 0.16), rgba(36, 31, 48, 0.04)),
+        url("employee/soltar/2.png");
+    }
+
+    .staff-soltar-3 {
+      background-image:
+        linear-gradient(165deg, rgba(36, 31, 48, 0.16), rgba(36, 31, 48, 0.04)),
+        url("employee/soltar/3.png");
+    }
+
+    .staff-squirrel-1 {
+      background-image:
+        linear-gradient(135deg, rgba(58, 36, 22, 0.16), rgba(58, 36, 22, 0.04)),
+        url("employee/squirrel/1.png");
+    }
+
+    .staff-squirrel-2 {
+      background-image:
+        linear-gradient(150deg, rgba(58, 36, 22, 0.16), rgba(58, 36, 22, 0.04)),
+        url("employee/squirrel/2.png");
+    }
+
+    .staff-squirrel-3 {
+      background-image:
+        linear-gradient(165deg, rgba(58, 36, 22, 0.16), rgba(58, 36, 22, 0.04)),
+        url("employee/squirrel/3.png");
     }
 
     .footer-box {
@@ -1093,9 +1166,12 @@
     </div>
 
     <div class="hero-card hero-visual">
-      <div class="visual-tag">Squirrelyouself Cafe Official Page</div>
       <div class="visual-main">
         <h2>最新消息</h2>
+        <div class="announcement-search">
+          <input id="newsSearchInput" class="announcement-search-input" type="text" placeholder="輸入關鍵字搜尋公告">
+          <button id="newsSearchClear" class="announcement-search-clear" type="button">清除</button>
+        </div>
         <div class="announcement-board">
           <div id="announcementList" class="announcement-list"></div>
         </div>
@@ -1127,7 +1203,6 @@
                 <div class="environment-slideshow">
                   <div class="environment-slide flow-1 is-active"></div>
                   <div class="environment-slide flow-2"></div>
-                  <div class="environment-slide flow-3"></div>
                 </div>
               </div>
               <div class="environment-body">
@@ -1142,7 +1217,6 @@
                 <div class="environment-slideshow">
                   <div class="environment-slide bar-1 is-active"></div>
                   <div class="environment-slide bar-2"></div>
-                  <div class="environment-slide bar-3"></div>
                 </div>
               </div>
               <div class="environment-body">
@@ -1157,7 +1231,6 @@
                 <div class="environment-slideshow">
                   <div class="environment-slide table-1 is-active"></div>
                   <div class="environment-slide table-2"></div>
-                  <div class="environment-slide table-3"></div>
                 </div>
               </div>
               <div class="environment-body">
@@ -1172,7 +1245,6 @@
                 <div class="environment-slideshow">
                   <div class="environment-slide restroom-1 is-active"></div>
                   <div class="environment-slide restroom-2"></div>
-                  <div class="environment-slide restroom-3"></div>
                 </div>
               </div>
               <div class="environment-body">
@@ -1333,15 +1405,14 @@
             <div class="environment-layout">
               <div class="environment-media">
                 <div class="environment-slideshow">
-                  <div class="environment-slide staff-guide-1 is-active"></div>
-                  <div class="environment-slide staff-guide-2"></div>
-                  <div class="environment-slide staff-guide-3"></div>
+                  <div class="environment-slide staff-lilei-1 is-active"></div>
+                  <div class="environment-slide staff-lilei-2"></div>
+                  <div class="environment-slide staff-lilei-3"></div>
                 </div>
               </div>
               <div class="environment-body">
-                <div class="staff-role">Front Guide</div>
-                <h3>迎賓角色</h3>
-                <p>負責接待、說明點餐方式與帶位，讓第一次來的客人也能快速進入狀況。</p>
+                <h3>里萊</h3>
+                <p>性格沉穩卻待人熱情的男硌獅，來自圖拉爾大陸，也是當地數一數二強大的戰士。據說老闆當初為了把這位實力與氣度兼具的猛者請進店裡，可是下了不少本錢。</p>
               </div>
             </div>
           </article>
@@ -1349,15 +1420,14 @@
             <div class="environment-layout">
               <div class="environment-media">
                 <div class="environment-slideshow">
-                  <div class="environment-slide staff-support-1 is-active"></div>
-                  <div class="environment-slide staff-support-2"></div>
-                  <div class="environment-slide staff-support-3"></div>
+                  <div class="environment-slide staff-rainrain-1 is-active"></div>
+                  <div class="environment-slide staff-rainrain-2"></div>
+                  <div class="environment-slide staff-rainrain-3"></div>
                 </div>
               </div>
               <div class="environment-body">
-                <div class="staff-role">Dining Support</div>
-                <h3>餐點協助</h3>
-                <p>負責確認餐點、備註與現場應對，必要時也能在後台補充內部備註與折扣說明。</p>
+                <h3>雨雨</h3>
+                <p>原本與仙人掌先生一同生活的拉拉菲爾，卻在某天決定離開熟悉日常，踏上探索世界的旅程。如今暫時停留在松鼠先生的餐廳裡工作，也把一路見聞與好奇心帶進了店內每一天。</p>
               </div>
             </div>
           </article>
@@ -1365,15 +1435,44 @@
             <div class="environment-layout">
               <div class="environment-media">
                 <div class="environment-slideshow">
-                  <div class="environment-slide staff-mood-1 is-active"></div>
-                  <div class="environment-slide staff-mood-2"></div>
-                  <div class="environment-slide staff-mood-3"></div>
+                  <div class="environment-slide staff-bigpot-1 is-active"></div>
+                  <div class="environment-slide staff-bigpot-2"></div>
+                  <div class="environment-slide staff-bigpot-3"></div>
                 </div>
               </div>
               <div class="environment-body">
-                <div class="staff-role">Workshop Mood</div>
-                <h3>角色氛圍</h3>
-                <p>之後可以把每位員工包裝成店內角色，讓這個首頁更像真正的品牌官網。</p>
+                <h3>達鍋</h3>
+                <p>原先是在奧薩德次大陸故鄉裡過著悠哉日子的熬龍族，卻被好友里萊硬生生拽出家門，從此在艾奧傑亞展開冒險。後來在好友受聘加入時，也一同來到松你去鼠，成了店內不可或缺的一員。</p>
+              </div>
+            </div>
+          </article>
+          <article class="environment-card environment-showcase">
+            <div class="environment-layout">
+              <div class="environment-media">
+                <div class="environment-slideshow">
+                  <div class="environment-slide staff-soltar-1 is-active"></div>
+                  <div class="environment-slide staff-soltar-2"></div>
+                  <div class="environment-slide staff-soltar-3"></div>
+                </div>
+              </div>
+              <div class="environment-body">
+                <h3>索塔珥</h3>
+                <p>活躍於艾奧傑亞各地的男維埃拉族冒險者，平日最大的興趣就是挖寶與尋酒。對各種佳釀懷抱近乎執著的熱愛，也讓他總是一邊旅行、一邊追尋那些散落於各個大陸的傳說美酒。</p>
+              </div>
+            </div>
+          </article>
+          <article class="environment-card environment-showcase">
+            <div class="environment-layout">
+              <div class="environment-media">
+                <div class="environment-slideshow">
+                  <div class="environment-slide staff-squirrel-1 is-active"></div>
+                  <div class="environment-slide staff-squirrel-2"></div>
+                  <div class="environment-slide staff-squirrel-3"></div>
+                </div>
+              </div>
+              <div class="environment-body">
+                <h3>FP</h3>
+                <p>為了在艾奧傑亞開一間最棒的餐廳而不停尋找同伴與理想據點，最終被白銀鄉的風景與人文吸引而停下腳步。雖然身為魯加族的他天生有著不容忽視的存在感，但為了讓客人能毫無壓力地走進店裡，他選擇以可愛的松鼠裝作為自己的招牌形象。</p>
               </div>
             </div>
           </article>
@@ -1390,15 +1489,7 @@
   </footer>
   <script>
     const newsItems = [
-      { date: "2026/04/17", text: "本日營業時間可在這裡更新，臨時延後開店也能直接公告。" },
-      { date: "2026/04/17", text: "如果吧檯區額滿、餐桌保留中，也可以在這裡同步通知客人。" },
-      { date: "2026/04/17", text: "活動日、限定餐點、特別時段與店內提醒，都能集中放在公告區。" },
-      { date: "2026/04/16", text: "如果有特別菜單上架，也可以在這裡提前通知客人當日內容。" },
-      { date: "2026/04/15", text: "遇到臨時休息、時段異動或店內調整時，可直接在首頁公告。" },
-      { date: "2026/04/14", text: "節日活動、主題夜或團體預約開放資訊，也很適合整理在這裡。" },
-      { date: "2026/04/13", text: "如果今天只開放部分座位區，或需要候位，也能在最新消息同步。" },
-      { date: "2026/04/12", text: "這裡也可以放新菜單試賣、限定甜點、員工特別推薦等資訊。" },
-      { date: "2026/04/11", text: "未來若要放更早期公告，直接往這個列表往下加就可以了。" }
+      { date: "2026/04/19", text: "這是一則範例公告，點擊後可以查看完整詳細說明頁面。", link: "notices/NOTICE_001.html" }
     ];
 
     const newsPerPage = 3;
@@ -1410,9 +1501,25 @@
     const newsNext = document.getElementById("newsNext");
     const newsPageInput = document.getElementById("newsPageInput");
     const newsJump = document.getElementById("newsJump");
+    const newsSearchInput = document.getElementById("newsSearchInput");
+    const newsSearchClear = document.getElementById("newsSearchClear");
+
+    let currentNewsKeyword = "";
+
+    function getFilteredNewsItems() {
+      const keyword = currentNewsKeyword.trim().toLowerCase();
+      if (!keyword) {
+        return newsItems;
+      }
+
+      return newsItems.filter(item => {
+        const target = `${item.date} ${item.text}`.toLowerCase();
+        return target.includes(keyword);
+      });
+    }
 
     function getTotalNewsPages() {
-      return Math.max(1, Math.ceil(newsItems.length / newsPerPage));
+      return Math.max(1, Math.ceil(getFilteredNewsItems().length / newsPerPage));
     }
 
     function clampNewsPage(page) {
@@ -1456,16 +1563,19 @@
     function renderNewsPage() {
       const totalPages = getTotalNewsPages();
       currentNewsPage = clampNewsPage(currentNewsPage);
+      const filteredNewsItems = getFilteredNewsItems();
 
       const startIndex = (currentNewsPage - 1) * newsPerPage;
-      const currentItems = newsItems.slice(startIndex, startIndex + newsPerPage);
+      const currentItems = filteredNewsItems.slice(startIndex, startIndex + newsPerPage);
 
-      announcementList.innerHTML = currentItems.map(item => `
-        <div class="announcement-item">
+      announcementList.innerHTML = currentItems.length > 0
+        ? currentItems.map(item => `
+        <${item.link ? "a" : "div"} class="announcement-item${item.link ? " announcement-link" : ""}"${item.link ? ` href="${item.link}"` : ""}${item.link ? ' target="_blank" rel="noopener noreferrer"' : ""}>
           <div class="announcement-date">${item.date}</div>
-          <div class="announcement-text">${item.text}</div>
-        </div>
-      `).join("");
+          <div class="announcement-text">${item.text}${item.link ? ' <span style="color: var(--accent); font-weight: 700;">查看詳細公告</span>' : ""}</div>
+        </${item.link ? "a" : "div"}>
+      `).join("")
+        : '<div class="announcement-empty">找不到符合的公告內容，試試其他關鍵字。</div>';
 
       const tokens = buildPageTokens(totalPages, currentNewsPage);
       newsPageNumbers.innerHTML = tokens.map(token => {
@@ -1512,6 +1622,20 @@
       if (event.key === "Enter") {
         jumpToNewsPage();
       }
+    });
+
+    newsSearchInput.addEventListener("input", event => {
+      currentNewsKeyword = event.target.value;
+      currentNewsPage = 1;
+      renderNewsPage();
+    });
+
+    newsSearchClear.addEventListener("click", () => {
+      currentNewsKeyword = "";
+      newsSearchInput.value = "";
+      currentNewsPage = 1;
+      renderNewsPage();
+      newsSearchInput.focus();
     });
 
     renderNewsPage();
@@ -1697,7 +1821,7 @@
         slides[activeSlideIndex].classList.remove("is-active");
         activeSlideIndex = (activeSlideIndex + 1) % slides.length;
         slides[activeSlideIndex].classList.add("is-active");
-      }, 1800);
+      }, 4200);
     });
 
     const staffTrack = document.getElementById("staffTrack");
