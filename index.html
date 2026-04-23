@@ -126,7 +126,7 @@
       display: grid;
       grid-template-columns: 0.92fr 1.08fr;
       gap: 28px;
-      align-items: start;
+      align-items: stretch;
     }
 
     .hero-card,
@@ -141,10 +141,15 @@
 
     .hero-card {
       padding: 42px;
+      height: 100%;
+      box-sizing: border-box;
     }
 
     .hero-intro {
       padding: 34px 34px 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .eyebrow {
@@ -167,8 +172,8 @@
     .hero p {
       margin: 0 0 24px;
       color: var(--muted);
-      font-size: 1.03rem;
-      line-height: 1.9;
+      font-size: 1.12rem;
+      line-height: 2;
     }
 
     .hero-actions {
@@ -178,7 +183,7 @@
     }
 
     .intro-meta {
-      margin: 26px 0 26px;
+      margin: 30px 0 24px;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 16px;
@@ -195,14 +200,14 @@
       display: block;
       margin-bottom: 8px;
       color: var(--accent-deep);
-      font-size: 0.95rem;
+      font-size: 1rem;
     }
 
     .intro-meta-card p {
       margin: 0;
       color: var(--muted);
-      line-height: 1.7;
-      font-size: 0.95rem;
+      line-height: 1.8;
+      font-size: 1.02rem;
     }
 
     .button {
@@ -337,10 +342,10 @@
 
     .announcement-item {
       display: grid;
-      grid-template-columns: 112px 1fr;
+      grid-template-columns: 132px 1fr;
       gap: 14px;
       align-items: start;
-      min-height: 96px;
+      min-height: 112px;
       padding: 16px 18px;
       border-top: 1px solid rgba(120, 78, 58, 0.1);
     }
@@ -418,9 +423,9 @@
       line-height: 1.7;
       display: -webkit-box;
       -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
+      -webkit-line-clamp: 3;
       overflow: hidden;
-      max-height: calc(1.7em * 2);
+      max-height: calc(1.7em * 3);
       word-break: break-word;
     }
 
@@ -732,6 +737,42 @@
         url("background/wc/2.png");
     }
 
+    .environment-slide.partner-a-1 {
+      background-image: url("cooperator/POTATORABBITWORKSHOP/1.png");
+    }
+
+    .environment-slide.partner-a-2 {
+      background-image: url("cooperator/POTATORABBITWORKSHOP/2.png");
+    }
+
+    .environment-slide.partner-a-3 {
+      background-image: url("cooperator/POTATORABBITWORKSHOP/3.png");
+    }
+
+    .environment-slide.partner-b-1 {
+      background-image:
+        radial-gradient(circle at 24% 30%, rgba(255, 255, 255, 0.34), transparent 35%),
+        linear-gradient(135deg, #8a6e5b 0%, #534238 100%);
+    }
+
+    .environment-slide.partner-b-2 {
+      background-image:
+        radial-gradient(circle at 78% 24%, rgba(255, 255, 255, 0.28), transparent 30%),
+        linear-gradient(135deg, #6f584b 0%, #3f312a 100%);
+    }
+
+    .environment-slide.partner-c-1 {
+      background-image:
+        radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.3), transparent 32%),
+        linear-gradient(135deg, #6e5067 0%, #3f2d3d 100%);
+    }
+
+    .environment-slide.partner-c-2 {
+      background-image:
+        radial-gradient(circle at 72% 22%, rgba(255, 255, 255, 0.26), transparent 31%),
+        linear-gradient(135deg, #815b76 0%, #503845 100%);
+    }
+
     .environment-body {
       display: flex;
       flex-direction: column;
@@ -751,6 +792,43 @@
       color: var(--muted);
       line-height: 1.9;
       font-size: 1.12rem;
+    }
+
+    .partner-card-link {
+      display: block;
+      flex: 0 0 100%;
+      min-width: 100%;
+      width: 100%;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .partner-card-link .environment-card {
+      width: 100%;
+      height: 100%;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .partner-card-link:hover .environment-card,
+    .partner-card-link:focus-visible .environment-card {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 42px rgba(59, 37, 26, 0.18);
+    }
+
+    .partner-link-note {
+      margin-top: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--accent-deep);
+    }
+
+    .partner-quote {
+      font-size: 1rem !important;
+      line-height: 1.55 !important;
+      letter-spacing: 0.01em;
     }
 
     #staff .environment-body h3 {
@@ -1154,6 +1232,8 @@
       <a href="#space">環境</a>
       <a href="#menu">餐點預覽</a>
       <a href="#staff">員工介紹</a>
+      <a href="#partners">合作夥伴</a>
+      <a href="recruitment.html" target="_blank" rel="noopener noreferrer">員工招生</a>
       <a class="cta-link" href="https://docs.google.com/forms/d/e/1FAIpQLScu11dW91wQFvIWU6v9doXW8m_yNeBEmzT98bOcQL1wLDUxww/viewform" target="_blank" rel="noopener noreferrer">立即點餐</a>
     </nav>
   </header>
@@ -1515,6 +1595,58 @@
       </div>
     </section>
 
+    <section id="partners" class="panel">
+      <div class="environment-section-head">
+        <h2 class="preview-title">合作夥伴</h2>
+      </div>
+      <div class="environment-carousel">
+        <button class="environment-nav prev" id="partnerPrev" type="button" aria-label="上一位合作夥伴">‹</button>
+        <div class="environment-track" id="partnerTrack">
+          <a class="partner-card-link" href="https://sites.google.com/view/popoto-bunny-workshop/%E9%A6%96%E9%A0%81" target="_blank" rel="noopener noreferrer" aria-label="前往馬鈴薯兔工房官網">
+            <article class="environment-card environment-showcase">
+              <div class="environment-layout">
+                <div class="environment-media">
+                  <div class="environment-slideshow">
+                    <div class="environment-slide partner-a-1 is-active"></div>
+                    <div class="environment-slide partner-a-2"></div>
+                    <div class="environment-slide partner-a-3"></div>
+                  </div>
+                </div>
+                <div class="environment-body">
+                  <h3>馬鈴薯兔工房</h3>
+                  <p class="partner-quote">「從馬鈴薯田到時尚舞台的距離，只差一件衣服」</p>
+                  <p>在艾奧傑亞的角落，有一間為所有冒險者打造的工坊。無論你來自哪個種族，每個人都值得擁有一套「剛剛好」的服裝。</p>
+                  <p>本店無低消門檻也沒有限制停留時間，也歡迎在店內拍拍照。但請不要在本店製作物品，否則每次會跟您酌收 100,000 Gil 的清潔費喔！</p>
+                  <p>地址：伊弗利特 白銀鄉 16 區 46 號</p>
+                  <div class="partner-link-note">點擊卡片前往馬鈴薯兔工房官方網站</div>
+                </div>
+              </div>
+            </article>
+          </a>
+          <a class="partner-card-link" href="https://docs.google.com/forms/d/e/1FAIpQLSd4D0pfaD3B-0K4hdBytccIvTb_kIobQJ6yX1SYoXVEWqClzw/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer" aria-label="前往合作夥伴招募表單">
+            <article class="environment-card environment-showcase">
+              <div class="environment-layout">
+                <div class="environment-media">
+                  <div class="environment-slideshow">
+                    <div class="environment-slide partner-c-1 is-active"></div>
+                    <div class="environment-slide partner-c-2"></div>
+                  </div>
+                </div>
+                <div class="environment-body">
+                  <h3>合作夥伴招募</h3>
+                  <p class="partner-quote">「如果你也想讓艾歐澤亞的夜晚更熱鬧，歡迎和松你去鼠一起合作。」</p>
+                  <p>不論是品牌聯動、活動協辦、折價券互通、宣傳合作，或任何想一起完成的特別企劃，都可以透過表單和我們聯繫。</p>
+                  <div class="partner-link-note">點擊卡片填寫合作夥伴表單</div>
+                </div>
+              </div>
+            </article>
+          </a>
+        </div>
+        <button class="environment-nav next" id="partnerNext" type="button" aria-label="下一位合作夥伴">›</button>
+        <div class="environment-dots" id="partnerDots"></div>
+      </div>
+    </section>
+
   </main>
 
   <footer>
@@ -1522,7 +1654,9 @@
   </footer>
   <script>
     const newsItems = [
-      { date: "2026/04/19", text: "這是一則範例公告，點擊後可以查看完整詳細說明頁面。", link: "notices/NOTICE_001.html" }
+      { date: "2026/05/02", text: "本店 5/2 將開始試營運，5/3 為正式營運。" },
+      { date: "2026/04/20", text: "4/20 即日起持松你去鼠所發放之折價卷至馬鈴薯兔工房消費，可享指定優惠，詳情點擊查看說明", link: "notices/NOTICE_002.html" },
+      { date: "2026/04/20", text: "4/20 即日起持馬鈴薯兔工房所發放之折價卷至本店消費，全品項可享八折優惠，詳情點擊查看說明", link: "notices/NOTICE_001.html" }
     ];
 
     const newsPerPage = 3;
@@ -1605,7 +1739,7 @@
         ? currentItems.map(item => `
         <${item.link ? "a" : "div"} class="announcement-item${item.link ? " announcement-link" : ""}"${item.link ? ` href="${item.link}"` : ""}${item.link ? ' target="_blank" rel="noopener noreferrer"' : ""}>
           <div class="announcement-date">${item.date}</div>
-          <div class="announcement-text">${item.text}${item.link ? ' <span style="color: var(--accent); font-weight: 700;">查看詳細公告</span>' : ""}</div>
+          <div class="announcement-text">${item.text}</div>
         </${item.link ? "a" : "div"}>
       `).join("")
         : '<div class="announcement-empty">找不到符合的公告內容，試試其他關鍵字。</div>';
@@ -1936,6 +2070,87 @@
 
     window.addEventListener("load", () => {
       scrollToStaffCard(0);
+    });
+
+    const partnerTrack = document.getElementById("partnerTrack");
+    const partnerCards = Array.from(partnerTrack.querySelectorAll(".environment-showcase"));
+    const partnerPrev = document.getElementById("partnerPrev");
+    const partnerNext = document.getElementById("partnerNext");
+    const partnerDots = document.getElementById("partnerDots");
+
+    let activePartnerIndex = 0;
+
+    function setActivePartnerCard(index) {
+      activePartnerIndex = Math.min(Math.max(index, 0), partnerCards.length - 1);
+      Array.from(partnerDots.children).forEach((dot, dotIndex) => {
+        dot.classList.toggle("is-active", dotIndex === activePartnerIndex);
+      });
+    }
+
+    function scrollToPartnerCard(index) {
+      const safeIndex = Math.min(Math.max(index, 0), partnerCards.length - 1);
+      const card = partnerCards[safeIndex];
+      const offset =
+        card.offsetLeft - (partnerTrack.clientWidth / 2) + (card.clientWidth / 2);
+
+      partnerTrack.scrollTo({
+        left: offset,
+        behavior: "smooth"
+      });
+
+      setActivePartnerCard(safeIndex);
+    }
+
+    function findClosestPartnerCard() {
+      const trackCenter = partnerTrack.scrollLeft + partnerTrack.clientWidth / 2;
+      let closestIndex = 0;
+      let closestDistance = Infinity;
+
+      partnerCards.forEach((card, index) => {
+        const cardCenter = card.offsetLeft + card.clientWidth / 2;
+        const distance = Math.abs(trackCenter - cardCenter);
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      setActivePartnerCard(closestIndex);
+    }
+
+    partnerCards.forEach((_, index) => {
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "environment-dot";
+      dot.setAttribute("aria-label", `查看第 ${index + 1} 位合作夥伴`);
+      dot.addEventListener("click", () => scrollToPartnerCard(index));
+      partnerDots.appendChild(dot);
+    });
+
+    partnerPrev.addEventListener("click", () => {
+      const nextIndex =
+        activePartnerIndex === 0 ? partnerCards.length - 1 : activePartnerIndex - 1;
+      scrollToPartnerCard(nextIndex);
+    });
+
+    partnerNext.addEventListener("click", () => {
+      const nextIndex =
+        activePartnerIndex === partnerCards.length - 1 ? 0 : activePartnerIndex + 1;
+      scrollToPartnerCard(nextIndex);
+    });
+
+    let partnerScrollTimer = null;
+    partnerTrack.addEventListener("scroll", () => {
+      findClosestPartnerCard();
+      window.clearTimeout(partnerScrollTimer);
+      partnerScrollTimer = window.setTimeout(() => {
+        scrollToPartnerCard(activePartnerIndex);
+      }, 120);
+    });
+
+    window.addEventListener("load", () => {
+      scrollToPartnerCard(0);
     });
   </script>
 </body>
