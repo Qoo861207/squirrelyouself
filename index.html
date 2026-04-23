@@ -1977,7 +1977,9 @@
     });
 
     const environmentSlideshows = Array.from(
-      document.querySelectorAll(".environment-slideshow")
+      document.querySelectorAll(
+        "#environment .environment-slideshow, #staff .environment-slideshow, #partners .partner-card-link:first-child .environment-slideshow"
+      )
     );
 
     environmentSlideshows.forEach(slideshow => {
