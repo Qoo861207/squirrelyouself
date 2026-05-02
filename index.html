@@ -762,12 +762,24 @@
     }
 
     .environment-slide.partner-c-1 {
+      background-image: url("cooperator/soulofthesoup/1.png");
+    }
+
+    .environment-slide.partner-c-2 {
+      background-image: url("cooperator/soulofthesoup/2.png");
+    }
+
+    .environment-slide.partner-c-3 {
+      background-image: url("cooperator/soulofthesoup/3.png");
+    }
+
+    .environment-slide.partner-d-1 {
       background-image:
         radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.3), transparent 32%),
         linear-gradient(135deg, #6e5067 0%, #3f2d3d 100%);
     }
 
-    .environment-slide.partner-c-2 {
+    .environment-slide.partner-d-2 {
       background-image:
         radial-gradient(circle at 72% 22%, rgba(255, 255, 255, 0.26), transparent 31%),
         linear-gradient(135deg, #815b76 0%, #503845 100%);
@@ -1684,13 +1696,31 @@
               </div>
             </article>
           </div>
-          <a class="partner-card-link" href="https://docs.google.com/forms/d/e/1FAIpQLSd4D0pfaD3B-0K4hdBytccIvTb_kIobQJ6yX1SYoXVEWqClzw/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer" aria-label="前往合作夥伴招募表單">
+          <div class="partner-card-link" aria-label="靈魂之湯合作夥伴資訊">
             <article class="environment-card environment-showcase">
               <div class="environment-layout">
                 <div class="environment-media">
                   <div class="environment-slideshow">
                     <div class="environment-slide partner-c-1 is-active"></div>
                     <div class="environment-slide partner-c-2"></div>
+                    <div class="environment-slide partner-c-3"></div>
+                  </div>
+                </div>
+                <div class="environment-body">
+                  <h3>靈魂之湯</h3>
+                  <p>以溫泉旅館氛圍為主的放鬆空間，整體環境安靜柔和，適合想短暫歇息、慢慢泡湯放空的旅人。店內免費對外開放，若想在白銀鄉找個能放鬆身心的小地方，靈魂之湯會是不錯的選擇。</p>
+                  <p>地址：伊弗利特 白銀鄉 13 區 43 號</p>
+                </div>
+              </div>
+            </article>
+          </div>
+          <a class="partner-card-link" href="https://docs.google.com/forms/d/e/1FAIpQLSd4D0pfaD3B-0K4hdBytccIvTb_kIobQJ6yX1SYoXVEWqClzw/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer" aria-label="前往合作夥伴招募表單">
+            <article class="environment-card environment-showcase">
+              <div class="environment-layout">
+                <div class="environment-media">
+                  <div class="environment-slideshow">
+                    <div class="environment-slide partner-d-1 is-active"></div>
+                    <div class="environment-slide partner-d-2"></div>
                   </div>
                 </div>
                 <div class="environment-body">
@@ -2041,7 +2071,7 @@
 
     const environmentSlideshows = Array.from(
       document.querySelectorAll(
-        "#space .environment-slideshow, #staff .environment-slideshow, #partners .partner-card-link:nth-child(-n+2) .environment-slideshow"
+        "#space .environment-slideshow, #staff .environment-slideshow, #partners .partner-card-link:nth-child(-n+3) .environment-slideshow"
       )
     );
 
