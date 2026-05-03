@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>營運時間調整公告 | 松你去鼠</title>
+  <style>
+    :root {
+      --bg: #f6efe4;
+      --card: #fffaf4;
+      --line: #e2cfbb;
+      --text: #3d2e24;
+      --muted: #8c674f;
+      --accent: #a85f40;
+      --accent-dark: #8c4e33;
+      --shadow: 0 24px 50px rgba(102, 72, 48, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Microsoft JhengHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.7), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(214, 172, 132, 0.24), transparent 24%),
+        linear-gradient(180deg, #f8f1e8 0%, #f4ebdf 100%);
+    }
+
+    .wrap {
+      width: min(920px, calc(100% - 32px));
+      margin: 48px auto;
+    }
+
+    .notice-card {
+      background: var(--card);
+      border: 1px solid rgba(168, 95, 64, 0.14);
+      border-radius: 28px;
+      padding: 36px;
+      box-shadow: var(--shadow);
+    }
+
+    .notice-tag {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(168, 95, 64, 0.1);
+      color: var(--accent-dark);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+    }
+
+    h1 {
+      margin: 18px 0 10px;
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1.15;
+    }
+
+    .notice-meta {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .notice-body {
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
+    .notice-body p {
+      margin: 0 0 18px;
+    }
+
+    .notice-body strong {
+      color: var(--accent-dark);
+    }
+
+    .back-link {
+      display: inline-flex;
+      margin-top: 18px;
+      color: var(--accent-dark);
+      font-weight: 700;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <article class="notice-card">
+      <span class="notice-tag">NOTICE</span>
+      <h1>營運時間調整公告</h1>
+      <p class="notice-meta">公告日期：2026/05/03</p>
+
+      <div class="notice-body">
+        <p>親愛的客人您好：</p>
+
+        <p>由於本日系統出現錯誤，造成店內流程與點單系統無法正常運作，為避免影響各位客人的用餐體驗，本日營運將暫緩，並改至 <strong>2026/05/10</strong> 再行開放。</p>
+
+        <p>作為本次臨時調整的補償，<strong>5/10 當日來店消費，全品項皆可享八折優惠</strong>。</p>
+
+        <p><strong>當日不需出示折價卷即可享有八折</strong>，若您原先已持有合作折價卷，也可保留至其他營業日再行使用，相關優惠資格不會因此失效。</p>
+
+        <p>造成各位等待與不便，我們在此向大家致上歉意，也感謝各位的體諒與包容。</p>
+
+        <p>若後續仍有其他調整，我們會於官網公告區第一時間更新。</p>
+
+        <p>松你去鼠 敬上</p>
+      </div>
+
+      <a class="back-link" href="../index.html">返回官網</a>
+    </article>
+  </div>
+</body>
+</html>
