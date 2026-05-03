@@ -2,12 +2,82 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=https://excavator-trespass-step.ngrok-free.dev/append-menu.html">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>松你去鼠｜追加點餐轉址</title>
-  <script>location.replace('https://excavator-trespass-step.ngrok-free.dev/append-menu.html');</script>
+  <title>松你去鼠｜追加點餐入口</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at top, rgba(223, 201, 179, 0.42), transparent 32%), #f6efe7;
+      color: #3f2c23;
+      font-family: "Microsoft JhengHei", sans-serif;
+    }
+    .card {
+      width: min(680px, calc(100% - 32px));
+      padding: 32px;
+      border-radius: 28px;
+      background: rgba(255, 251, 246, 0.96);
+      border: 1px solid rgba(181, 133, 96, 0.16);
+      box-shadow: 0 24px 50px rgba(67, 41, 28, 0.12);
+    }
+    h1 { margin: 0 0 12px; font-size: clamp(2rem, 5vw, 3rem); }
+    p { margin: 0 0 14px; line-height: 1.8; color: #6e5547; }
+    .hours {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(243, 234, 224, 0.9);
+      color: #7b5d4f;
+      font-weight: 700;
+    }
+    .link {
+      display: inline-flex;
+      margin-top: 20px;
+      padding: 12px 20px;
+      border-radius: 999px;
+      text-decoration: none;
+      background: #b96e49;
+      color: #fffdf8;
+      font-weight: 700;
+    }
+  </style>
 </head>
 <body>
-  <p>正在前往追加點餐頁面：<a href="https://excavator-trespass-step.ngrok-free.dev/append-menu.html">https://excavator-trespass-step.ngrok-free.dev/append-menu.html</a></p>
+  <main class="card">
+    <h1 id="title">正在確認營業狀態...</h1>
+    <p id="desc">請稍候，系統正在確認目前是否可開放追加點餐。</p>
+    <div class="hours">營業時間：每周日 晚上 6:00 - 9:00</div>
+    <a class="link" href="https://qoo861207.github.io/squirrelyouself/">返回官網</a>
+  </main>
+  <script>
+    const STATUS_URL = 'https://excavator-trespass-step.ngrok-free.dev/store-status';
+    const TARGET_URL = 'https://excavator-trespass-step.ngrok-free.dev/append-menu.html';
+    const titleEl = document.getElementById('title');
+    const descEl = document.getElementById('desc');
+
+    async function boot() {
+      try {
+        const res = await fetch(`${STATUS_URL}?_=${Date.now()}`, { cache: 'no-store' });
+        const data = await res.json();
+
+        if (data && data.success && data.isOpen) {
+          titleEl.textContent = '正在前往追加點餐頁面...';
+          descEl.textContent = '目前為營業時間，系統即將為您開啟追加點餐頁。';
+          location.replace(TARGET_URL);
+          return;
+        }
+
+        titleEl.textContent = '目前非營業時間';
+        descEl.textContent = '目前尚未開店，或店內暫時未開放追加點餐。請依營業時間再前來，謝謝您的體諒。';
+      } catch (error) {
+        titleEl.textContent = '目前非營業時間';
+        descEl.textContent = '目前伺服器尚未開啟，暫時無法提供追加點餐服務。請依營業時間再前來，謝謝您的體諒。';
+      }
+    }
+
+    boot();
+  </script>
 </body>
 </html>
