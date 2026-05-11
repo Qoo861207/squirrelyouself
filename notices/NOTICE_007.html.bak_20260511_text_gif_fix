@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>折價卷署名錯誤更換公告 | 松你去鼠</title>
+  <style>
+    :root {
+      --bg: #f6efe4;
+      --card: #fffaf4;
+      --line: #e2cfbb;
+      --text: #3d2e24;
+      --muted: #8c674f;
+      --accent: #a85f40;
+      --accent-dark: #8c4e33;
+      --shadow: 0 24px 50px rgba(102, 72, 48, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Microsoft JhengHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.7), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(214, 172, 132, 0.24), transparent 24%),
+        linear-gradient(180deg, #f8f1e8 0%, #f4ebdf 100%);
+    }
+
+    .wrap {
+      width: min(920px, calc(100% - 32px));
+      margin: 48px auto;
+    }
+
+    .notice-card {
+      background: var(--card);
+      border: 1px solid rgba(168, 95, 64, 0.14);
+      border-radius: 28px;
+      padding: clamp(24px, 4vw, 36px);
+      box-shadow: var(--shadow);
+    }
+
+    .notice-tag {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(168, 95, 64, 0.1);
+      color: var(--accent-dark);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+    }
+
+    h1 {
+      margin: 18px 0 10px;
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1.15;
+    }
+
+    .notice-meta {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .notice-body {
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
+    .notice-body p { margin: 0 0 18px; }
+
+    .coupon-box {
+      margin: 18px 0 22px;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.58);
+    }
+
+    .coupon-box strong {
+      color: var(--accent-dark);
+    }
+
+    .apology-gif {
+      width: min(420px, 100%);
+      display: block;
+      margin: 28px auto 10px;
+      border-radius: 22px;
+      border: 1px solid rgba(168, 95, 64, 0.18);
+      box-shadow: 0 16px 34px rgba(102, 72, 48, 0.16);
+    }
+
+    .notice-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+    }
+
+    .notice-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 20px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .notice-button.secondary {
+      background: transparent;
+      color: var(--accent-dark);
+      border: 1px solid rgba(168, 95, 64, 0.28);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <article class="notice-card">
+      <div class="notice-tag">NOTICE DETAIL</div>
+      <h1>折價卷署名錯誤更換公告</h1>
+      <p class="notice-meta">公告日期：2026/05/11</p>
+
+      <div class="notice-body">
+        <p>親愛的客人您好：</p>
+
+        <p>因本店員工操作疏忽，導致部分折價卷署名遭錯誤覆蓋。對於因此造成的不便，本店在此向受到影響的客人致上歉意。</p>
+
+        <div class="coupon-box">
+          <p><strong>受影響折價卷內容：</strong><br>3級空白管弦樂琴樂譜　署名：雪月之夜</p>
+        </div>
+
+        <p>若您持有上述署名為「雪月之夜」的折價卷，可於下一次營業日至本店向現場店員提出更換，本店將免費協助更換為正確版本。</p>
+
+        <div class="coupon-box">
+          <p><strong>正確折價卷內容：</strong><br>3級空白管弦樂琴樂譜　署名：球貓像顆球</p>
+        </div>
+
+        <p>更換時請向現場店員出示原折價卷內容，以便確認與處理。原折價卷所對應的優惠資格不會因此失效，請客人放心。</p>
+
+        <p>再次感謝各位客人的體諒，也謝謝大家願意包容試營運期間仍在調整中的流程。後續若有其他異動，本店也會於官網公告區同步更新。</p>
+
+        <img class="apology-gif" src="assets/coupon-signature-apology-lite.gif" alt="松你去鼠道歉示意 GIF" loading="lazy">
+
+        <p>松你去鼠 敬上</p>
+      </div>
+
+      <div class="notice-actions">
+        <a class="notice-button secondary" href="../index.html">返回官網</a>
+      </div>
+    </article>
+  </div>
+</body>
+</html>
