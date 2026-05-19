@@ -1,90 +1,136 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>松你去鼠｜點餐入口</title>
   <style>
+    :root {
+      --bg: #f6efe6;
+      --panel: rgba(255,255,255,0.9);
+      --text: #2f231d;
+      --muted: #7d685c;
+      --accent: #a85d3d;
+      --border: rgba(168, 93, 61, 0.18);
+      --shadow: 0 24px 54px rgba(128, 91, 63, 0.18);
+    }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       min-height: 100vh;
-      display: grid;
-      place-items: center;
-      background: radial-gradient(circle at top, rgba(223, 201, 179, 0.42), transparent 32%), #f6efe7;
-      color: #3f2c23;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
       font-family: "Microsoft JhengHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(233, 193, 164, 0.45), transparent 30%),
+        radial-gradient(circle at bottom left, rgba(226, 194, 170, 0.35), transparent 28%),
+        var(--bg);
     }
     .card {
-      width: min(680px, calc(100% - 32px));
-      padding: 32px;
+      width: min(720px, 100%);
+      padding: 40px;
       border-radius: 28px;
-      background: rgba(255, 251, 246, 0.96);
-      border: 1px solid rgba(181, 133, 96, 0.16);
-      box-shadow: 0 24px 50px rgba(67, 41, 28, 0.12);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
     }
-    h1 { margin: 0 0 12px; font-size: clamp(2rem, 5vw, 3rem); }
-    p { margin: 0 0 14px; line-height: 1.8; color: #6e5547; }
-    .hours {
-      margin-top: 18px;
-      padding: 16px 18px;
-      border-radius: 18px;
-      background: rgba(243, 234, 224, 0.9);
-      color: #7b5d4f;
+    .eyebrow {
+      margin: 0 0 10px;
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      color: var(--accent);
       font-weight: 700;
+      text-transform: uppercase;
     }
-    .link {
+    h1 {
+      margin: 0 0 18px;
+      font-size: clamp(42px, 8vw, 72px);
+      line-height: 0.95;
+    }
+    p {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.9;
+      color: var(--muted);
+      white-space: pre-line;
+    }
+    .actions { margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap; }
+    .button {
       display: inline-flex;
-      margin-top: 20px;
-      padding: 12px 20px;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 24px;
       border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--text);
       text-decoration: none;
-      background: #b96e49;
-      color: #fffdf8;
       font-weight: 700;
+      background: rgba(255,255,255,0.75);
     }
+    .button.primary { background: var(--accent); color: #fff; border-color: transparent; }
   </style>
 </head>
 <body>
   <main class="card">
-    <h1 id="title">正在確認營業狀態...</h1>
-    <p id="desc">請稍候，系統正在確認目前是否可開放點餐。</p>
-    <div class="hours">營業時間：每周日 晚上 6:00 - 9:00</div>
-    <a class="link" href="https://qoo861207.github.io/squirrelyouself/">返回官網</a>
+    <p class="eyebrow" id="eyebrow">正在確認營業狀態</p>
+    <h1 id="title">請稍候</h1>
+    <p id="description">正在確認目前是否開放點餐，若店面尚未營業，會直接顯示營業時間資訊。</p>
+    <div class="actions">
+      <a class="button" href="https://qoo861207.github.io/squirrelyouself/">返回官網</a>
+      <a class="button primary" id="fallbackLink" href="https://qoo861207.github.io/squirrelyouself/">重新整理</a>
+    </div>
   </main>
   <script>
-    const STATUS_URL = 'https://menu.squirrel-you-self.com/store-status';
-    const TARGET_URL = 'https://menu.squirrel-you-self.com/menu-live.html';
+    const storeStatusUrl = 'https://menu.squirrel-you-self.com/store-status?_=' + Date.now();
+    const targetUrl = 'https://menu.squirrel-you-self.com/menu-live.html';
+    const businessHours = '每周日 晚上 6:00 - 9:00';
     const titleEl = document.getElementById('title');
-    const descEl = document.getElementById('desc');
+    const descriptionEl = document.getElementById('description');
+    const eyebrowEl = document.getElementById('eyebrow');
+    const fallbackLink = document.getElementById('fallbackLink');
 
-    async function boot() {
-      try {
-        const res = await fetch(`${STATUS_URL}?_=${Date.now()}`, {
-          cache: 'no-store',
-          mode: 'cors',
-          headers: {
-            'ngrok-skip-browser-warning': 'true'
-          }
-        });
-        const data = await res.json();
-
-        if (data && data.success && data.isOpen) {
-          titleEl.textContent = '正在前往點餐頁面...';
-          descEl.textContent = '目前為營業時間，系統即將為您開啟點餐頁。';
-          location.replace(TARGET_URL);
-          return;
-        }
-
-        titleEl.textContent = '目前非營業時間';
-        descEl.textContent = '目前尚未開店，或店內暫時未開放點餐。請依營業時間再前來，謝謝您的體諒。';
-      } catch (error) {
-        titleEl.textContent = '目前非營業時間';
-        descEl.textContent = '目前伺服器尚未開啟，暫時無法提供點餐服務。請依營業時間再前來，謝謝您的體諒。';
-      }
+    function showClosed() {
+      eyebrowEl.textContent = '目前非營業時間';
+      titleEl.textContent = '目前非營業時間';
+      descriptionEl.textContent = '目前尚未開放點餐。\n營業時間：' + businessHours + '。';
+      fallbackLink.textContent = '返回官網';
+      fallbackLink.href = 'https://qoo861207.github.io/squirrelyouself/';
     }
 
-    boot();
+    function showOffline() {
+      eyebrowEl.textContent = '伺服器尚未開啟';
+      titleEl.textContent = '目前非營業時間';
+      descriptionEl.textContent = '目前點餐伺服器尚未開啟，請稍後再試。\n營業時間：' + businessHours + '。';
+      fallbackLink.textContent = '返回官網';
+      fallbackLink.href = 'https://qoo861207.github.io/squirrelyouself/';
+    }
+
+    fetch(storeStatusUrl, { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw new Error('bad response');
+        return res.json();
+      })
+      .then(function (data) {
+        if (data && data.success && data.isOpen) {
+          location.replace(targetUrl);
+          return;
+        }
+        showClosed();
+      })
+      .catch(function () {
+        showOffline();
+      });
   </script>
 </body>
 </html>
+
+
+
+
+
+
 
