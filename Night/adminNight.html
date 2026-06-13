@@ -1,0 +1,580 @@
+﻿<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>松夜鼠堂 POS 後台 Night</title>
+  <style>
+    :root {
+      --bg: #070407;
+      --panel: rgba(12, 7, 14, .74);
+      --card: rgba(255, 245, 232, .055);
+      --ink: #fff5e8;
+      --muted: rgba(255, 245, 232, .72);
+      --line: rgba(240, 189, 116, .24);
+      --gold: #f0bd74;
+      --rose: #ff638b;
+      --violet: #7c5cff;
+      --ok: #76d98b;
+      --bad: #ff8e8e;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Microsoft JhengHei", "Microsoft JhengHei UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(255,245,232,.22), transparent 25rem),
+        radial-gradient(circle at 84% 4%, rgba(255,99,139,.24), transparent 28rem),
+        linear-gradient(135deg, #050305, #1a1018 54%, #070508);
+      overflow-x: hidden;
+    }
+
+    .page { width: min(1260px, calc(100% - 34px)); margin: 0 auto; padding: 26px 0 72px; }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 26px;
+      padding: 13px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(9,6,10,.52);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 900; letter-spacing: .14em; }
+    .brand-dot { width: 30px; height: 30px; border-radius: 50%; background: radial-gradient(circle at 34% 28%, #fff4cf, var(--gold) 36%, var(--rose) 70%, #332052); box-shadow: 0 0 28px rgba(255,99,139,.42); }
+    .nav-links { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .nav a, .btn {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 9px 17px;
+      border: 1px solid rgba(240,189,116,.34);
+      border-radius: 999px;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 900;
+      transition: .25s;
+      background: rgba(255,245,232,.04);
+      cursor: pointer;
+    }
+
+    .nav a:hover, .btn:hover { transform: translateY(-2px); }
+    .btn.ok { border-color: rgba(118,217,139,.45); color: var(--ok); }
+    .btn.bad { border-color: rgba(255,142,142,.45); color: var(--bad); }
+    .btn.primary { border-color: rgba(240,189,116,.5); background: linear-gradient(135deg, rgba(124,92,255,.5), rgba(255,99,139,.45)); }
+    .btn.small { min-height: 34px; padding: 6px 12px; font-size: 13px; }
+
+    .hero, .panel, .order, .modal-card {
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      background: var(--panel);
+      box-shadow: 0 24px 80px rgba(0,0,0,.22);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero { padding: clamp(28px,5vw,52px); margin-bottom: 22px; }
+    .kicker { margin: 0 0 12px; color: var(--gold); font-size: 13px; font-weight: 900; letter-spacing: .25em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(38px,6vw,72px); line-height: .95; letter-spacing: -.05em; }
+    h2 { margin: 0 0 18px; font-size: clamp(26px,4vw,42px); }
+    h3 { margin: 0; }
+    p { color: var(--muted); line-height: 1.8; font-weight: 650; }
+
+    .stats { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; margin-bottom: 20px; }
+    .stat { padding: 18px; border: 1px solid rgba(240,189,116,.18); border-radius: 22px; background: rgba(255,245,232,.045); }
+    .stat b { display: block; font-size: 30px; color: var(--gold); margin-top: 6px; }
+
+    .panel { padding: clamp(22px,4vw,36px); }
+    .panel-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .night-status-panel { margin-bottom: 20px; }
+    .night-status-panel p { margin: 6px 0 0; }
+    .orders { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
+    .order { padding: 20px; cursor: pointer; transition: .22s ease; }
+    .order:hover { transform: translateY(-3px); border-color: rgba(240,189,116,.45); }
+    .order-head { display: flex; justify-content: space-between; gap: 12px; align-items: start; border-bottom: 1px solid rgba(240,189,116,.14); padding-bottom: 12px; margin-bottom: 14px; }
+    .order h3 { font-size: 26px; }
+    .pill { display: inline-flex; padding: 7px 10px; border-radius: 999px; border: 1px solid rgba(240,189,116,.24); font-weight: 900; color: var(--gold); font-size: 13px; }
+    .pill.ok { color: var(--ok); border-color: rgba(118,217,139,.32); }
+    .pill.bad { color: var(--bad); border-color: rgba(255,142,142,.32); }
+    .items { display: grid; gap: 8px; margin: 14px 0; }
+    .item { display: flex; justify-content: space-between; gap: 10px; color: var(--muted); border-bottom: 1px solid rgba(240,189,116,.12); padding-bottom: 7px; }
+    .total { font-size: 28px; color: var(--gold); font-weight: 950; }
+    .empty { padding: 40px; text-align: center; color: var(--muted); border: 1px dashed rgba(240,189,116,.25); border-radius: 28px; grid-column: 1 / -1; }
+
+    .modal[hidden] { display: none; }
+    .modal { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 18px; background: rgba(0,0,0,.56); backdrop-filter: blur(10px); }
+    .modal-card { width: min(1080px, 100%); max-height: min(92vh, 920px); overflow: auto; padding: clamp(20px,4vw,34px); }
+    .modal-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; border-bottom: 1px solid rgba(240,189,116,.18); padding-bottom: 16px; margin-bottom: 18px; }
+    .modal-title { margin: 0; font-size: clamp(28px, 4vw, 46px); }
+    .detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
+    .detail-card { border: 1px solid rgba(240,189,116,.18); border-radius: 20px; padding: 14px; background: var(--card); }
+    .detail-card.wide { grid-column: 1 / -1; }
+    .detail-label { color: var(--gold); font-size: 13px; font-weight: 900; margin-bottom: 6px; letter-spacing: .08em; }
+    .detail-value { color: var(--ink); font-weight: 850; line-height: 1.8; }
+    .detail-muted { color: var(--muted); font-weight: 650; }
+    .detail-total { color: var(--gold); font-size: 32px; font-weight: 950; }
+
+    .field-row { display: grid; grid-template-columns: 1fr 130px; gap: 10px; }
+    select, input, textarea {
+      width: 100%;
+      border: 1px solid rgba(240,189,116,.22);
+      border-radius: 14px;
+      padding: 11px 13px;
+      background: rgba(255,245,232,.92);
+      color: #291b17;
+      font: inherit;
+      font-weight: 750;
+    }
+    textarea { min-height: 74px; resize: vertical; }
+    .quick-list, .actions, .raffle-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    .macro-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; margin-top: 12px; }
+    .macro-card { border: 1px solid rgba(240,189,116,.18); border-radius: 18px; padding: 12px; background: rgba(255,245,232,.04); }
+    .macro-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .macro-title { color: var(--gold); font-weight: 900; }
+    .macro-card textarea { min-height: 62px; color: #2a1c18; }
+    .status-line { margin-top: 10px; color: var(--ok); min-height: 24px; font-weight: 850; }
+    code { color: var(--gold); word-break: break-all; font-weight: 850; }
+
+    @media (max-width: 980px) {
+      .orders, .stats, .detail-grid, .macro-grid { grid-template-columns: 1fr; }
+      .nav { align-items: flex-start; border-radius: 24px; flex-direction: column; }
+      .field-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="nav">
+      <div class="brand"><span class="brand-dot"></span><span>松夜鼠堂 POS</span></div>
+      <div class="nav-links"><a href="indexNight.html">首頁</a><a href="menuNight.html">點餐頁</a><a href="adminNight.html">後台</a></div>
+    </nav>
+
+    <section class="hero">
+      <p class="kicker">Night POS Admin</p>
+      <h1>松夜鼠堂後台</h1>
+      <p>點擊訂單可查看詳情、儲存折扣、調整抽獎次數、複製收銀巨集與抽獎頁面。</p>
+    </section>
+
+    <section class="panel night-status-panel">
+      <div class="panel-head">
+        <div>
+          <h2>松夜鼠堂營業狀態</h2>
+          <p id="nightStoreStatusText">讀取中...</p>
+        </div>
+        <div class="actions">
+          <button class="btn ok" onclick="setNightStoreOpen(true)">開台</button>
+          <button class="btn bad" onclick="setNightStoreOpen(false)">休店</button>
+          <button class="btn" onclick="window.open('/gamble-admin.html?scope=night', '_blank', 'noopener')">獎金池後台</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <article class="stat">未完成訂單<b id="statOpen">0</b></article>
+      <article class="stat">已收款<b id="statPaid">0</b></article>
+      <article class="stat">已送達<b id="statDelivered">0</b></article>
+      <article class="stat">目前總額<b id="statTotal">0 G</b></article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>訂單列表</h2>
+        <button class="btn bad" onclick="clearOrders()">清空 Night 訂單</button>
+      </div>
+      <div id="orders" class="orders"></div>
+    </section>
+  </main>
+
+  <div id="orderModal" class="modal" hidden>
+    <div class="modal-card">
+      <div class="modal-top">
+        <div>
+          <p class="kicker">Night Order Detail</p>
+          <h2 id="modalTitle" class="modal-title">訂單詳情</h2>
+          <p id="modalSubtitle"></p>
+        </div>
+        <button class="btn" onclick="closeOrderModal()">關閉</button>
+      </div>
+
+      <div class="detail-grid">
+        <section class="detail-card">
+          <div class="detail-label">訂單狀態</div>
+          <div id="detailStatus" class="detail-value"></div>
+        </section>
+        <section class="detail-card">
+          <div class="detail-label">金額</div>
+          <div id="detailMoney" class="detail-value"></div>
+        </section>
+        <section class="detail-card wide">
+          <div class="detail-label">餐點</div>
+          <div id="detailItems" class="items"></div>
+        </section>
+        <section class="detail-card wide">
+          <div class="detail-label">備註</div>
+          <div id="detailNote" class="detail-muted"></div>
+        </section>
+        <section class="detail-card wide">
+          <div class="detail-label">折扣設定</div>
+          <div class="field-row">
+            <select id="discountType">
+              <option value="none">不折扣</option>
+              <option value="percent">折扣百分比</option>
+              <option value="fixed">直接折抵金額</option>
+            </select>
+            <input type="number" id="discountValue" min="0" value="0" placeholder="數值">
+          </div>
+          <div class="quick-list">
+            <button class="btn small" type="button" onclick="applyQuickDiscount('percent', 20, '合作夥伴折價卷八折')">合作夥伴折價卷八折</button>
+            <button class="btn small" type="button" onclick="applyQuickDiscount('percent', 30, '餐點晚到七折')">餐點晚到七折</button>
+            <button class="btn small" type="button" onclick="applyQuickDiscount('percent', 20, '餐點不足折抵八折')">餐點不足折抵八折</button>
+            <button class="btn small" type="button" onclick="applyQuickDiscount('percent', 20, '全場優惠八折')">全場優惠八折</button>
+          </div>
+          <textarea id="discountReason" placeholder="折扣原因，例如：合作夥伴折價卷 / 餐點延遲補償"></textarea>
+        </section>
+        <section class="detail-card wide">
+          <div class="detail-label">抽獎資格</div>
+          <div id="detailRaffle" class="detail-value"></div>
+          <div class="raffle-actions">
+            <button class="btn small" onclick="adjustRaffle(1)">抽獎 +1</button>
+            <button class="btn small" onclick="adjustRaffle(5)">抽獎 +5</button>
+            <button class="btn small" onclick="adjustRaffle(100)">抽獎 +100</button>
+            <button class="btn small bad" onclick="adjustRaffle(-1)">抽獎 -1</button>
+          </div>
+        </section>
+        <section class="detail-card wide">
+          <div class="detail-label">抽獎網址</div>
+          <code id="detailRaffleUrl"></code>
+        </section>
+        <section class="detail-card wide">
+          <div class="detail-label">操作</div>
+          <div class="actions">
+            <button class="btn primary" onclick="copyRaffleUrlFromModal()">複製抽獎網址</button>
+            <button class="btn" onclick="openRaffleFromModal()">打開抽獎頁</button>
+            <button class="btn ok" onclick="setCurrentStatus('paid')">確認收款</button>
+            <button class="btn ok" onclick="setCurrentStatus('delivered')">餐點送達</button>
+            <button class="btn" onclick="saveDiscount()">儲存折扣</button>
+            <button class="btn bad" onclick="setCurrentStatus('closed')">完成/移除</button>
+          </div>
+          <div id="modalStatus" class="status-line"></div>
+        </section>
+        <section class="detail-card wide">
+          <div class="detail-label">常用巨集</div>
+          <div id="macroGrid" class="macro-grid"></div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const money = n => `${Number(n || 0).toLocaleString('zh-TW')} G`;
+    let orders = [];
+    let currentOrder = null;
+    let nightStoreStatus = null;
+
+    function escapeHtml(value = '') {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function fullRaffleUrl(order) {
+      if (!order?.raffleUrl) return '';
+      return new URL(order.raffleUrl, location.origin).href;
+    }
+
+    function statusText(order) {
+      return `${order.paid ? '已收款' : '未收款'} / ${order.delivered ? '已送達' : '未送達'}`;
+    }
+
+    function getOrderById(id) {
+      return orders.find(item => Number(item.id) === Number(id));
+    }
+
+    function renderNightStoreStatus(status) {
+      nightStoreStatus = status;
+      const el = document.getElementById('nightStoreStatusText');
+      if (!el) return;
+      const state = status?.isOpen ? '開台中，可以點餐' : '休店中，客人會看到非營業中繼頁';
+      el.textContent = `${state}｜營業時間：${status?.businessHours || '每週日 晚上 10:00 - 12:30'}｜更新：${status?.updatedAt || '無'}`;
+      el.style.color = status?.isOpen ? 'var(--ok)' : 'var(--bad)';
+    }
+
+    async function loadNightStoreStatus() {
+      const res = await fetch('/night-api/store-status', { cache: 'no-store' });
+      const data = await res.json();
+      if (data.success) renderNightStoreStatus(data);
+    }
+
+    async function setNightStoreOpen(isOpen) {
+      const res = await fetch('/night-api/store-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isOpen })
+      });
+      const data = await res.json();
+      if (data.success) renderNightStoreStatus(data);
+    }
+
+    async function loadOrders(keepModal = true) {
+      const res = await fetch('/night-api/orders', { cache: 'no-store' });
+      const data = await res.json();
+      orders = data.orders || [];
+      if (currentOrder && keepModal) {
+        currentOrder = getOrderById(currentOrder.id) || currentOrder;
+      }
+      render();
+      if (currentOrder && keepModal) renderOrderModal(currentOrder, false);
+    }
+
+    function render() {
+      const open = orders.filter(o => o.status !== 'closed');
+      document.getElementById('statOpen').textContent = open.length;
+      document.getElementById('statPaid').textContent = open.filter(o => o.paid).length;
+      document.getElementById('statDelivered').textContent = open.filter(o => o.delivered).length;
+      document.getElementById('statTotal').textContent = money(open.reduce((sum, o) => sum + Number(o.total || 0), 0));
+
+      const wrap = document.getElementById('orders');
+      if (!open.length) {
+        wrap.innerHTML = '<div class="empty">目前沒有 Night 訂單。</div>';
+        return;
+      }
+
+      wrap.innerHTML = open.map(order => {
+        const raffle = order.raffle || {};
+        return `<article class="order" onclick="openOrderModal(${order.id})">
+          <div class="order-head">
+            <div><h3>#${order.id} ${escapeHtml(order.customer)}</h3><p>${escapeHtml(order.createdAt || '')}</p></div>
+            <div><span class="pill ${order.paid ? 'ok' : 'bad'}">${order.paid ? '已收款' : '未收款'}</span> <span class="pill ${order.delivered ? 'ok' : 'bad'}">${order.delivered ? '已送達' : '未送達'}</span></div>
+          </div>
+          <div class="items">${(order.items || []).slice(0, 5).map(item => `<div class="item"><span>${escapeHtml(item.name)} x${item.qty}</span><b>${money(item.subtotal)}</b></div>`).join('')}</div>
+          ${(order.items || []).length > 5 ? `<p>另有 ${(order.items || []).length - 5} 個品項，點開查看完整內容。</p>` : ''}
+          <div class="detail-muted">原始 ${money(order.subtotal)} / 折扣 ${money(order.discount_amount)} / 應收</div>
+          <div class="total">${money(order.total)}</div>
+          <p>抽獎：可抽 ${raffle.eligible || 0} / 已抽 ${raffle.used || 0} / 剩餘 ${raffle.remaining || 0}</p>
+        </article>`;
+      }).join('');
+    }
+
+    function openOrderModal(id) {
+      const order = getOrderById(id);
+      if (!order) return;
+      currentOrder = order;
+      document.getElementById('orderModal').hidden = false;
+      renderOrderModal(order, true);
+    }
+
+    function closeOrderModal() {
+      currentOrder = null;
+      document.getElementById('orderModal').hidden = true;
+    }
+
+    function renderOrderModal(order, resetStatus = false) {
+      if (!order) return;
+      const raffle = order.raffle || {};
+      document.getElementById('modalTitle').textContent = `#${order.id} ${order.customer || '未命名客人'}`;
+      document.getElementById('modalSubtitle').textContent = `下單時間：${order.createdAt || '無'}`;
+      document.getElementById('detailStatus').innerHTML = `狀態：${statusText(order)}<br>訂單編號：#${order.id}`;
+      document.getElementById('detailMoney').innerHTML = `原始金額：${money(order.subtotal)}<br>折扣金額：${money(order.discount_amount)}<br><span class="detail-total">應收：${money(order.total)}</span><br>折扣原因：${escapeHtml(order.discount_reason || '無')}`;
+      document.getElementById('detailItems').innerHTML = (order.items || []).map(item => `<div class="item"><span>${escapeHtml(item.name)} x${item.qty}</span><b>${money(item.subtotal)}</b></div>`).join('') || '<div class="detail-muted">無餐點</div>';
+      document.getElementById('detailNote').textContent = order.note || '無';
+      document.getElementById('discountType').value = order.discount_type || 'none';
+      document.getElementById('discountValue').value = Number(order.discount_value || 0);
+      document.getElementById('discountReason').value = order.discount_reason || '';
+      document.getElementById('detailRaffle').innerHTML = `折扣前合計：${money(raffle.basisAmount)} / 每 ${money(raffle.unit)} 1 次<br>基本 ${raffle.baseEligible || 0} 次 / 人工調整 ${formatSigned(raffle.manualAdjustment || 0)} / 可抽 ${raffle.eligible || 0} 次 / 已抽 ${raffle.used || 0} 次 / 剩餘 ${raffle.remaining || 0} 次`;
+      document.getElementById('detailRaffleUrl').textContent = fullRaffleUrl(order) || '尚未產生抽獎網址';
+      renderMacros(order);
+      if (resetStatus) document.getElementById('modalStatus').textContent = '';
+    }
+
+    function formatSigned(value) {
+      const safe = Number(value || 0);
+      return safe > 0 ? `+${safe}` : String(safe);
+    }
+
+    function applyQuickDiscount(type, value, reason) {
+      document.getElementById('discountType').value = type;
+      document.getElementById('discountValue').value = value;
+      document.getElementById('discountReason').value = reason;
+    }
+
+    async function saveDiscount() {
+      if (!currentOrder) return;
+      setModalStatus('儲存折扣中...');
+      const res = await fetch(`/night-api/order/${currentOrder.id}/discount`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          discount_type: document.getElementById('discountType').value,
+          discount_value: Number(document.getElementById('discountValue').value || 0),
+          discount_reason: document.getElementById('discountReason').value.trim()
+        })
+      });
+      const data = await res.json();
+      if (!data.success) return setModalStatus(data.message || '折扣儲存失敗', true);
+      currentOrder = data.order;
+      await loadOrders(false);
+      renderOrderModal(currentOrder, false);
+      setModalStatus('折扣已儲存');
+    }
+
+    async function adjustRaffle(delta) {
+      if (!currentOrder) return;
+      setModalStatus('調整抽獎次數中...');
+      const res = await fetch(`/night-api/raffle/${currentOrder.id}/adjust`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ delta })
+      });
+      const data = await res.json();
+      if (!data.success) return setModalStatus(data.message || '抽獎次數調整失敗', true);
+      currentOrder = data.order;
+      await loadOrders(false);
+      renderOrderModal(currentOrder, false);
+      setModalStatus(`抽獎次數已調整 ${formatSigned(delta)}`);
+    }
+
+    async function setCurrentStatus(action) {
+      if (!currentOrder) return;
+      await setStatus(currentOrder.id, action);
+      if (action === 'closed') closeOrderModal();
+    }
+
+    async function setStatus(id, action) {
+      const res = await fetch(`/night-api/order/${id}/status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action })
+      });
+      const data = await res.json();
+      if (!data.success) return setModalStatus(data.message || '狀態更新失敗', true);
+      currentOrder = data.order;
+      await loadOrders(false);
+      if (currentOrder && action !== 'closed') {
+        renderOrderModal(currentOrder, false);
+        setModalStatus('狀態已更新');
+      }
+    }
+
+    async function copyText(text, label = '內容') {
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+      }
+      catch (error) {
+        const temp = document.createElement('textarea');
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.focus();
+        temp.select();
+        document.execCommand('copy');
+        temp.remove();
+      }
+      setModalStatus(`${label}已複製`);
+    }
+
+    function copyRaffleUrlFromModal() {
+      if (!currentOrder) return;
+      copyText(fullRaffleUrl(currentOrder), '抽獎網址');
+    }
+
+    function openRaffleFromModal() {
+      if (!currentOrder) return;
+      const url = fullRaffleUrl(currentOrder);
+      if (url) window.open(url, '_blank', 'noopener');
+    }
+
+    function buildMacro(order, mode) {
+      const name = String(order.customer || '').trim() || '<t>';
+      const total = Number(order.total || 0);
+      const subtotal = Number(order.subtotal || 0);
+      const discount = Number(order.discount_amount || 0);
+      const raffleUrl = fullRaffleUrl(order);
+      if (mode === 'discountable') {
+        return `/say 客人 <t> 你好，你的訂單金額為${subtotal}G，如有折價卷可以出示給我確認。`;
+      }
+      if (mode === 'discounted') {
+        return `/say 客人 <t> 你好，你的訂單折價後總共${total}G。`;
+      }
+      if (mode === 'normal') {
+        return `/say 客人 <t> 你好，你的訂單總共${total}G。`;
+      }
+      if (mode === 'raffle') {
+        return `客人 <t> 你好，這是您的抽獎頁面：${raffleUrl}`;
+      }
+      if (mode === 'served') {
+        return `/say 客人 <t> 您好，您的餐點已送達，請慢用。`;
+      }
+      if (mode === 'seat') {
+        return ``;
+      }
+      return '';
+    }
+
+    function renderMacros(order) {
+      const macros = [
+        ['可出示折價卷', buildMacro(order, 'discountable')],
+        ['折價後總額', buildMacro(order, 'discounted')],
+        ['一般總額', buildMacro(order, 'normal')],
+        ['抽獎頁面', buildMacro(order, 'raffle')],
+        ['餐點送達', buildMacro(order, 'served')],
+        ['帶位提醒', buildMacro(order, 'seat')]
+      ];
+      document.getElementById('macroGrid').innerHTML = macros.map(([title, text], index) => `<div class="macro-card">
+        <div class="macro-head"><div class="macro-title">巨集 ${index + 1}：${escapeHtml(title)}</div><button class="btn small" onclick="copyText(document.getElementById('macro${index}').value, '巨集 ${index + 1}')">複製</button></div>
+        <textarea id="macro${index}" readonly>${escapeHtml(text)}</textarea>
+      </div>`).join('');
+    }
+
+    function setModalStatus(message, isError = false) {
+      const el = document.getElementById('modalStatus');
+      el.textContent = message;
+      el.style.color = isError ? 'var(--bad)' : 'var(--ok)';
+    }
+
+    async function clearOrders() {
+      if (!confirm('確定清空所有 Night 訂單？')) return;
+      await fetch('/night-api/clear', { method: 'POST' });
+      closeOrderModal();
+      loadOrders(false);
+    }
+
+    document.getElementById('orderModal').addEventListener('click', event => {
+      if (event.target.id === 'orderModal') closeOrderModal();
+    });
+
+    loadNightStoreStatus();
+    loadOrders();
+    setInterval(() => loadOrders(true), 3000);
+    try {
+      const events = new EventSource('/events');
+      events.onmessage = event => {
+        loadOrders(true);
+        try {
+          const payload = JSON.parse(event.data || '{}');
+          if (payload.type === 'night-store-status') loadNightStoreStatus();
+        }
+        catch (e) {}
+      };
+    }
+    catch (e) {}
+  </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,21 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 1100">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7d89a"/>
+      <stop offset="0.5" stop-color="#7b4220"/>
+      <stop offset="1" stop-color="#1a0f0a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="36%" r="58%">
+      <stop offset="0" stop-color="#fff4c8" stop-opacity="0.65"/>
+      <stop offset="0.45" stop-color="#e6a24f" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="700" height="1100" rx="54" fill="url(#bg)"/>
+  <rect x="34" y="34" width="632" height="1032" rx="42" fill="none" stroke="#ffe2a7" stroke-width="10" opacity="0.74"/>
+  <rect x="64" y="64" width="572" height="972" rx="34" fill="none" stroke="#2a170d" stroke-width="6" opacity="0.72"/>
+  <circle cx="350" cy="360" r="290" fill="url(#glow)"/>
+  <path d="M160 210 L350 96 L540 210 L540 890 L350 1004 L160 890 Z" fill="none" stroke="#ffe7b8" stroke-width="8" opacity="0.5"/>
+  <text x="350" y="606" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="360" font-weight="900" fill="#fff0ca" opacity="0.96">A</text>
+  <text x="350" y="735" text-anchor="middle" font-family="Arial, sans-serif" font-size="46" font-weight="700" letter-spacing="8" fill="#fff0ca" opacity="0.74">SAMPLE CARD BACK</text>
+</svg>

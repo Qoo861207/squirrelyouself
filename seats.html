@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>座位管理</title>
+
+<style>
+/* ===== 訂單視窗 ===== */
+
+.order-panel {
+
+  position: fixed;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  background: white;
+
+  padding: 30px;
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.2);
+
+  display: none;
+
+  width: 360px;
+
+  z-index: 1000;
+
+}
+
+button {
+
+  background: #1a73e8;
+
+  color: white;
+
+  border: none;
+
+  padding: 8px 16px;
+
+  border-radius: 6px;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  margin-right: 6px;
+
+}
+
+button:hover {
+
+  background: #1669c1;
+
+}
+
+.menu-row {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 8px;
+
+}
+
+input[type="text"],
+input[type="number"] {
+
+  width: 100%;
+
+  padding: 8px;
+
+  margin-top: 4px;
+
+  margin-bottom: 12px;
+
+  border: 1px solid #dadce0;
+
+  border-radius: 6px;
+
+  font-size: 14px;
+
+}
+
+input:focus {
+
+  outline: none;
+
+  border: 1px solid #1a73e8;
+
+}
+
+body {
+
+  font-family: Arial, sans-serif;
+
+  background: #f1f3f4;
+
+  color: #202124;
+
+  margin: 0;
+
+}
+
+/* 主容器 */
+
+.container {
+  position: relative;
+  width: 800px;
+  height: 800px;
+  margin: auto;
+
+  background-image: url("floor.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* 桌子 */
+
+.table {
+  position: absolute;
+  width: 100px;
+  height: 60px;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 60px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* 吧檯 */
+
+.bar {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 60px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* 狀態 */
+
+.empty {
+  background: green;
+}
+
+.occupied {
+  background: red;
+}
+
+/* ===== 桌子位置 ===== */
+
+#T1 { top: 59px; left: 105px; }
+
+#T2 { top: 285px; left: 105px; }
+
+#T3 { top: 493px; left: 105px; }
+
+/* ===== 吧檯直排 ===== */
+
+#BAR1 { top: 50px; left: 420px; }
+
+#BAR2 { top: 125px; left: 420px; }
+
+#BAR3 { top: 200px; left: 420px; }
+
+#BAR4 { top: 275px; left: 420px; }
+
+#BAR5 { top: 350px; left: 420px; }
+
+/* ===== 吧檯橫排 ===== */
+
+#BAR6 { top: 480px; left: 520px; }
+
+#BAR7 { top: 480px; left: 600px; }
+
+#BAR8 { top: 480px; left: 680px; }
+
+.title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+</style>
+
+</head>
+
+<!-- ===== 訂單視窗 ===== -->
+
+<div id="orderPanel" class="order-panel">
+
+  <h2 id="orderTitle">訂單</h2>
+
+  客人名稱：
+  <input type="text" id="customerName"><br><br>
+
+<br><br>
+
+人數：
+<input type="number" id="peopleCount" min="1" value="1"><br><br>
+
+餐點：
+
+<div>
+
+<label>
+  <input type="checkbox"
+         value="100"
+         class="menuItem">
+
+  烤肉串 100G
+
+  x
+  <input type="number"
+         min="1"
+         max="9"
+         value="1"
+         class="qty">
+</label>
+
+<br>
+
+<label>
+  <input type="checkbox"
+         value="150"
+         class="menuItem">
+
+  燉湯 150G
+
+  x
+  <input type="number"
+         min="1"
+         max="9"
+         value="1"
+         class="qty">
+</label>
+
+<br>
+
+
+
+<label>
+  <input type="checkbox"
+         value="200"
+         class="menuItem">
+
+  特調飲料 200G
+
+  x
+  <input type="number"
+         min="1"
+         max="9"
+         value="1"
+         class="qty">
+</label>
+
+<br>
+
+餐點備註：
+
+<br>
+
+<input type="text"
+       id="note"
+       placeholder="例：加蔥、加鹽、加辣、加飯等">
+
+<br>
+
+</div>
+
+  <br>
+
+  總金額：
+  <span id="totalPrice">0</span> G
+
+  <br><br>
+
+  <button onclick="submitOrder()">
+    送出訂單
+  </button>
+
+  <button onclick="closeOrder()">
+    關閉
+  </button>
+
+</div>
+
+<body>
+
+<div class="title">
+座位狀態
+</div>
+
+<div class="container" id="container">
+</div>
+
+<script>
+let currentTable = "";
+
+
+/* ===== 點擊座位開訂單 ===== */
+
+function openOrder(tableName) {
+
+  currentTable = tableName;
+
+  document.getElementById("orderTitle").innerText =
+    "訂單 - " + tableName;
+
+  const peopleInput =
+    document.getElementById("peopleCount");
+
+  // ===== 如果是吧檯 =====
+  if (tableName.startsWith("BAR")) {
+
+    peopleInput.value = 1;
+
+    peopleInput.max = 1;
+
+    peopleInput.disabled = true;
+
+  }
+  // ===== 如果是桌子 =====
+  else {
+
+    peopleInput.value = 1;
+
+    peopleInput.max = 6;
+
+    peopleInput.disabled = false;
+
+  }
+
+  document.getElementById("orderPanel").style.display =
+    "block";
+
+}
+
+
+/* ===== 關閉視窗 ===== */
+
+function closeOrder() {
+
+  document.getElementById("customerName").value = "";
+
+  document.getElementById("peopleCount").value = 1;
+
+  document.querySelectorAll(".menuItem")
+  .forEach(item => item.checked = false);
+
+  document.getElementById("totalPrice").innerText = 0;
+
+  document.getElementById("orderPanel").style.display =
+    "none";
+
+}
+
+async function checkoutSeat(name) {
+
+  const ok = confirm(
+    "此座位正在使用，是否結帳？"
+  );
+
+  if (ok) {
+
+    await toggleSeat(name);
+
+    loadSeats();
+
+  }
+
+  // 清空資料
+  document.getElementById("customerName").value = "";
+
+  document.getElementById("peopleCount").value = 1;
+
+  document.querySelectorAll(".menuItem")
+  .forEach(item => item.checked = false);
+
+  document.getElementById("totalPrice").innerText = 0;
+
+  document.getElementById("orderPanel").style.display =
+    "none";
+
+}
+
+
+/* ===== 計算總價 ===== */
+
+document.querySelectorAll(".menuItem")
+.forEach(item => {
+
+  item.addEventListener("change", updateTotal);
+
+});
+
+document.querySelectorAll(".qty")
+.forEach(q => {
+
+  q.addEventListener("change", updateTotal);
+
+});
+
+function updateTotal() {
+
+  let total = 0;
+
+  document.querySelectorAll(".menuItem")
+  .forEach((item, index) => {
+
+    if (item.checked) {
+
+      const qty =
+        document.querySelectorAll(".qty")[index].value;
+
+      total +=
+        parseInt(item.value) * qty;
+
+    }
+
+  });
+
+  document.getElementById("totalPrice")
+    .innerText = total;
+
+}
+
+async function loadSeats() {
+
+  const res = await fetch("/tables");
+  const data = await res.json();
+
+  const container =
+    document.getElementById("container");
+
+  container.innerHTML = "";
+
+  data.forEach(seat => {
+
+    const div =
+      document.createElement("div");
+
+    div.id = seat.name;
+
+    if (seat.name.startsWith("BAR")) {
+
+      div.className = "bar";
+
+    }
+    else {
+
+      div.className = "table";
+
+    }
+
+    div.classList.add(
+      seat.status === "empty"
+        ? "empty"
+        : "occupied"
+    );
+
+    div.innerText = seat.name;
+
+    /* ⭐ 這段是關鍵 */
+
+    div.onclick = () => {
+
+  if (seat.status === "empty") {
+
+    openOrder(seat.name);
+
+  }
+
+};
+
+    container.appendChild(div);
+
+  });
+
+}
+
+async function toggleSeat(name) {
+
+  await fetch("/toggle/" + name);
+
+  loadSeats();
+
+}
+
+
+/* ===== 送出訂單 ===== */
+
+async function submitOrder() {
+
+  const customer =
+    document.getElementById("customerName").value;
+
+  const people =
+    document.getElementById("peopleCount").value;
+	
+	const note =
+	document.getElementById("note").value;
+
+  const items = [];
+
+  let total = 0;
+
+  document.querySelectorAll(".menuItem")
+.forEach((item, index) => {
+
+  if (item.checked) {
+
+    const qty =
+      document.querySelectorAll(".qty")[index].value;
+
+    const text =
+      item.parentElement.innerText
+      .replace(/\s*x\s*\d+/, "");
+
+    items.push(
+      text
+		.replace(/\s*x\s*$/, "")
+		.trim() + " x" + qty
+    );
+
+    total +=
+      parseInt(item.value) * qty;
+
+  }
+
+});
+
+  /* ⭐ 最低消費檢查（至少一個餐點） */
+  
+  if (customer.trim() === "") {
+
+  alert("⚠ 請輸入客人名稱！");
+
+  return;
+
+}
+  
+  if (items.length === 0) {
+
+    alert("⚠ 請至少選擇一個餐點！");
+
+    return;
+
+  }
+
+  /* 送出訂單 */
+
+  const res = await fetch("/order", {
+
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({
+
+	customer: customer,
+
+	people: people,
+
+	table_name: currentTable,
+
+	items: items.join(", "),
+
+	note: note,
+
+	total: total
+
+	})
+
+  });
+
+  const data = await res.json();
+
+  await toggleSeat(currentTable);
+
+  alert(
+    "訂單已送出！\n號碼牌：#" +
+    data.orderId
+  );
+
+  closeOrder();
+
+}
+
+
+/* ===== 初始化 ===== */
+
+loadSeats();
+
+</script>
+
+</body>
+</html>

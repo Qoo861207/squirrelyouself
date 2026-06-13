@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>松夜鼠堂｜目前非營業時間</title>
+  <style>
+    :root {
+      --cream: #fff6e9;
+      --muted: rgba(255, 246, 233, 0.68);
+      --gold: #f0bd74;
+      --rose: #ff638b;
+      --violet: #7c5cff;
+      --line: rgba(240, 189, 116, 0.28);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      min-height: 100%;
+      background: #12090d;
+      color: var(--cream);
+      font-family: "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 18% 14%, rgba(255, 246, 233, 0.28), transparent 18rem),
+        radial-gradient(circle at 76% 18%, rgba(255, 99, 139, 0.24), transparent 22rem),
+        radial-gradient(circle at 50% 90%, rgba(124, 92, 255, 0.22), transparent 28rem),
+        linear-gradient(145deg, #292137 0%, #180c14 46%, #080508 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -20%;
+      pointer-events: none;
+      background:
+        linear-gradient(104deg, transparent 0 18%, rgba(255, 246, 233, 0.16) 20%, transparent 27%),
+        linear-gradient(114deg, transparent 0 42%, rgba(255, 246, 233, 0.10) 45%, transparent 51%),
+        radial-gradient(circle, rgba(255, 246, 233, 0.22) 0 1px, transparent 1.4px);
+      background-size: auto, auto, 62px 62px;
+      opacity: 0.55;
+      animation: moonDrift 18s ease-in-out infinite alternate;
+    }
+
+    @keyframes moonDrift {
+      from { transform: translate3d(-1.2%, -0.8%, 0); }
+      to { transform: translate3d(1.4%, 1%, 0); }
+    }
+
+    .card {
+      position: relative;
+      width: min(100%, 900px);
+      padding: clamp(34px, 6vw, 72px);
+      border: 1px solid var(--line);
+      border-radius: 36px;
+      background: rgba(12, 7, 12, 0.58);
+      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.34), inset 0 0 0 1px rgba(255, 246, 233, 0.035);
+      backdrop-filter: blur(22px);
+    }
+
+    .eyebrow {
+      margin: 0 0 20px;
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(44px, 8vw, 92px);
+      line-height: 1.02;
+      letter-spacing: -0.05em;
+    }
+
+    .lead {
+      max-width: 720px;
+      margin: 28px 0 0;
+      color: rgba(255, 246, 233, 0.78);
+      font-size: clamp(18px, 2.1vw, 25px);
+      line-height: 1.9;
+      font-weight: 800;
+    }
+
+    .hours {
+      margin-top: 34px;
+      padding: 20px 24px;
+      border-left: 4px solid var(--gold);
+      background: rgba(255, 246, 233, 0.06);
+      color: rgba(255, 246, 233, 0.86);
+      font-size: clamp(17px, 1.8vw, 22px);
+      line-height: 1.7;
+      font-weight: 850;
+    }
+
+    .hours b {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .btn {
+      position: relative;
+      isolation: isolate;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 24px;
+      border: 1px solid rgba(255, 246, 233, 0.32);
+      border-radius: 999px;
+      overflow: hidden;
+      color: var(--cream);
+      text-decoration: none;
+      font-weight: 950;
+      letter-spacing: 0.03em;
+      transition: transform 240ms ease, border-color 240ms ease, color 240ms ease;
+    }
+
+    .btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(90deg, var(--violet), var(--rose) 54%, var(--gold));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 420ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      color: #12090d;
+      border-color: rgba(255, 246, 233, 0.72);
+    }
+
+    .btn:hover::before { transform: scaleX(1); }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <p class="eyebrow">Night Dining / Not Open Yet</p>
+    <h1>目前非營業時間</h1>
+    <p class="lead">松夜鼠堂現在還沒開放點餐。你可以先看看介紹與公告，等後台開店後，點餐頁就會自動開放。</p>
+    <div class="hours">
+      <b>固定營業時間</b>
+      每週日 晚上 10:00 - 12:30
+    </div>
+    <div class="actions">
+      <a class="btn" href="indexNight.html">回松夜鼠堂首頁</a>
+      <a class="btn" href="menuNight.html">重新確認是否開店</a>
+    </div>
+  </main>
+</body>
+</html>

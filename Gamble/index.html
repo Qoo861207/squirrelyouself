@@ -1,0 +1,2411 @@
+﻿<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gamble 測試版</title>
+  <link rel="preload" href="Bside-lite.jpg" as="image">
+  <link rel="preload" href="card-back-a.svg" as="image">
+  <style>
+    :root {
+      --bg: #120f0d;
+      --panel: rgba(28, 22, 18, 0.92);
+      --panel-2: rgba(41, 31, 24, 0.92);
+      --line: rgba(221, 185, 134, 0.18);
+      --text: #f9f1e7;
+      --muted: #c8b39f;
+      --accent: #d18b55;
+      --accent-2: #f2bf7b;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+      --common: linear-gradient(135deg, #7f7067, #a5978a);
+      --uncommon: linear-gradient(135deg, #3f7d56, #62b07a);
+      --rare: linear-gradient(135deg, #355f9e, #5f97df);
+      --epic: linear-gradient(135deg, #7442b4, #ab77f0);
+      --legendary: linear-gradient(135deg, #b86d24, #ffd17d);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Microsoft JhengHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(228, 168, 92, 0.16), transparent 28%),
+        radial-gradient(circle at 18% 24%, rgba(255, 220, 166, 0.08), transparent 24%),
+        linear-gradient(180deg, #1a1411 0%, #0d0907 100%);
+    }
+
+    .page {
+      width: min(1280px, calc(100% - 40px));
+      margin: 28px auto 40px;
+      display: grid;
+      gap: 22px;
+    }
+
+    .hero, .panel {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero {
+      padding: 28px 32px;
+      display: grid;
+      grid-template-columns: 1.4fr 0.9fr;
+      gap: 22px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--accent-2);
+      font-size: 0.9rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+    }
+
+    .hero p {
+      margin: 18px 0 0;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 1.04rem;
+      line-height: 1.9;
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 14px;
+    }
+
+    .stat-card {
+      padding: 18px 20px;
+      border-radius: 22px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      font-weight: 800;
+    }
+
+    .board-hero {
+      grid-template-columns: minmax(0, 1.65fr) minmax(280px, 0.8fr);
+      align-items: stretch;
+    }
+
+    .board-stage {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      border: 1px solid rgba(247, 214, 142, 0.36);
+      background: rgba(0, 0, 0, 0.42);
+      box-shadow: inset 0 0 36px rgba(255, 202, 120, 0.08), 0 18px 45px rgba(0, 0, 0, 0.36);
+    }
+
+    .board-map {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 420px;
+      object-fit: contain;
+      background: rgba(255, 247, 224, 0.04);
+    }
+
+    .board-token {
+      position: absolute;
+      left: var(--token-x, 10.5%);
+      top: var(--token-y, 13%);
+      width: clamp(72px, 8.4vw, 124px);
+      transform: translate(-50%, -34%);
+      transform-origin: 50% 82%;
+      z-index: 4;
+      filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 12px rgba(255, 222, 150, 0.48));
+      transition: left 0.42s cubic-bezier(.2,.8,.22,1), top 0.42s cubic-bezier(.2,.8,.22,1);
+      pointer-events: none;
+    }
+
+    .board-token.is-moving {
+      animation: boardTokenHop 0.42s ease-in-out infinite;
+    }
+
+    .board-side {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .board-copy {
+      padding: 6px 4px 4px;
+    }
+
+    .board-copy h1 {
+      margin-bottom: 12px;
+    }
+
+    .board-status {
+      padding: 16px 18px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .board-action {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .board-prize-pop {
+      position: fixed;
+      inset: 0;
+      z-index: 95;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: radial-gradient(circle at 50% 40%, rgba(255, 217, 146, 0.2), rgba(0, 0, 0, 0.78) 62%);
+      backdrop-filter: blur(8px);
+    }
+
+    .board-prize-pop[hidden] {
+      display: none;
+    }
+
+    .board-prize-card {
+      width: min(420px, 86vw);
+      padding: 18px;
+      border-radius: 28px;
+      border: 1px solid rgba(247, 214, 142, 0.42);
+      background: linear-gradient(160deg, rgba(36, 24, 16, 0.96), rgba(12, 8, 6, 0.96));
+      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.65), 0 0 32px rgba(255, 218, 135, 0.2);
+      animation: boardPrizeIn 0.46s cubic-bezier(.2,.85,.2,1) both;
+      text-align: center;
+    }
+
+    .board-prize-card img {
+      display: block;
+      width: 100%;
+      max-height: 58vh;
+      object-fit: contain;
+      border-radius: 18px;
+      margin-bottom: 14px;
+    }
+
+    .board-prize-card h3 {
+      margin: 0 0 8px;
+      font-size: clamp(1.45rem, 4vw, 2.1rem);
+    }
+
+    .board-prize-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    @keyframes boardTokenHop {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      48% { transform: translate(-50%, -66%) scale(1.05); }
+    }
+
+    @keyframes boardPrizeIn {
+      from { opacity: 0; transform: translateY(18px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.65fr 0.85fr;
+      gap: 22px;
+    }
+
+    .case-panel {
+      padding: 22px;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .panel-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .panel-note {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .case-selector {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .case-chip {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 18px;
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+      font-weight: 700;
+    }
+
+    .case-chip:hover { transform: scale(1.05); }
+    .case-chip.active {
+      background: linear-gradient(135deg, rgba(209, 139, 85, 0.24), rgba(242, 191, 123, 0.1));
+      border-color: rgba(242, 191, 123, 0.52);
+    }
+
+    .reel-wrap {
+      position: relative;
+      border-radius: 26px;
+      padding: 22px 18px 24px;
+      background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.05), transparent 30%),
+        #110d0b;
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .reel-highlight {
+      position: absolute;
+      top: 16px;
+      bottom: 16px;
+      left: 50%;
+      width: 182px;
+      transform: translateX(-50%);
+      border-radius: 20px;
+      border: 2px solid rgba(255, 227, 172, 0.9);
+      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.32), 0 0 26px rgba(255, 188, 101, 0.32);
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .reel-track {
+      display: flex;
+      gap: 14px;
+      will-change: transform;
+      padding: 2px 0;
+    }
+
+    .reel-item {
+      width: 168px;
+      min-width: 168px;
+      height: 230px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow: hidden;
+      background: #1a1411;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+
+    .reel-art {
+      height: 122px;
+      display: grid;
+      place-items: center;
+      font-size: 2.5rem;
+      font-weight: 900;
+      text-shadow: 0 4px 18px rgba(0,0,0,0.45);
+      padding: 12px;
+    }
+
+    .reel-item.full-prize-face {
+      border-radius: 12px;
+    }
+
+    .reel-art.with-prize-image {
+      color: transparent;
+      height: 100%;
+      background-color: rgba(0,0,0,0.22);
+      background-position: center;
+      background-size: auto 104%;
+      background-repeat: no-repeat;
+    }
+
+    .reel-item.full-prize-face .reel-body {
+      display: none;
+    }
+
+    .reel-body {
+      padding: 14px 14px 16px;
+      background: rgba(17,13,11,0.95);
+      height: calc(100% - 122px);
+      display: grid;
+      align-content: start;
+      gap: 8px;
+    }
+
+    .item-name {
+      font-size: 1.02rem;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .item-type {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .rarity-tag {
+      margin-top: auto;
+      justify-self: start;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      margin-top: 18px;
+    }
+
+    .button {
+      border: none;
+      border-radius: 999px;
+      padding: 15px 24px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 800;
+      transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .button:hover { transform: scale(1.06); }
+    .button:active { transform: scale(1.12); }
+    .button.primary {
+      background: linear-gradient(135deg, #d0834a, #f3bb78);
+      color: #1c110d;
+      box-shadow: 0 12px 24px rgba(193, 121, 57, 0.28);
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .side-panel {
+      padding: 22px;
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .drop-card {
+      border-radius: 24px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .drop-art {
+      min-height: 220px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 24px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.08));
+    }
+
+    .drop-body {
+      padding: 18px 20px 20px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .drop-name { font-size: 1.3rem; font-weight: 900; }
+    .drop-desc { color: var(--muted); line-height: 1.8; }
+
+    .pool {
+      display: grid;
+      gap: 10px;
+      max-height: 320px;
+      overflow: auto;
+      padding-right: 6px;
+    }
+
+    .pool-item {
+      display: grid;
+      grid-template-columns: 48px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .pool-thumb {
+      width: 48px;
+      height: 68px;
+      border-radius: 9px;
+      background-color: rgba(0,0,0,0.22);
+      background-position: center;
+      background-size: auto 104%;
+      background-repeat: no-repeat;
+      box-shadow: inset 0 0 0 1px rgba(255, 224, 174, 0.18);
+    }
+
+    .pool-left { display: grid; gap: 4px; }
+    .pool-name { font-weight: 800; }
+    .pool-type { color: var(--muted); font-size: 0.88rem; }
+    .pool-rate { font-weight: 900; color: var(--accent-2); }
+
+    .drop-art.with-prize-image {
+      color: transparent;
+      background-color: rgba(0,0,0,0.22);
+      background-position: center;
+      background-size: auto 104%;
+      background-repeat: no-repeat;
+    }
+
+    .history-panel {
+      padding: 22px;
+    }
+
+    .history-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .history-main { display: grid; gap: 4px; }
+    .history-name { font-weight: 900; }
+    .history-meta { color: var(--muted); font-size: 0.88rem; }
+
+    .badge-common { background: rgba(170, 154, 143, 0.13); color: #d4c7be; }
+    .badge-uncommon { background: rgba(98, 176, 122, 0.15); color: #a9e4b8; }
+    .badge-rare { background: rgba(95, 151, 223, 0.15); color: #aed1ff; }
+    .badge-epic { background: rgba(171, 119, 240, 0.16); color: #dec5ff; }
+    .badge-legendary { background: rgba(255, 209, 125, 0.2); color: #ffe2a6; }
+
+    .bg-common { background: var(--common); }
+    .bg-uncommon { background: var(--uncommon); }
+    .bg-rare { background: var(--rare); }
+    .bg-epic { background: var(--epic); }
+    .reveal-overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 1200;
+    }
+
+    .reveal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+      animation: revealOverlayFadeIn 0.22s ease forwards;
+      cursor: pointer;
+    }
+
+    .reveal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(255, 225, 166, 0.18), rgba(0, 0, 0, 0.46) 62%);
+      backdrop-filter: blur(4px);
+    }
+
+    .reveal-card-wrap {
+      position: relative;
+      z-index: 1;
+      perspective: 1800px;
+      width: min(350px, 78vw);
+      height: 580px;
+      display: grid;
+      place-items: center;
+    }
+
+    .reveal-card {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      animation: revealCardSpin 1.9s linear forwards;
+      filter: drop-shadow(0 18px 48px rgba(0,0,0,0.45));
+    }
+
+    .reveal-card-face {
+      position: absolute;
+      transform-style: preserve-3d;
+      inset: 0;
+      border-radius: 28px;
+      overflow: hidden;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    .reveal-card-front {
+      --prize-front-image: url("card-back-a.svg");
+      --card-back-image: var(--prize-front-image);
+      --card-front-image: url("Bside-lite.jpg");
+      transform: rotateY(0deg) translateZ(1px);
+      background: radial-gradient(circle at 28% 18%, rgba(255, 230, 184, 0.16), rgba(30, 20, 16, 0.98));
+      opacity: 1;
+    }
+
+    .reveal-card.show-b-side .reveal-card-front {
+      --card-back-image: url("Bside-lite.jpg");
+    }
+
+    .reveal-card.show-b-side .reveal-front-art,
+    .reveal-card.show-b-side .reveal-front-meta {
+      opacity: 0;
+    }
+    .reveal-front-shell {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-rows: 72% 28%;
+      background-image: linear-gradient(180deg, rgba(22, 13, 8, 0.08), rgba(22, 13, 8, 0.28)), var(--card-back-image);
+      background-size: cover;
+      background-position: center;
+      border: 1px solid rgba(255, 223, 173, 0.3);
+    }
+
+
+    .reveal-front-shell,
+    .reveal-front-art,
+    .reveal-front-meta,
+    .reveal-card-back,
+    .reveal-card-back .drop-art,
+    .reveal-info,
+    .reveal-name,
+    .reveal-rarity {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform-style: preserve-3d;
+    }
+    .reveal-card-front.use-prize-image .reveal-front-art,
+    .reveal-card-front.use-prize-image .reveal-front-meta {
+      opacity: 0;
+    }
+
+    .reveal-card-front.use-prize-image .reveal-front-shell {
+      background-size: cover, auto 104%;
+      background-position: center, center;
+      background-repeat: no-repeat, no-repeat;
+    }
+
+    .reveal-front-art {
+      display: grid;
+      place-items: center;
+      font-size: 5.1rem;
+      font-weight: 900;
+      color: rgba(255, 243, 220, 0.95);
+      text-shadow: 0 10px 28px rgba(0,0,0,0.46);
+      background: transparent;
+    }
+
+    .reveal-front-meta {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+      padding: 22px;
+      background: linear-gradient(180deg, rgba(18, 11, 7, 0.55), rgba(10, 6, 4, 0.92));
+    }
+
+    .reveal-front-label {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #fff1d4;
+      line-height: 1.1;
+    }
+
+    .reveal-front-sub {
+      font-size: 1rem;
+      color: rgba(234, 216, 197, 0.78);
+      letter-spacing: 0.04em;
+    }
+    .reveal-card-back {
+      transform: rotateY(180deg) translateZ(1px);
+      background-image: linear-gradient(180deg, rgba(10, 15, 25, 0.08), rgba(10, 15, 25, 0.28)), var(--card-front-image);
+      background-size: cover;
+      background-position: center;
+      border: 1px solid rgba(190, 226, 255, 0.34);
+      display: grid;
+      grid-template-rows: 72% 28%;
+      opacity: 0;
+    }
+
+    .reveal-card-back .drop-art {
+      height: 100%;
+      min-height: 0;
+    }
+
+    .reveal-info {
+      background: rgba(19, 12, 9, 0.92);
+      padding: 22px 22px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .reveal-name {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.15;
+      color: #fff3dc;
+    }
+
+    .reveal-rarity {
+      align-self: flex-start;
+      display: inline-flex;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #ead8c5;
+      background: rgba(255,255,255,0.04);
+    }
+
+        .reveal-click-hint {
+      position: absolute;
+      left: calc(100% + 18px);
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 12px 16px;
+      width: auto;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 226, 180, 0.38);
+      background: rgba(20, 13, 10, 0.9);
+      color: rgba(255, 239, 214, 0.94);
+      font-size: 0.9rem;
+      font-weight: 700;
+      line-height: 1.45;
+      letter-spacing: 0.03em;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.32);
+      opacity: 0;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .reveal-overlay.show-hint .reveal-click-hint {
+      animation: revealHintFade 2s ease forwards;
+    }
+
+    @keyframes revealHintFade {
+      0% {
+        opacity: 0;
+        transform: translateY(-50%) translateX(14px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+      }
+    }
+
+    .reveal-rarity.legendary {
+      color: #ffe6b2;
+      background: rgba(255, 188, 83, 0.14);
+      border-color: rgba(255, 208, 120, 0.35);
+      box-shadow: 0 0 22px rgba(255, 183, 61, 0.14);
+    }
+
+    @keyframes revealOverlayFadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    @keyframes revealCardSpin {
+      0% {
+        transform: translateY(30px) scale(0.66) rotateZ(-13deg) rotateY(0deg);
+      }
+      22% {
+        transform: translateY(8px) scale(0.92) rotateZ(5deg) rotateY(720deg);
+      }
+      48% {
+        transform: translateY(-5px) scale(1.07) rotateZ(-3deg) rotateY(1440deg);
+      }
+      74% {
+        transform: translateY(-3px) scale(1.08) rotateZ(1deg) rotateY(1800deg);
+      }
+      88% {
+        transform: translateY(0) scale(1.03) rotateZ(-0.6deg) rotateY(1980deg);
+      }
+      100% {
+        transform: translateY(0) scale(1) rotateZ(0deg) rotateY(2160deg);
+      }
+    }
+    .bg-legendary { background: var(--legendary); }
+
+    .drop-art.drop-showcase {
+      animation: dropShowcase 1.2s cubic-bezier(.18,.84,.22,1);
+      box-shadow: 0 0 0 1px var(--prize-glow, rgba(255, 220, 140, 0.26)), 0 0 38px var(--prize-glow, rgba(255, 186, 79, 0.34));
+    }
+
+    body.prize-common { --prize-flash-a: rgba(255,255,255,0.48); --prize-flash-b: rgba(210,210,210,0.26); --prize-glow: rgba(255,255,255,0.38); }
+    body.prize-uncommon { --prize-flash-a: rgba(119,255,166,0.50); --prize-flash-b: rgba(52,190,92,0.28); --prize-glow: rgba(119,255,166,0.42); }
+    body.prize-rare { --prize-flash-a: rgba(116,184,255,0.52); --prize-flash-b: rgba(52,110,255,0.30); --prize-glow: rgba(116,184,255,0.46); }
+    body.prize-epic { --prize-flash-a: rgba(196,130,255,0.56); --prize-flash-b: rgba(129,65,225,0.34); --prize-glow: rgba(196,130,255,0.48); }
+    body.prize-legendary { --prize-flash-a: rgba(255,226,166,0.62); --prize-flash-b: rgba(255,177,62,0.40); --prize-glow: rgba(255,209,125,0.56); }
+
+    body.prize-flash::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at center, var(--prize-flash-a), var(--prize-flash-b), transparent 68%);
+      animation: prizeAura 2.4s ease-in-out infinite alternate;
+      z-index: 999;
+    }
+    @keyframes dropShowcase {
+      0% { transform: scale(0.88); filter: brightness(0.92); }
+      24% { transform: scale(1.08); filter: brightness(1.18); }
+      56% { transform: scale(1.02); filter: brightness(1.08); }
+      100% { transform: scale(1); filter: brightness(1); }
+    }
+
+    @keyframes prizeAura {
+      0% { opacity: 0.34; filter: saturate(1.05); }
+      100% { opacity: 0.82; filter: saturate(1.35); }
+    }
+
+    .ten-draw-overlay[hidden] { display: none; }
+    .ten-draw-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      background:
+        radial-gradient(circle at center, rgba(238, 178, 90, 0.12), transparent 40%),
+        rgba(5, 3, 2, 0.86);
+      backdrop-filter: blur(14px);
+      cursor: pointer;
+    }
+
+    .ten-draw-panel {
+      width: min(1380px, 100%);
+      max-height: calc(100vh - 20px);
+      border: 1px solid rgba(255, 216, 158, 0.28);
+      border-radius: 28px;
+      background: rgba(16, 10, 7, 0.76);
+      box-shadow: 0 28px 90px rgba(0,0,0,0.54);
+      overflow: hidden;
+      padding: clamp(14px, 1.8vw, 24px);
+    }
+
+    .ten-draw-head {
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 10px;
+    }
+
+    .ten-draw-status {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 850;
+      letter-spacing: 0.03em;
+    }
+
+    .ten-draw-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(120px, 1fr));
+      gap: clamp(10px, 1.1vw, 16px);
+      align-items: stretch;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .ten-card {
+      position: relative;
+      aspect-ratio: 0.68;
+      min-height: 0;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      opacity: 0;
+      transform: translateY(18px) scale(0.94);
+      animation: tenCardEnter 0.56s cubic-bezier(.18,.82,.22,1) forwards;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+    }
+
+    .ten-card::before,
+    .ten-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transition: opacity 0.5s ease, transform 0.7s cubic-bezier(.2,.82,.24,1);
+    }
+
+    .ten-card::before {
+      z-index: 2;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.26)),
+        url('Bside-lite.jpg') center / cover no-repeat;
+      transform: rotateY(0deg);
+      transform-origin: center;
+    }
+
+    .ten-card::after {
+      z-index: 4;
+      pointer-events: none;
+      opacity: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.72), transparent);
+      transform: translateX(-130%) skewX(-12deg);
+    }
+
+    .ten-card.revealed::before {
+      opacity: 0;
+      transform: rotateY(88deg) scaleX(0.12);
+    }
+
+    .ten-card.revealed::after {
+      opacity: 1;
+      animation: tenCardShine 0.92s ease forwards;
+    }
+
+    .ten-card-face {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 12px;
+      background-color: rgba(0,0,0,0.34);
+      background-position: center;
+      background-size: auto 104%;
+      background-repeat: no-repeat;
+      opacity: 0;
+      transform: scale(1.04);
+      transition: opacity 0.5s ease, transform 0.7s cubic-bezier(.2,.82,.24,1);
+    }
+
+    .ten-card.revealed .ten-card-face {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .ten-card.revealing {
+      opacity: 1;
+      transform-style: preserve-3d;
+      animation: tenCardLocalRevealSpin 1.9s linear forwards;
+      border-color: rgba(255, 216, 158, 0.62);
+      box-shadow: 0 0 48px rgba(255, 184, 69, 0.22);
+    }
+
+    .ten-card.revealing::before {
+      animation: tenCardLocalBackFade 1.9s linear forwards;
+    }
+
+    .ten-card.revealing .ten-card-face {
+      animation: tenCardLocalFaceShow 1.9s linear forwards;
+    }
+
+    .ten-draw-grid.ready-to-reveal {
+      cursor: pointer;
+    }
+
+    .ten-draw-grid.ready-to-reveal .ten-card:not(.revealed) {
+      box-shadow: 0 0 24px rgba(255, 216, 158, 0.08);
+    }
+
+    .ten-card-name {
+      width: 100%;
+      padding: 8px 6px;
+      text-align: center;
+      color: #fff4db;
+      font-size: clamp(0.78rem, 1vw, 1.1rem);
+      font-weight: 950;
+      text-shadow: 0 4px 14px rgba(0,0,0,0.82), 0 0 22px var(--ten-glow, rgba(255,255,255,0.16));
+      background: linear-gradient(180deg, transparent, rgba(0,0,0,0.72));
+      border-radius: 0 0 10px 10px;
+    }
+
+    #tenDrawCloseBtn {
+      display: none;
+    }
+
+    .ten-draw-click-hint {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: clamp(72px, 8vh, 112px);
+      z-index: 1300;
+      width: 100%;
+      padding: clamp(18px, 2.2vw, 30px) 24px;
+      border: 0;
+      border-radius: 0;
+      color: #fff4db;
+      background:
+        linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.72) 18%, rgba(0, 0, 0, 0.78) 50%, rgba(0, 0, 0, 0.72) 82%, transparent),
+        linear-gradient(180deg, rgba(255, 216, 158, 0.03), rgba(255, 216, 158, 0.08));
+      font-weight: 900;
+      font-size: clamp(1.7rem, 3vw, 3.5rem);
+      letter-spacing: 0.1em;
+      opacity: 0;
+      transform: translateY(42px);
+      transition: none;
+      pointer-events: none;
+      text-align: center;
+      text-shadow: 0 0 18px rgba(255, 216, 158, 0.32), 0 8px 22px rgba(0,0,0,0.62);
+      box-shadow: 0 -22px 70px rgba(0,0,0,0.34), 0 22px 80px rgba(0,0,0,0.28);
+    }
+
+    .ten-draw-overlay.ready-to-reveal-screen .ten-draw-click-hint,
+    .ten-draw-overlay.ready-to-close .ten-draw-click-hint,
+    .ten-draw-click-hint.is-visible {
+      animation: tenDrawHintRise 1.25s cubic-bezier(.16,.82,.22,1) 1s forwards;
+    }
+
+    .ten-card.common { --ten-glow: rgba(255,255,255,0.46); border-color: rgba(255,255,255,0.25); }
+    .ten-card.uncommon { --ten-glow: rgba(119,255,166,0.56); border-color: rgba(119,255,166,0.36); box-shadow: 0 0 30px rgba(119,255,166,0.14); }
+    .ten-card.rare { --ten-glow: rgba(116,184,255,0.62); border-color: rgba(116,184,255,0.42); box-shadow: 0 0 34px rgba(116,184,255,0.16); }
+    .ten-card.epic { --ten-glow: rgba(196,130,255,0.66); border-color: rgba(196,130,255,0.48); box-shadow: 0 0 38px rgba(196,130,255,0.20); }
+    .ten-card.legendary { --ten-glow: rgba(255,212,104,0.78); border-color: rgba(255,212,104,0.72); box-shadow: 0 0 54px rgba(255,184,69,0.32); }
+
+    @keyframes tenCardEnter {
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes tenCardShine {
+      0% { opacity: 0; transform: translateX(-130%) skewX(-12deg); }
+      28% { opacity: 0.9; }
+      100% { opacity: 0; transform: translateX(130%) skewX(-12deg); }
+    }
+
+    @keyframes tenCardLocalRevealSpin {
+      0% { transform: scale(0.98) rotateZ(-3deg) rotateY(0deg); }
+      22% { transform: scale(1.01) rotateZ(2deg) rotateY(720deg); }
+      48% { transform: scale(1.04) rotateZ(-2deg) rotateY(1440deg); }
+      74% { transform: scale(1.04) rotateZ(1deg) rotateY(1800deg); }
+      88% { transform: scale(1.02) rotateZ(-0.4deg) rotateY(1980deg); }
+      100% { transform: scale(1) rotateZ(0deg) rotateY(2160deg); }
+    }
+
+    @keyframes tenCardLocalBackFade {
+      0%, 54% { opacity: 1; transform: rotateY(0deg); }
+      68%, 100% { opacity: 0; transform: rotateY(86deg) scaleX(0.14); }
+    }
+
+    @keyframes tenCardLocalFaceShow {
+      0%, 54% { opacity: 0; transform: scale(1.06); }
+      68% { opacity: 1; transform: scale(1.02); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes tenDrawHintRise {
+      0% { opacity: 0; transform: translateY(42px); filter: blur(3px); }
+      58% { opacity: 0.86; transform: translateY(-4px); filter: blur(0); }
+      100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+    }
+
+    @media (max-width: 1080px) {
+      .hero, .main-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 760px) {
+      .page { width: min(100% - 20px, 100%); margin: 16px auto 28px; }
+      .hero, .case-panel, .side-panel, .history-panel { padding: 18px; }
+      .reel-item { width: 148px; min-width: 148px; height: 216px; }
+      .reel-highlight { width: 160px; }
+      .ten-draw-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero board-hero">
+      <div class="board-stage" id="boardStage">
+        <img class="board-map" src="prize-assets/大富翁地圖.png" alt="松你去鼠大富翁地圖">
+        <img class="board-token" id="boardToken" src="prize-assets/棋子.png" alt="棋子">
+      </div>
+      <div class="board-side">
+        <div class="board-copy">
+          <p class="eyebrow">Squirrelyouself Board</p>
+          <h1>松你去鼠大富翁</h1>
+          <p>抽獎之外，也讓棋子在地圖上走一圈。走到哪一格，就看今晚的運氣送你什麼。</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">客人座位</div>
+          <div class="stat-value" id="customerSeatLabel">未指定</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">客人名字</div>
+          <div class="stat-value" id="customerNameLabel">未指定</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">累計抽數</div>
+          <div class="stat-value" id="spinCount">0</div>
+        </div>
+        <div class="board-status" id="boardStatus">目前停在 START。抽到移動牌後，棋子會依照結果前進或後退。</div>
+      </div>
+    </section>
+
+    <div class="board-prize-pop" id="boardPrizePop" hidden>
+      <div class="board-prize-card">
+        <img id="boardPrizeImage" src="prize-assets/原地休息.png" alt="地圖獎項">
+        <h3 id="boardPrizeTitle">原地休息</h3>
+        <p>點擊螢幕關閉提示。</p>
+      </div>
+    </div>
+
+    <section class="main-grid">
+      <section class="panel case-panel">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">開箱展示</h2>
+            <div class="panel-note">滑到中間黃框的就是這次抽到的道具。</div>
+          </div>
+          <div class="case-selector" id="caseSelector"></div>
+        </div>
+
+        <div class="reel-wrap">
+          <div class="reel-highlight"></div>
+          <div class="reel-track" id="reelTrack"></div>
+        </div>
+
+        <div class="controls">
+          <button class="button primary" id="openOnceBtn">開 1 箱</button>
+          <button class="button secondary" id="openTenBtn">十連抽</button>
+          <span class="hint" id="raffleHint">請從後台座位訂單開啟抽獎頁，系統會自動扣除抽獎資格。</span>
+        </div>
+      </section>
+
+      <aside class="panel side-panel">
+
+        <section>
+          <div class="panel-head" style="margin-bottom: 10px;">
+            <h3 class="panel-title" style="font-size: 1.35rem;">道具池</h3>
+            <span class="panel-note">目前箱種內容</span>
+          </div>
+          <div class="pool" id="poolList"></div>
+        </section>
+      </aside>
+    </section>
+
+    <section class="panel history-panel">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">最近抽到</h2>
+
+        </div>
+      </div>
+      <div class="history-list" id="historyList"></div>
+    </section>
+  </div>
+
+  <div class="ten-draw-overlay" id="tenDrawOverlay" hidden>
+    <section class="ten-draw-panel" aria-label="十連抽結果">
+      <div class="ten-draw-head">
+        <div>
+          <p class="eyebrow">Ten Draw Result</p>
+          <h2>十連抽結果</h2>
+          <p class="ten-draw-status" id="tenDrawStatus">由左到右依序揭曉。</p>
+        </div>
+        <button class="button secondary" id="tenDrawCloseBtn" type="button">關閉結果</button>
+      </div>
+      <div class="ten-draw-grid" id="tenDrawGrid"></div>
+      <div class="ten-draw-click-hint" id="tenDrawClickHint">點擊螢幕關閉結果</div>
+    </section>
+  </div>
+
+  <script>
+    const GAMBLE_PROBABILITY_NOTE = '銘謝惠顧 40.5% / 折價卷 15% / 再抽一次 6% / 1萬G 8% / 3萬G 5% / 原地休息 8% / 前進一格 6% / 前進兩格 3% / 前進三格 1% / 後退一格 1.5% / 後退兩格 0.5% / 15萬G 3% / 30萬G 2% / 50萬G 0.3% / 100萬G 0.2%';
+    const FORCE_DEMO_SEQUENCE = false;
+
+    const CASES = [
+      {
+        id: 'squirrel-prize',
+        name: '松你去鼠抽獎箱',
+        pityTarget: 0,
+        items: [
+          { name: '銘謝惠顧', type: '未中獎', rarity: 'common', chance: 40.5, art: '謝', image: 'prize-assets/thanks.png', desc: '白色特效。很可惜這次沒有中獎，祝下次手氣更好。' },
+          { name: '折價卷', type: '折價卷', rarity: 'common', chance: 15, art: '券', image: 'prize-assets/discount.jpg', desc: '白色特效。正式版可替換成店內折價卷內容。' },
+          { name: '再抽一次', type: '追加機會', rarity: 'common', chance: 6, art: '抽', image: 'prize-assets/bonus-draw.jpg', desc: '白色特效。可讓客人再獲得一次抽獎機會。' },
+          { name: '1萬G', type: '1萬G', rarity: 'common', chance: 8, art: '萬', image: 'prize-assets/10000Gil.png', desc: '白色特效。可作為 1 萬 G 價值獎勵。' },
+          { name: '3萬G', type: '3萬G', rarity: 'common', chance: 5, art: '萬', image: 'prize-assets/30000Gil.png', desc: '白色特效。可作為 3 萬 G 價值獎勵。' },
+          { name: '原地休息', type: '大富翁', rarity: 'common', chance: 8, art: '休', image: 'prize-assets/原地休息.png', desc: '大富翁選項。棋子原地停留一次。', boardRest: true },
+          { name: '前進一格', type: '大富翁', rarity: 'uncommon', chance: 6, art: '進', image: 'prize-assets/前進一格.png', desc: '大富翁選項。棋子往前 1 格。', boardMoveSteps: 1 },
+          { name: '前進兩格', type: '大富翁', rarity: 'uncommon', chance: 3, art: '進', image: 'prize-assets/前進兩格.png', desc: '大富翁選項。棋子往前 2 格。', boardMoveSteps: 2 },
+          { name: '前進三格', type: '大富翁', rarity: 'rare', chance: 1, art: '進', image: 'prize-assets/前進三格.png', desc: '大富翁選項。棋子往前 3 格。', boardMoveSteps: 3 },
+          { name: '後退一格', type: '大富翁', rarity: 'common', chance: 1.5, art: '退', image: 'prize-assets/後退一格.png', desc: '大富翁選項。棋子往後 1 格。', boardMoveSteps: -1 },
+          { name: '後退兩格', type: '大富翁', rarity: 'common', chance: 0.5, art: '退', image: 'prize-assets/後退一格.png', desc: '大富翁選項。棋子往後 2 格。', boardMoveSteps: -2 },
+          { name: '15萬G', type: '15萬G', rarity: 'uncommon', chance: 3, art: '綠', image: 'prize-assets/150000Gil.jpg', desc: '綠色特效。可作為 15 萬 G 價值獎勵。' },
+          { name: '30萬G', type: '30萬G', rarity: 'rare', chance: 2, art: '衣', image: 'prize-assets/300000Gil.jpg', desc: '藍色特效。可作為約 30 萬 G 價值的服裝獎勵。' },
+          { name: '50萬G', type: '50萬G', rarity: 'epic', chance: 0.3, art: '紫', image: 'prize-assets/500000Gil.jpg', desc: '紫色特效。中高價值獎金或等值獎品。' },
+          { name: '100萬G大獎', type: '100萬G', rarity: 'legendary', chance: 0.2, art: '金', image: 'prize-assets/1000000Gil.jpg', desc: '黃金特效。最大獎，正式營運前請確認獎池資金。' }
+        ]
+      }
+    ];
+
+    const rarityText = {
+      common: '一般',
+      uncommon: '少見',
+      rare: '稀有',
+      epic: '史詩',
+      legendary: '傳說'
+    };
+
+    const caseSelector = document.getElementById('caseSelector');
+    const reelTrack = document.getElementById('reelTrack');
+    const poolList = document.getElementById('poolList');
+    const historyList = document.getElementById('historyList');
+    const customerSeatLabelEl = document.getElementById('customerSeatLabel');
+    const customerNameLabelEl = document.getElementById('customerNameLabel');
+    const spinCountEl = document.getElementById('spinCount');
+    const boardTokenEl = document.getElementById('boardToken');
+    const boardStatusEl = document.getElementById('boardStatus');
+    const boardMoveBtn = document.getElementById('boardMoveBtn');
+    const boardPrizePop = document.getElementById('boardPrizePop');
+    const boardPrizeImage = document.getElementById('boardPrizeImage');
+    const boardPrizeTitle = document.getElementById('boardPrizeTitle');
+    const dropArtEl = document.getElementById('dropArt');
+    let revealOverlayEl = null;
+    let revealCardEl = null;
+    let revealArtEl = null;
+    let revealNameEl = null;
+    let revealRarityEl = null;
+    let revealFrontArtEl = null;
+    let revealFrontLabelEl = null;
+    let revealFrontSubEl = null;
+    const dropNameEl = document.getElementById('dropName');
+    const dropDescEl = document.getElementById('dropDesc');
+    const dropRarityEl = document.getElementById('dropRarity');
+
+    const pageParams = new URLSearchParams(window.location.search);
+
+    function getRequestedBoardPositionFromUrl() {
+      const requested = Number(pageParams.get('board') || 0);
+      if (!Number.isFinite(requested) || requested < 1 || requested > 24) return 0;
+      return Math.trunc(requested);
+    }
+
+    const state = {
+      currentCase: CASES[0],
+      pity: 0,
+      spins: 0,
+      history: [],
+      demoIndex: 0,
+      locked: false,
+      forceDemoNextSpin: false,
+      tenDrawResults: [],
+      tenDrawRevealedCount: 0,
+      tenDrawAutoRevealing: false,
+      tenDrawPromptReady: false,
+      tenDrawPromptTimer: null,
+      requestedBoardPosition: getRequestedBoardPositionFromUrl(),
+      boardPosition: 1,
+      boardMoving: false,
+      boardStorageKey: '',
+      boardTestStarted: false
+    };
+
+    const BOARD_POSITIONS = {
+      1: { x: 11.5, y: 17.5 }, 2: { x: 28.5, y: 17.5 }, 3: { x: 41.5, y: 17.5 }, 4: { x: 54.5, y: 17.5 },
+      5: { x: 67.5, y: 17.5 }, 6: { x: 80.5, y: 17.5 }, 7: { x: 90, y: 14.5 }, 8: { x: 90, y: 26 },
+      9: { x: 90, y: 36 }, 10: { x: 90, y: 46 }, 11: { x: 90, y: 56 }, 12: { x: 90, y: 66 },
+      13: { x: 80, y: 70 }, 14: { x: 69, y: 70 }, 15: { x: 58, y: 70 }, 16: { x: 46, y: 70 },
+      17: { x: 34, y: 70 }, 18: { x: 22, y: 70 }, 19: { x: 9, y: 70 }, 20: { x: 9, y: 56 },
+      21: { x: 9, y: 46 }, 22: { x: 9, y: 37 }, 23: { x: 9, y: 28 }, 24: { x: 11.5, y: 17.5 }
+    };
+
+    const BOARD_TILES = {
+      1: { title: 'START', image: 'prize-assets/1000000Gil.jpg', note: '剛好繞回 START 可獲得 100 萬 G 大獎。' },
+      2: { title: '原地休息', image: 'prize-assets/原地休息.png', note: '在這裡稍微喘口氣。' },
+      3: { title: '1萬G', image: 'prize-assets/10000Gil.png', note: '獲得 1 萬 G。' },
+      4: { title: '前進一格', image: 'prize-assets/前進一格.png', note: '移動選項：往前 1 格。' },
+      5: { title: '原地休息', image: 'prize-assets/原地休息.png', note: '在這裡稍微喘口氣。' },
+      6: { title: '3萬G', image: 'prize-assets/30000Gil.png', note: '獲得 3 萬 G。' },
+      7: { title: '後退一格', image: 'prize-assets/後退一格.png', note: '移動選項：往後 1 格。' },
+      8: { title: '1萬G', image: 'prize-assets/10000Gil.png', note: '獲得 1 萬 G。' },
+      9: { title: '5萬G', image: 'prize-assets/50000Gil.png', note: '獲得 5 萬 G。' },
+      10: { title: '折價卷', image: 'prize-assets/discount.jpg', note: '獲得折價卷。' },
+      11: { title: '前進兩格', image: 'prize-assets/前進兩格.png', note: '移動選項：往前 2 格。' },
+      12: { title: '10萬G', image: 'prize-assets/100000Gil.png', note: '獲得 10 萬 G。' },
+      13: { title: '1萬G', image: 'prize-assets/10000Gil.png', note: '獲得 1 萬 G。' },
+      14: { title: '原地休息', image: 'prize-assets/原地休息.png', note: '在這裡稍微喘口氣。' },
+      15: { title: '3萬G', image: 'prize-assets/30000Gil.png', note: '獲得 3 萬 G。' },
+      16: { title: '折價卷', image: 'prize-assets/discount.jpg', note: '獲得折價卷。' },
+      17: { title: '後退兩格', image: 'prize-assets/後退一格.png', note: '移動選項：往後 2 格。' },
+      18: { title: '30萬G', image: 'prize-assets/300000Gil.jpg', note: '獲得 30 萬 G。' },
+      19: { title: '1萬G', image: 'prize-assets/10000Gil.png', note: '獲得 1 萬 G。' },
+      20: { title: '前進三格', image: 'prize-assets/前進三格.png', note: '移動選項：往前 3 格。' },
+      21: { title: '5萬G', image: 'prize-assets/50000Gil.png', note: '獲得 5 萬 G。' },
+      22: { title: '折價卷', image: 'prize-assets/discount.jpg', note: '獲得折價卷。' },
+      23: { title: '3萬G', image: 'prize-assets/30000Gil.png', note: '獲得 3 萬 G。' },
+      24: { title: 'START 大獎', image: 'prize-assets/1000000Gil.jpg', note: '剛好回到 START，可獲得 100 萬 G 大獎。' }
+    };
+
+    const raffleContext = {
+      seat: (pageParams.get('seat') || '').trim(),
+      customer: '',
+      raffle: null
+    };
+
+    function setRaffleHint(message) {
+      const hint = document.getElementById('raffleHint');
+      if (hint) hint.textContent = message;
+    }
+
+    function setOpenButtonsDisabled(disabled) {
+      const shouldDisable = disabled || !state.assetsReady;
+      const openOnceBtn = document.getElementById('openOnceBtn');
+      const openFiveBtn = document.getElementById('openFiveBtn');
+      const openTenBtn = document.getElementById('openTenBtn');
+      const testForwardOneBtn = document.getElementById('testForwardOneBtn');
+      if (openOnceBtn) openOnceBtn.disabled = shouldDisable;
+      if (openFiveBtn) openFiveBtn.disabled = shouldDisable;
+      if (openTenBtn) openTenBtn.disabled = shouldDisable;
+      if (testForwardOneBtn) testForwardOneBtn.disabled = Boolean(state.locked || state.boardMoving);
+    }
+
+    const PRELOAD_IMAGE_SOURCES = [
+      'Bside-lite.jpg',
+      'card-back-a.svg',
+      'prize-assets/thanks.png',
+      'prize-assets/discount.jpg',
+      'prize-assets/bonus-draw.jpg',
+      'prize-assets/10000Gil.png',
+      'prize-assets/30000Gil.png',
+      'prize-assets/150000Gil.jpg',
+      'prize-assets/300000Gil.jpg',
+      'prize-assets/500000Gil.jpg',
+      'prize-assets/1000000Gil.jpg',
+      'prize-assets/大富翁地圖.png',
+      'prize-assets/棋子.png',
+      'prize-assets/原地休息.png',
+      'prize-assets/前進一格.png',
+      'prize-assets/前進兩格.png',
+      'prize-assets/前進三格.png',
+      'prize-assets/後退一格.png',
+      'prize-assets/50000Gil.png',
+      'prize-assets/100000Gil.png'
+    ];
+
+    function preloadImage(src) {
+      return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => resolve(src);
+        img.onerror = () => resolve(src);
+        img.src = src;
+      });
+    }
+
+    async function preloadGambleImages() {
+      setOpenButtonsDisabled(true);
+      setRaffleHint('正在載入抽卡圖片，請稍候...');
+      await Promise.all(PRELOAD_IMAGE_SOURCES.map(preloadImage));
+      state.assetsReady = true;
+      return refreshRaffleEligibility();
+    }
+
+    const BOARD_LAST_POSITION = 23;
+
+    function normalizeBoardPosition(position) {
+      return ((Number(position || 1) - 1 + BOARD_LAST_POSITION) % BOARD_LAST_POSITION) + 1;
+    }
+
+    function getNextBoardPosition(current, direction) {
+      const normalizedCurrent = normalizeBoardPosition(current);
+      const normalizedDirection = direction >= 0 ? 1 : -1;
+
+      return normalizeBoardPosition(normalizedCurrent + normalizedDirection);
+    }
+
+    function normalizeBoardStorageText(value) {
+      return String(value || '').trim().toUpperCase().replace(/\s+/g, '_');
+    }
+
+    function getBoardStorageKey() {
+      const customer = normalizeBoardStorageText(raffleContext.customer);
+      if (customer) return `squirrely-board-position:customer:${customer}`;
+      const seat = normalizeBoardStorageText(raffleContext.seat);
+      return seat ? `squirrely-board-position:seat:${seat}` : '';
+    }
+
+    function readStoredBoardPosition(key = getBoardStorageKey()) {
+      if (!key) return null;
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return null;
+        return normalizeBoardPosition(Number(raw));
+      }
+      catch (err) {
+        return null;
+      }
+    }
+
+    function saveBoardPosition() {
+      const key = getBoardStorageKey();
+      if (!key) return;
+      try {
+        state.boardStorageKey = key;
+        localStorage.setItem(key, String(state.boardPosition));
+      }
+      catch (err) {
+        console.warn('board position save failed', err);
+      }
+    }
+
+    function clearBoardPositionStorage() {
+      const keys = new Set([state.boardStorageKey, getBoardStorageKey()].filter(Boolean));
+      keys.forEach(key => {
+        try { localStorage.removeItem(key); }
+        catch (err) { console.warn('board position clear failed', err); }
+      });
+      state.boardStorageKey = '';
+    }
+
+    function syncBoardPositionStorage({ preferStored = false } = {}) {
+      const key = getBoardStorageKey();
+      if (!key) return;
+      if (state.requestedBoardPosition) {
+        state.boardStorageKey = key;
+        setBoardPosition(state.requestedBoardPosition);
+        state.requestedBoardPosition = 0;
+        try {
+          pageParams.delete('board');
+          const query = pageParams.toString();
+          window.history.replaceState({}, '', `${window.location.pathname}${query ? `?${query}` : ''}`);
+        }
+        catch (err) {
+          console.warn('board test position url cleanup failed', err);
+        }
+        return;
+      }
+      if (key === state.boardStorageKey) return;
+      const stored = readStoredBoardPosition(key);
+      state.boardStorageKey = key;
+      if (preferStored && stored !== null) {
+        setBoardPosition(stored);
+      }
+      else {
+        saveBoardPosition();
+      }
+    }
+
+    function setBoardPosition(position) {
+      state.boardPosition = normalizeBoardPosition(position);
+      const point = BOARD_POSITIONS[state.boardPosition] || BOARD_POSITIONS[1];
+      if (boardTokenEl) {
+        boardTokenEl.style.setProperty('--token-x', `${point.x}%`);
+        boardTokenEl.style.setProperty('--token-y', `${point.y}%`);
+      }
+      const tile = BOARD_TILES[state.boardPosition] || BOARD_TILES[1];
+      if (boardStatusEl) {
+        boardStatusEl.textContent = `目前停在第 ${String(state.boardPosition).padStart(2, '0')} 格：${tile.title}。`;
+      }
+      saveBoardPosition();
+    }
+
+    function showBoardPrize(tile) {
+      if (!boardPrizePop || !boardPrizeImage || !boardPrizeTitle || !tile) return;
+      boardPrizeImage.src = tile.image;
+      boardPrizeImage.alt = tile.title;
+      boardPrizeTitle.textContent = tile.title;
+      const note = boardPrizePop.querySelector('p');
+      if (note) note.textContent = `${tile.note || '獲得地圖獎項。'} 點擊螢幕關閉提示。`;
+      boardPrizePop.hidden = false;
+    }
+
+    function focusBoardForMovement() {
+      const boardStage = document.getElementById('boardStage');
+      boardStage?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function getBoardTileMoveSteps(tile) {
+      if (!tile?.title) return 0;
+      const title = String(tile.title || '');
+      if (title.includes('\u524d\u9032\u4e09\u683c')) return 3;
+      if (title.includes('\u524d\u9032\u5169\u683c')) return 2;
+      if (title.includes('\u524d\u9032\u4e00\u683c')) return 1;
+      if (title.includes('\u5f8c\u9000\u5169\u683c')) return -2;
+      if (title.includes('\u5f8c\u9000\u4e00\u683c')) return -1;
+      return Number(tile.boardMoveSteps || 0);
+    }
+
+    function getBoardTileRarity(tile) {
+      if (!tile?.title) return 'common';
+      const title = String(tile.title || '');
+      if (title.includes('100\u842c') || title.includes('START')) return 'legendary';
+      if (title.includes('50\u842c') || title.includes('30\u842c')) return 'epic';
+      if (title.includes('10\u842c') || title.includes('\u6298\u50f9')) return 'rare';
+      if (title.includes('\u524d\u9032') || title.includes('\u5f8c\u9000') || title.includes('\u518d\u62bd')) return 'uncommon';
+      return 'common';
+    }
+
+    function makeBoardTileResult(tile) {
+      if (!tile) return null;
+      const moveSteps = getBoardTileMoveSteps(tile);
+      const isStart = state.boardPosition === 1 || tile.title === 'START';
+      const name = isStart ? '100\u842cG\u5927\u734e' : tile.title;
+      return {
+        name,
+        type: '\u5927\u5bcc\u7fc1\u5730\u5716',
+        rarity: isStart ? 'legendary' : getBoardTileRarity(tile),
+        chance: 0,
+        art: '\u683c',
+        image: isStart ? 'prize-assets/1000000Gil.jpg' : (tile.image || 'card-back-a.svg'),
+        desc: tile.note || '\u5927\u5bcc\u7fc1\u5730\u5716\u683c\u734e\u9805\u3002',
+        boardMoveSteps: moveSteps,
+        boardRest: String(tile.title || '').includes('\u539f\u5730\u4f11\u606f'),
+        boardTile: state.boardPosition
+      };
+    }
+
+    async function resolveBoardTile(tile, chainDepth = 0) {
+      if (!tile) return;
+      const result = makeBoardTileResult(tile);
+      showBoardPrize({
+        title: result.name,
+        image: result.image,
+        note: result.desc
+      });
+      reportGambleResult(result, state.spins, { remaining: state.raffle?.remaining || 0 });
+
+      if (result.boardMoveSteps && chainDepth < 6) {
+        await sleep(1250);
+        if (boardPrizePop) boardPrizePop.hidden = true;
+        await moveBoardToken(result.boardMoveSteps, chainDepth + 1);
+      }
+    }
+
+    async function moveBoardToken(steps, chainDepth = 0) {
+      if (state.boardMoving || !boardTokenEl) return;
+      const stepCount = Number(steps || 0);
+      if (!stepCount) return;
+      state.boardMoving = true;
+      boardMoveBtn && (boardMoveBtn.disabled = true);
+      boardTokenEl.classList.add('is-moving');
+      focusBoardForMovement();
+      await sleep(650);
+
+      const direction = stepCount >= 0 ? 1 : -1;
+      for (let i = 0; i < Math.abs(stepCount); i += 1) {
+        setBoardPosition(getNextBoardPosition(state.boardPosition, direction));
+        await sleep(430);
+      }
+
+      boardTokenEl.classList.remove('is-moving');
+      state.boardMoving = false;
+      boardMoveBtn && (boardMoveBtn.disabled = false);
+      await resolveBoardTile(BOARD_TILES[state.boardPosition], chainDepth);
+    }
+
+    function bindBoardControls() {
+      state.boardStorageKey = getBoardStorageKey();
+      const storedPosition = readStoredBoardPosition(state.boardStorageKey);
+      setBoardPosition(state.requestedBoardPosition || storedPosition || state.boardPosition);
+      boardPrizePop?.addEventListener('click', () => {
+        boardPrizePop.hidden = true;
+      });
+    }
+
+    function describeRaffle(raffle) {
+      if (!raffle) return '尚未讀取抽獎資格。';
+      const customerText = raffleContext.customer ? `｜客人 ${raffleContext.customer}` : '';
+      return `座位 ${raffleContext.seat}${customerText}｜可抽 ${raffle.eligible || 0} 次｜已抽 ${raffle.used || 0} 次｜剩餘 ${raffle.remaining || 0} 次`;
+    }
+
+    function resetLocalGambleDisplay() {
+      state.history = [];
+      state.spins = 0;
+      state.pity = 0;
+      if (dropArtEl && dropNameEl && dropDescEl && dropRarityEl) {
+        dropArtEl.className = 'drop-art bg-common';
+        dropArtEl.style.backgroundImage = '';
+        dropArtEl.textContent = '按下開箱後，這裡會顯示最新抽中的道具。';
+        dropNameEl.textContent = '等待抽獎';
+        dropDescEl.textContent = '這裡會顯示抽到的道具說明與稀有度。';
+        dropRarityEl.className = 'rarity-tag badge-common';
+        dropRarityEl.textContent = '一般';
+      }
+      updateHeader();
+      updateHistory();
+    }
+
+    async function refreshRaffleEligibility() {
+      if (!raffleContext.seat) {
+        setOpenButtonsDisabled(true);
+        setRaffleHint('請從後台座位訂單的「打開抽獎頁」進入，才會自動扣除抽獎資格。');
+        return null;
+      }
+
+      try {
+        const res = await fetch(`/seat-order-items/${encodeURIComponent(raffleContext.seat)}?_=${Date.now()}`, { cache: 'no-store' });
+        const data = await res.json();
+        raffleContext.raffle = data?.summary?.raffle || null;
+        raffleContext.customer = String(data?.summary?.customer || '').trim();
+        const hasActiveOrder = Number(data?.summary?.latestOrderId || 0) > 0;
+        if (!hasActiveOrder) {
+          clearBoardPositionStorage();
+          setBoardPosition(1);
+          raffleContext.customer = '';
+          raffleContext.raffle = null;
+          resetLocalGambleDisplay();
+          setOpenButtonsDisabled(true);
+          setRaffleHint(`座位 ${raffleContext.seat} 目前沒有可抽獎的入座訂單。`);
+          return null;
+        }
+        syncBoardPositionStorage({ preferStored: true });
+        const remaining = Number(raffleContext.raffle?.remaining || 0);
+        setOpenButtonsDisabled(remaining <= 0);
+        setRaffleHint(remaining > 0 ? describeRaffle(raffleContext.raffle) : `${describeRaffle(raffleContext.raffle)}｜目前沒有剩餘抽獎資格`);
+        return raffleContext.raffle;
+      }
+      catch (err) {
+        console.warn('raffle eligibility load failed', err);
+        setOpenButtonsDisabled(true);
+        setRaffleHint('抽獎資格讀取失敗，請確認 Ver005 伺服器正在運作。');
+        return null;
+      }
+    }
+
+    async function claimRaffleEligibility() {
+      if (!raffleContext.seat) {
+        alert('請從後台座位訂單開啟抽獎頁');
+        return null;
+      }
+
+      const res = await fetch(`/seat-raffle/${encodeURIComponent(raffleContext.seat)}/claim`, { method: 'POST' });
+      const data = await res.json();
+      if (!data.success) {
+        raffleContext.raffle = data.raffle || raffleContext.raffle;
+        setRaffleHint(data.message || '目前沒有剩餘抽獎資格');
+        setOpenButtonsDisabled(true);
+        alert(data.message || '目前沒有剩餘抽獎資格');
+        return null;
+      }
+
+      raffleContext.raffle = data.raffle || null;
+      setRaffleHint(describeRaffle(raffleContext.raffle));
+      return raffleContext.raffle;
+    }
+    function rarityBadgeClass(rarity) {
+      return 'badge-' + rarity;
+    }
+
+    function rarityBgClass(rarity) {
+      return 'bg-' + rarity;
+    }
+    function clearPrizeFlashClasses() {
+      document.body.classList.remove('prize-flash', 'prize-common', 'prize-uncommon', 'prize-rare', 'prize-epic', 'prize-legendary');
+    }
+
+    function triggerPrizeEffect(item) {
+      clearPrizeFlashClasses();
+      void document.body.offsetWidth;
+      document.body.classList.add('prize-flash', 'prize-' + item.rarity);
+    }
+
+    function makeCard(item) {
+      return `
+        <article class="reel-item full-prize-face">
+          <div class="reel-art with-prize-image ${rarityBgClass(item.rarity)}" style="background-image: url('${item.image || 'card-back-a.svg'}')" aria-label="${item.name}">${item.art}</div>
+        </article>
+      `;
+    }
+
+    function updateCaseSelector() {
+      caseSelector.innerHTML = CASES.map(box => `
+        <button class="case-chip ${box.id === state.currentCase.id ? 'active' : ''}" data-case="${box.id}">${box.name}</button>
+      `).join('');
+    }
+
+    function updatePool() {
+      poolList.innerHTML = state.currentCase.items.map(item => `
+        <div class="pool-item">
+          <div class="pool-thumb" style="background-image: url('${item.image || 'card-back-a.svg'}')" aria-hidden="true"></div>
+          <div class="pool-left">
+            <div class="pool-name">${item.name}</div>
+            <div class="pool-type">${item.type}｜${rarityText[item.rarity]}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateHeader() {
+      customerSeatLabelEl.textContent = raffleContext.seat || '未指定';
+      customerNameLabelEl.textContent = raffleContext.customer || '未指定';
+      spinCountEl.textContent = state.spins;
+    }
+
+    function updateHistory() {
+      if (!state.history.length) {
+        historyList.innerHTML = '<div class="history-item"><div class="history-main"><div class="history-name">目前還沒有抽獎紀錄</div><div class="history-meta">按下開箱後，這裡會列出最近抽到的結果。</div></div></div>';
+        return;
+      }
+      historyList.innerHTML = state.history.map((entry, idx) => `
+        <div class="history-item">
+          <div class="history-main">
+            <div class="history-name">${entry.name}</div>
+            <div class="history-meta">${entry.type}｜${entry.caseName}｜第 ${entry.spinIndex} 抽</div>
+          </div>
+          <span class="rarity-tag ${rarityBadgeClass(entry.rarity)}">${rarityText[entry.rarity]}</span>
+        </div>
+      `).join('');
+    }
+
+    function getRarityLabel(rarity) {
+      switch (rarity) {
+        case "legendary": return "傳說";
+        case "epic": return "史詩";
+        case "rare": return "稀有";
+        case "uncommon": return "少見";
+        default: return "一般";
+      }
+    }
+
+    function showRevealCard(item) {
+      revealOverlayEl = revealOverlayEl || document.getElementById("revealOverlay");
+      revealCardEl = revealCardEl || document.getElementById("revealCard");
+      revealArtEl = revealArtEl || document.getElementById("revealArt");
+      revealNameEl = revealNameEl || document.getElementById("revealName");
+      revealRarityEl = revealRarityEl || document.getElementById("revealRarity");
+      revealFrontArtEl = revealFrontArtEl || document.getElementById("revealFrontArt");
+      revealFrontLabelEl = revealFrontLabelEl || document.getElementById("revealFrontLabel");
+      revealFrontSubEl = revealFrontSubEl || document.getElementById("revealFrontSub");
+      if (!revealOverlayEl || !revealCardEl || !revealArtEl || !revealNameEl || !revealRarityEl || !revealFrontArtEl || !revealFrontLabelEl || !revealFrontSubEl) return;
+      const revealFrontFace = revealCardEl.querySelector('.reveal-card-front');
+      const prizeImage = item.image || 'card-back-a.svg';
+      if (revealFrontFace) {
+        revealFrontFace.style.setProperty('--prize-front-image', 'url("' + prizeImage + '")');
+        revealFrontFace.classList.add('use-prize-image');
+      }
+      if (!revealOverlayEl.dataset.boundClose) {
+        const closeReveal = () => {
+          revealOverlayEl.classList.remove("active");
+          clearPrizeFlashClasses();
+          revealOverlayEl.dispatchEvent(new CustomEvent("reveal-card-closed"));
+        };
+        revealOverlayEl.addEventListener("click", closeReveal);
+        revealCardEl.addEventListener("click", closeReveal);
+        revealOverlayEl.dataset.boundClose = "1";
+      }
+      revealFrontArtEl.textContent = "";
+      revealFrontLabelEl.textContent = "";
+      revealFrontSubEl.textContent = "";
+      revealCardEl.classList.add("show-b-side");
+      revealArtEl.className = `drop-art with-prize-image bg-${item.rarity}`;
+      revealArtEl.style.backgroundImage = `url('${prizeImage}')`;
+      revealArtEl.textContent = "";
+      revealNameEl.textContent = item.name;
+      revealRarityEl.textContent = getRarityLabel(item.rarity);
+      revealRarityEl.className = `reveal-rarity ${item.rarity}`;
+      revealOverlayEl.classList.remove("active");
+      revealOverlayEl.classList.remove("show-hint");
+      revealCardEl.style.animation = "none";
+      revealCardEl.onanimationend = null;
+      void revealOverlayEl.offsetWidth;
+      revealOverlayEl.classList.add("active");
+      window.clearTimeout(showRevealCard.sideToBackTimer);
+      window.clearTimeout(showRevealCard.sideToFrontTimer);
+      showRevealCard.sideToBackTimer = window.setTimeout(() => {
+        revealFrontArtEl.textContent = "";
+        revealFrontLabelEl.textContent = "";
+        revealFrontSubEl.textContent = "";
+        revealCardEl.classList.add("show-b-side");
+      }, 0);
+      showRevealCard.sideToFrontTimer = window.setTimeout(() => {
+        revealFrontArtEl.textContent = "";
+        revealFrontLabelEl.textContent = "";
+        revealFrontSubEl.textContent = "";
+        revealCardEl.classList.remove("show-b-side");
+      }, 1540);
+      revealCardEl.style.animation = "revealCardSpin 1.9s linear forwards";
+      revealCardEl.onanimationend = () => {
+        revealFrontArtEl.textContent = "";
+        revealFrontLabelEl.textContent = "";
+        revealFrontSubEl.textContent = "";
+        revealCardEl.classList.remove("show-b-side");
+        revealOverlayEl.classList.add("show-hint");
+        revealCardEl.onanimationend = null;
+      };
+      window.clearTimeout(showRevealCard.timer);
+    }
+
+
+    function isBoardActionItem(item) {
+      if (!item) return false;
+      return Boolean(
+        Number(item.boardMoveSteps || 0) ||
+        item.boardRest ||
+        String(item.name || '').includes('\u539f\u5730\u4f11\u606f') ||
+        String(item.type || '').includes('\u5927\u5bcc\u7fc1')
+      );
+    }
+
+    async function runBoardActionItem(item, options = {}) {
+      if (!item) return;
+      const moveSteps = Number(item.boardMoveSteps || 0);
+      if (moveSteps) {
+        if (options.showBeforeMove !== false) {
+          const absSteps = Math.abs(moveSteps);
+          showBoardPrize({
+            title: item.name || (moveSteps > 0 ? `\u524d\u9032${absSteps}\u683c` : `\u5f8c\u9000${absSteps}\u683c`),
+            image: item.image,
+            note: item.desc || (moveSteps > 0 ? `\u79fb\u52d5\u9078\u9805\uff1a\u5f80\u524d ${absSteps} \u683c\u3002` : `\u79fb\u52d5\u9078\u9805\uff1a\u5f80\u5f8c ${absSteps} \u683c\u3002`)
+          });
+          await sleep(options.moveNoticeDelay || 1150);
+          if (boardPrizePop) boardPrizePop.hidden = true;
+        }
+        await moveBoardToken(moveSteps);
+        return;
+      }
+      if (options.showNonMove || item.boardRest || String(item.name || '').includes('\u539f\u5730\u4f11\u606f')) {
+        showBoardPrize({
+          title: item.name || '\u539f\u5730\u4f11\u606f',
+          image: item.image,
+          note: item.desc || '\u9019\u6b21\u5927\u5bcc\u7fc1\u539f\u5730\u4f11\u606f\u3002'
+        });
+        if (options.autoHide) {
+          await sleep(options.restDelay || 900);
+          if (boardPrizePop) boardPrizePop.hidden = true;
+        }
+      }
+    }
+
+    async function runTenDrawBoardQueue() {
+      const boardItems = state.tenDrawResults.filter(isBoardActionItem);
+      if (!boardItems.length) return;
+      for (const item of boardItems) {
+        await runBoardActionItem(item, { autoHide: true, restDelay: 850 });
+        await sleep(260);
+      }
+    }
+
+    function runBoardActionAfterReveal(item) {
+      if (!isBoardActionItem(item)) return;
+
+      let hasRunBoardAction = false;
+      const runAction = () => {
+        if (hasRunBoardAction) return;
+        hasRunBoardAction = true;
+        window.setTimeout(() => {
+          runBoardActionItem(item, { showNonMove: true }).catch((error) => console.warn('board action failed', error));
+        }, 120);
+      };
+
+      revealOverlayEl = revealOverlayEl || document.getElementById("revealOverlay");
+      if (revealOverlayEl?.classList.contains("active")) {
+        revealOverlayEl.addEventListener("reveal-card-closed", runAction, { once: true });
+        window.setTimeout(() => {
+          if (hasRunBoardAction || !revealOverlayEl?.classList.contains("active")) return;
+          revealOverlayEl.classList.remove("active");
+          revealOverlayEl.classList.remove("show-hint");
+          clearPrizeFlashClasses();
+          runAction();
+        }, 7200);
+        return;
+      }
+
+      runAction();
+    }
+
+
+    function reportGambleResult(item, spinIndex, raffle) {
+      return fetch('/gamble-result', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: item.name,
+          type: item.type,
+          rarity: item.rarity,
+          chance: item.chance,
+          caseName: state.currentCase.name,
+          seat: raffleContext.seat,
+          customer: raffleContext.customer,
+          raffleRemaining: Number(raffle?.remaining || 0),
+          spinIndex
+        })
+      })
+        .then(async res => {
+          if (!res.ok) throw new Error(await res.text());
+          return res.json();
+        })
+        .catch(err => console.warn('gamble result report failed', err));
+    }
+    function setLatestDrop(item) {
+      if (!dropArtEl || !dropNameEl || !dropDescEl || !dropRarityEl) return;
+      dropArtEl.className = 'drop-art with-prize-image ' + rarityBgClass(item.rarity);
+      dropArtEl.textContent = '';
+      dropArtEl.style.backgroundImage = `url('${item.image || 'card-back-a.svg'}')`;
+      dropNameEl.textContent = item.name;
+      dropDescEl.textContent = item.desc;
+      dropRarityEl.className = 'rarity-tag ' + rarityBadgeClass(item.rarity);
+      dropRarityEl.textContent = rarityText[item.rarity];
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => window.setTimeout(resolve, ms));
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function renderTenDrawPlaceholders(count) {
+      const grid = document.getElementById('tenDrawGrid');
+      if (!grid) return;
+      grid.innerHTML = Array.from({ length: count }, (_, index) => `
+        <article class="ten-card" data-index="${index}" style="animation-delay:${index * 0.035}s">
+          <div class="ten-card-face">
+            <div class="ten-card-name">等待揭曉</div>
+          </div>
+        </article>
+      `).join('');
+      state.tenDrawRevealedCount = 0;
+      updateTenDrawRevealStatus();
+    }
+
+    function animateTenDrawCardInPlace(index, item) {
+      return new Promise(resolve => {
+        const grid = document.getElementById('tenDrawGrid');
+        const card = grid?.querySelector(`[data-index="${index}"]`);
+        if (!card) {
+          resolve();
+          return;
+        }
+        const image = item.image || 'card-back-a.svg';
+        card.className = `ten-card ${item.rarity || 'common'} revealing`;
+        card.innerHTML = `
+          <div class="ten-card-face" style="background-image:url('${escapeHtml(image)}')">
+            <div class="ten-card-name">${escapeHtml(item.name)}</div>
+          </div>
+        `;
+        let finished = false;
+        const finishReveal = () => {
+          if (finished) return;
+          finished = true;
+          card.classList.remove('revealing');
+          card.classList.add('revealed');
+          if (card.dataset.counted !== 'true') {
+            card.dataset.counted = 'true';
+            state.tenDrawRevealedCount += 1;
+          }
+          updateTenDrawRevealStatus();
+          resolve();
+        };
+        card.addEventListener('animationend', event => {
+          if (event.animationName !== 'tenCardLocalRevealSpin') return;
+          finishReveal();
+        }, { once: true });
+        window.setTimeout(finishReveal, 2600);
+      });
+    }
+
+    function closeTenDrawOverlay() {
+      const overlay = document.getElementById('tenDrawOverlay');
+      const hint = document.getElementById('tenDrawClickHint');
+      if (overlay) {
+        overlay.hidden = true;
+        overlay.classList.remove('ready-to-close');
+        overlay.classList.remove('ready-to-reveal-screen');
+      }
+      hint?.classList.remove('is-visible');
+      state.tenDrawPromptReady = false;
+      if (state.tenDrawPromptTimer) window.clearTimeout(state.tenDrawPromptTimer);
+      state.tenDrawPromptTimer = null;
+      clearPrizeFlashClasses();
+      if (state.tenDrawBoardQueuePending) {
+        state.tenDrawBoardQueuePending = false;
+        window.setTimeout(() => {
+          runTenDrawBoardQueue().catch((error) => console.warn('ten draw board queue failed', error));
+        }, 250);
+      }
+    }
+
+    function showTenDrawHint(text, className) {
+      const overlay = document.getElementById('tenDrawOverlay');
+      const hint = document.getElementById('tenDrawClickHint');
+      if (!overlay || !hint) return;
+      state.tenDrawPromptReady = false;
+      if (state.tenDrawPromptTimer) window.clearTimeout(state.tenDrawPromptTimer);
+      hint.textContent = text;
+      hint.classList.remove('is-visible');
+      overlay.classList.remove('ready-to-reveal-screen');
+      overlay.classList.remove('ready-to-close');
+      void hint.offsetWidth;
+      if (className) overlay.classList.add(className);
+      hint.classList.add('is-visible');
+      state.tenDrawPromptTimer = window.setTimeout(() => {
+        state.tenDrawPromptReady = true;
+      }, 2100);
+    }
+
+    function updateTenDrawRevealStatus() {
+      const status = document.getElementById('tenDrawStatus');
+      const overlay = document.getElementById('tenDrawOverlay');
+      if (!status) return;
+      const total = state.tenDrawResults.length;
+      if (!total) {
+        status.textContent = '正在準備十連抽結果...';
+        return;
+      }
+      status.textContent = `目前已揭曉 ${state.tenDrawRevealedCount} / ${total} 張。`;
+      if (state.tenDrawRevealedCount >= total) {
+        status.textContent = `十連抽完成，共揭曉 ${total} 張。`;
+        document.getElementById('tenDrawGrid')?.classList.remove('ready-to-reveal');
+        showTenDrawHint('點擊螢幕關閉結果', 'ready-to-close');
+        return;
+      }
+      overlay?.classList.remove('ready-to-close');
+    }
+
+    async function revealTenDrawSequence() {
+      if (!state.tenDrawResults.length || state.tenDrawAutoRevealing || !state.tenDrawPromptReady) return;
+      state.tenDrawAutoRevealing = true;
+      state.tenDrawPromptReady = false;
+      if (state.tenDrawPromptTimer) window.clearTimeout(state.tenDrawPromptTimer);
+      state.tenDrawPromptTimer = null;
+      document.getElementById('tenDrawOverlay')?.classList.remove('ready-to-reveal-screen');
+      document.getElementById('tenDrawGrid')?.classList.remove('ready-to-reveal');
+      document.getElementById('tenDrawClickHint')?.classList.remove('is-visible');
+      const revealJobs = state.tenDrawResults.map(async (item, index) => {
+        await sleep(index * 250);
+        triggerPrizeEffect(item);
+        await animateTenDrawCardInPlace(index, item);
+      });
+      await Promise.all(revealJobs);
+      state.tenDrawBoardQueuePending = true;
+      state.tenDrawAutoRevealing = false;
+      state.tenDrawRevealedCount = state.tenDrawResults.length;
+      updateTenDrawRevealStatus();
+    }
+
+    function weightedPick(box) {
+      const roll = Math.random() * 100;
+      let sum = 0;
+      for (const item of box.items) {
+        sum += item.chance;
+        if (roll <= sum) return item;
+      }
+      return box.items[box.items.length - 1];
+    }
+
+    function pickWithPity() {
+      if (FORCE_DEMO_SEQUENCE || state.forceDemoNextSpin) {
+        const item = state.currentCase.items[state.demoIndex % state.currentCase.items.length];
+        state.demoIndex += 1;
+        state.pity = 0;
+        state.forceDemoNextSpin = false;
+        return item;
+      }
+
+      const item = weightedPick(state.currentCase);
+      state.pity += 1;
+      return item;
+    }
+    function renderIdleStrip() {
+      const pool = state.currentCase.items;
+      const featuredIndex = Math.max(0, pool.findIndex(item => item.rarity === 'legendary'));
+      const idleStrip = pool.concat(pool, pool);
+      const targetIndex = pool.length + featuredIndex;
+
+      reelTrack.getAnimations().forEach(animation => animation.cancel());
+      reelTrack.innerHTML = idleStrip.map(makeCard).join('');
+      reelTrack.style.transition = 'none';
+      reelTrack.style.transform = 'translateX(0px)';
+
+      requestAnimationFrame(() => {
+        const reelWrap = document.querySelector('.reel-wrap');
+        const reelStyle = window.getComputedStyle(reelWrap);
+        const paddingLeft = parseFloat(reelStyle.paddingLeft) || 0;
+        const targetCard = reelTrack.querySelectorAll('.reel-item')[targetIndex];
+        if (!targetCard) return;
+        const centerOffset = (reelWrap.clientWidth / 2) - paddingLeft - (targetCard.offsetWidth / 2);
+        const idleTarget = -(targetCard.offsetLeft - centerOffset);
+        reelTrack.style.transform = 'translateX(' + idleTarget + 'px)';
+      });
+    }
+
+    function buildSpinStrip(finalItem) {
+      const pool = state.currentCase.items;
+      const result = [];
+      for (let i = 0; i < 42; i += 1) {
+        result.push(pool[Math.floor(Math.random() * pool.length)]);
+      }
+      result[36] = finalItem;
+      return result;
+    }
+
+    function getBoardForwardOnePrize() {
+      return state.currentCase.items.find(item => item.name === '前進一格') || null;
+    }
+
+    async function runForwardOneBoardTest() {
+      if (state.locked || state.boardMoving) return;
+      const forwardOnePrize = getBoardForwardOnePrize();
+      if (!forwardOnePrize) return;
+      if (!state.boardTestStarted) {
+        state.boardTestStarted = true;
+        setBoardPosition(1);
+        focusBoardForMovement();
+        await sleep(650);
+      }
+      spinOnce(forwardOnePrize, { skipClaim: true });
+    }
+
+    async function spinOnce(forcedItem = null, options = {}) {
+      if (state.locked) return false;
+      state.locked = true;
+      const claimedRaffle = options.skipClaim
+        ? { remaining: raffleContext.remaining || 0 }
+        : await claimRaffleEligibility();
+      if (!claimedRaffle) {
+        state.locked = false;
+        return false;
+      }
+
+      const finalItem = forcedItem || pickWithPity();
+      const strip = buildSpinStrip(finalItem);
+      reelTrack.getAnimations().forEach(animation => animation.cancel());
+      reelTrack.style.transition = 'none';
+      reelTrack.style.transform = 'translateX(0px)';
+      reelTrack.innerHTML = strip.map(makeCard).join('');
+
+      const spinDuration = 14900;
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const centerIndex = 36;
+          const itemWidth = 168 + 14;
+          const reelWrap = document.querySelector('.reel-wrap');
+          const reelStyle = window.getComputedStyle(reelWrap);
+          const paddingLeft = parseFloat(reelStyle.paddingLeft) || 0;
+          const centerOffset = (reelWrap.clientWidth / 2) - paddingLeft - (168 / 2);
+          const actualTarget = -((centerIndex * itemWidth) - centerOffset);
+          const overshootRatio = 0.18 + (Math.random() * 0.30);
+          const overshootDirection = Math.random() < 0.5 ? -1 : 1;
+          const overshootTarget = actualTarget + (itemWidth * overshootRatio * overshootDirection);
+
+          const animation = reelTrack.animate(
+            [
+              { transform: 'translateX(0px)', offset: 0, easing: 'cubic-bezier(.02,.98,.08,1)' },
+              { transform: `translateX(${overshootTarget}px)`, offset: 0.965, easing: 'cubic-bezier(.22,.82,.28,1)' },
+              { transform: `translateX(${actualTarget}px)`, offset: 1 }
+            ],
+            {
+              duration: spinDuration,
+              fill: 'forwards'
+            }
+          );
+
+          animation.onfinish = () => {
+            reelTrack.style.transition = 'none';
+            reelTrack.style.transform = `translateX(${actualTarget}px)`;
+            state.spins += 1;
+            state.history.unshift({
+              ...finalItem,
+              caseName: state.currentCase.name,
+              spinIndex: state.spins
+            });
+            state.history = state.history.slice(0, 12);
+            setLatestDrop(finalItem);
+            showRevealCard(finalItem);
+            runBoardActionAfterReveal(finalItem);
+            if (dropArtEl) {
+              dropArtEl.classList.remove('drop-showcase');
+              void dropArtEl.offsetWidth;
+              dropArtEl.classList.add('drop-showcase');
+            }
+            triggerPrizeEffect(finalItem);
+            if (!options.skipReport) {
+              reportGambleResult(finalItem, state.spins, claimedRaffle);
+            }
+            updateHeader();
+            updateHistory();
+            state.locked = false;
+            refreshRaffleEligibility();
+
+          };
+        });
+      });
+      return true;
+    }
+
+    function waitUntilUnlocked() {
+      return new Promise(resolve => {
+        const timer = window.setInterval(() => {
+          if (!state.locked) {
+            window.clearInterval(timer);
+            resolve();
+          }
+        }, 150);
+      });
+    }
+
+    function waitUntilRevealClosed() {
+      return new Promise(resolve => {
+        const overlay = document.getElementById('revealOverlay');
+        if (!overlay || !overlay.classList.contains('active')) {
+          resolve();
+          return;
+        }
+        const timer = window.setInterval(() => {
+          if (!overlay.classList.contains('active')) {
+            window.clearInterval(timer);
+            resolve();
+          }
+        }, 150);
+      });
+    }
+
+    async function openMultiple(count) {
+      if (state.locked) return;
+      const useDemoOrder = count === 9;
+      if (useDemoOrder) state.demoIndex = 0;
+      for (let i = 0; i < count; i += 1) {
+        if (useDemoOrder) state.forceDemoNextSpin = true;
+        const started = await spinOnce();
+        if (!started) break;
+        await waitUntilUnlocked();
+        if (count > 1) await waitUntilRevealClosed();
+      }
+      state.forceDemoNextSpin = false;
+    }
+
+    async function openTenDraw() {
+      if (state.locked) return;
+      state.locked = true;
+      setOpenButtonsDisabled(true);
+      renderTenDrawPlaceholders(10);
+      state.tenDrawResults = [];
+      state.tenDrawRevealedCount = 0;
+      state.tenDrawAutoRevealing = false;
+      const overlay = document.getElementById('tenDrawOverlay');
+      const grid = document.getElementById('tenDrawGrid');
+      const status = document.getElementById('tenDrawStatus');
+      if (overlay) {
+        overlay.hidden = false;
+        overlay.classList.remove('ready-to-close');
+        overlay.classList.remove('ready-to-reveal-screen');
+      }
+      document.getElementById('tenDrawClickHint')?.classList.remove('is-visible');
+      state.tenDrawPromptReady = false;
+      if (state.tenDrawPromptTimer) window.clearTimeout(state.tenDrawPromptTimer);
+      state.tenDrawPromptTimer = null;
+      if (grid) grid.classList.remove('ready-to-reveal');
+      if (status) status.textContent = '正在準備十連抽結果...';
+
+      let preparedCount = 0;
+      try {
+        for (let i = 0; i < 10; i += 1) {
+          if (raffleContext.raffle && Number(raffleContext.raffle.remaining || 0) <= 0) break;
+          const claimedRaffle = await claimRaffleEligibility();
+          if (!claimedRaffle) break;
+
+          const finalItem = pickWithPity();
+          state.spins += 1;
+          state.history.unshift({
+            ...finalItem,
+            caseName: state.currentCase.name,
+            spinIndex: state.spins
+          });
+          state.history = state.history.slice(0, 12);
+          setLatestDrop(finalItem);
+          triggerPrizeEffect(finalItem);
+          const report = await reportGambleResult(finalItem, state.spins, claimedRaffle);
+          if (report?.raffle) raffleContext.raffle = report.raffle;
+          if (report?.order?.customer) raffleContext.customer = String(report.order.customer || '').trim();
+          state.tenDrawResults.push(finalItem);
+          preparedCount += 1;
+        }
+
+        state.tenDrawResults = state.tenDrawResults.slice(0, preparedCount);
+        renderTenDrawPlaceholders(preparedCount);
+        updateHeader();
+        updateHistory();
+
+        if (preparedCount <= 0) {
+          closeTenDrawOverlay();
+          return;
+        }
+        document.getElementById('tenDrawGrid')?.classList.add('ready-to-reveal');
+        showTenDrawHint('點擊螢幕翻卡', 'ready-to-reveal-screen');
+        updateTenDrawRevealStatus();
+      }
+      finally {
+        state.locked = false;
+        refreshRaffleEligibility();
+      }
+    }
+
+    function switchCase(id) {
+      if (state.locked) return;
+      state.currentCase = CASES.find(box => box.id === id) || CASES[0];
+      state.pity = 0;
+      updateCaseSelector();
+      updatePool();
+      updateHeader();
+      renderIdleStrip();
+    preloadGambleImages();
+    }
+
+    caseSelector.addEventListener('click', event => {
+      const button = event.target.closest('[data-case]');
+      if (!button) return;
+      switchCase(button.dataset.case);
+    });
+
+    function handleTenDrawPromptClick() {
+      const overlay = document.getElementById('tenDrawOverlay');
+      if (!state.tenDrawPromptReady) return;
+      if (overlay?.classList.contains('ready-to-close')) {
+        closeTenDrawOverlay();
+        return;
+      }
+      if (overlay?.classList.contains('ready-to-reveal-screen')) {
+        revealTenDrawSequence();
+      }
+    }
+
+    document.getElementById('openOnceBtn').addEventListener('click', () => openMultiple(1));
+    document.getElementById('openTenBtn')?.addEventListener('click', openTenDraw);
+    document.getElementById('testForwardOneBtn')?.addEventListener('click', runForwardOneBoardTest);
+    document.getElementById('tenDrawCloseBtn')?.addEventListener('click', closeTenDrawOverlay);
+    document.getElementById('tenDrawGrid')?.addEventListener('click', handleTenDrawPromptClick);
+    document.getElementById('tenDrawGrid')?.addEventListener('touchstart', handleTenDrawPromptClick, { passive: true });
+    document.getElementById('tenDrawOverlay')?.addEventListener('click', handleTenDrawPromptClick);
+    window.setInterval(() => {
+      if (!state.locked) refreshRaffleEligibility();
+    }, 5000);
+
+
+    updateCaseSelector();
+    updatePool();
+    updateHeader();
+    updateHistory();
+    bindBoardControls();
+    renderIdleStrip();
+    preloadGambleImages();
+  </script>
+  <div class="reveal-overlay" id="revealOverlay" aria-hidden="true">
+    <div class="reveal-backdrop"></div>
+    <div class="reveal-card-wrap">
+      <div class="reveal-card" id="revealCard">
+        <div class="reveal-card-face reveal-card-front">
+          <div class="reveal-front-shell">
+            <div class="reveal-front-art" id="revealFrontArt">?</div>
+            <div class="reveal-front-meta">
+              <div class="reveal-front-label" id="revealFrontLabel">神秘卡片</div>
+              <div class="reveal-front-sub" id="revealFrontSub">準備翻面揭示</div>
+            </div>
+          </div>
+        </div>
+        <div class="reveal-card-face reveal-card-back">
+          <div class="drop-art" id="revealArt"></div>
+          <div class="reveal-info">
+            <div class="reveal-name" id="revealName">等待抽獎</div>
+            <div class="reveal-rarity" id="revealRarity">一般</div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal-click-hint">點擊螢幕關閉卡片</div>
+    </div>
+  </div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

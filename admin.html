@@ -1,0 +1,2167 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>座位後台</title>
+<style>
+.order-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  color: black;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 0 10px black;
+  display: none;
+  width: 760px;
+  max-width: calc(100vw - 24px);
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+  z-index: 1300;
+  box-sizing: border-box;
+}
+
+.order-panel h2 {
+  margin: 0 0 8px;
+  font-size: 28px;
+}
+
+.order-header-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.order-field {
+  display: grid;
+  gap: 6px;
+}
+
+.order-field label {
+  font-size: 13px;
+  font-weight: bold;
+  color: #555;
+}
+
+.order-field input {
+  width: 100%;
+  border: 1px solid #d4d4d4;
+  border-radius: 10px;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  font-size: 15px;
+}
+
+.order-section-label {
+  margin: 8px 0 6px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #555;
+}
+
+.order-menu-layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 0;
+}
+
+.order-menu-group {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fafafa;
+  min-height: 0;
+}
+
+.order-menu-group h4 {
+  margin: 0 0 10px;
+  font-size: 16px;
+}
+
+.order-menu-note {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.order-menu-list {
+  display: grid;
+  gap: 8px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.order-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.order-total-box {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #f4f4f4;
+  font-weight: bold;
+}
+
+.order-total-box span {
+  font-size: 28px;
+}
+
+.order-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.order-actions button {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+body {
+  font-family: Arial;
+  background: #222;
+  color: white;
+}
+
+.container {
+  position: relative;
+  width: 800px;
+  height: 800px;
+  margin: auto;
+  background-image: url("floor.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.table {
+  position: absolute;
+  width: 100px;
+  height: 60px;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 60px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+}
+
+.bar {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 60px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+}
+
+.empty {
+  background: green;
+}
+
+.occupied {
+  background: red;
+}
+
+.preparing {
+  background: #ef6c00;
+}
+
+.warning {
+  background: #fbc02d;
+  color: #111;
+}
+
+.overdue {
+  background: #111;
+  color: #fff;
+}
+
+.served {
+  background: #d32f2f;
+}
+
+#T1 { top: 59px; left: 105px; }
+#T2 { top: 285px; left: 105px; }
+#T3 { top: 493px; left: 105px; }
+#BAR1 { top: 50px; left: 420px; }
+#BAR2 { top: 125px; left: 420px; }
+#BAR3 { top: 200px; left: 420px; }
+#BAR4 { top: 275px; left: 420px; }
+#BAR5 { top: 350px; left: 420px; }
+#BAR6 { top: 480px; left: 520px; }
+#BAR7 { top: 480px; left: 600px; }
+#BAR8 { top: 480px; left: 680px; }
+
+.title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.toolbar {
+  width: 800px;
+  margin: 0 auto 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.toolbar button {
+  background: #f0f0f0;
+  color: #111;
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.snapshot-box {
+  width: 800px;
+  margin: 0 auto 16px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+.summary-grid {
+  width: 800px;
+  margin: 0 auto 16px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.summary-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.summary-label {
+  font-size: 13px;
+  color: #d0d0d0;
+  margin-bottom: 6px;
+}
+
+.summary-value {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.seat-detail-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  color: black;
+  padding: 16px 16px 14px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  display: none;
+  width: min(760px, calc(100vw - 24px));
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  z-index: 1200;
+  box-sizing: border-box;
+}
+
+.seat-detail-panel h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 28px;
+}
+
+.seat-detail-line {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.45;
+  font-size: 14px;
+}
+
+.seat-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 14px;
+  margin-bottom: 12px;
+}
+
+.seat-detail-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #fafafa;
+}
+
+.seat-detail-card.wide {
+  grid-column: 1 / -1;
+}
+
+.seat-detail-note-input {
+  width: 100%;
+  min-height: 54px;
+  margin-top: 6px;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  padding: 8px 9px;
+  box-sizing: border-box;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.seat-detail-status {
+  margin-top: 6px;
+  color: #666;
+  font-size: 13px;
+  min-height: 18px;
+}
+
+.seat-detail-discount-row {
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: 1fr 110px;
+  gap: 8px;
+}
+
+.seat-detail-discount-row select,
+.seat-detail-discount-row input {
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  padding: 7px 9px;
+  font-size: 13px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.discount-quick-list {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.discount-quick-list button {
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  background: #f1e6df;
+  color: #6b4a3a;
+}
+
+.seat-detail-actions {
+  margin-top: 0;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  padding: 12px;
+  border: 1px solid #e0d6cf;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.seat-detail-action-card {
+  display: grid;
+  gap: 10px;
+}
+
+.seat-detail-action-card .seat-detail-status:empty {
+  display: none;
+}
+
+.seat-detail-actions button {
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.raffle-adjust-actions {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.raffle-adjust-actions button {
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-weight: 800;
+  color: #fff;
+  background: #6a1b9a;
+}
+
+.raffle-adjust-actions button:last-child {
+  background: #795548;
+}
+
+.macro-panel {
+  margin-top: 14px;
+  display: grid;
+  gap: 10px;
+}
+
+.macro-card {
+  background: #fff;
+  border: 1px solid #e4d9cf;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.macro-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.macro-card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #5d4037;
+}
+
+.macro-card button {
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 12px;
+  background: #6d4c41;
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.macro-card textarea {
+  width: 100%;
+  min-height: 64px;
+  resize: vertical;
+  border: 1px solid #d8cdc3;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+  box-sizing: border-box;
+  font-family: Consolas, "Microsoft JhengHei", monospace;
+  background: #fcfaf8;
+}
+
+.macro-panel-note {
+  margin-top: 2px;
+  font-size: 12px;
+  color: #7a6a60;
+}
+
+@media (max-width: 720px) {
+  .order-header-grid,
+  .order-menu-layout,
+  .seat-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .order-menu-list {
+    max-height: 220px;
+  }
+
+  .order-footer {
+    align-items: stretch;
+  }
+
+  .seat-detail-card.wide {
+    grid-column: auto;
+  }
+}
+
+.sop-panel {
+  position: fixed;
+  top: 88px;
+  right: 18px;
+  width: min(360px, calc(100vw - 24px));
+  max-height: calc(100vh - 110px);
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.96);
+  color: #111;
+  border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.32);
+  padding: 18px 18px 16px;
+  z-index: 1100;
+  display: none;
+}
+
+.sop-panel h3 {
+  margin: 0 0 12px;
+  font-size: 22px;
+}
+
+.sop-intro {
+  margin: 0 0 14px;
+  color: #555;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.sop-role {
+  border: 1px solid rgba(120, 120, 120, 0.2);
+  border-radius: 12px;
+  padding: 12px 13px;
+  margin-bottom: 10px;
+  background: #fafafa;
+}
+
+.sop-role h4 {
+  margin: 0 0 8px;
+  font-size: 17px;
+}
+
+.sop-role p {
+  margin: 0;
+  color: #444;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.sop-role-actions {
+  margin-top: 10px;
+}
+
+.sop-role-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #6b4a3a;
+  color: #fff;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.sop-close-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.sop-close-row button {
+  border: 0;
+  border-radius: 999px;
+  padding: 9px 14px;
+  cursor: pointer;
+  font-weight: bold;
+}
+</style>
+</head>
+<body class="admin-locked">
+  <div id="adminPasswordGate" style="position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(19,17,16,.88);backdrop-filter:blur(12px);">
+    <div style="width:min(440px,100%);padding:32px;border-radius:24px;background:#f8f2ec;border:1px solid rgba(168,93,61,.18);box-shadow:0 30px 80px rgba(0,0,0,.35);font-family:'Microsoft JhengHei',sans-serif;color:#2f231d;">
+      <div style="font-size:13px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#a85d3d;margin-bottom:12px;">Admin Access</div>
+      <h1 style="margin:0 0 10px;font-size:38px;line-height:1.05;">輸入後台密碼</h1>
+      <p style="margin:0 0 20px;font-size:16px;line-height:1.8;color:#6b5a50;">此頁面僅提供員工使用，請先輸入密碼再進入後台。</p>
+      <form id="adminPasswordForm" style="display:grid;gap:14px;">
+        <input id="adminPasswordInput" type="password" autocomplete="current-password" placeholder="請輸入密碼" style="width:100%;height:54px;padding:0 18px;border-radius:16px;border:1px solid rgba(168,93,61,.22);background:#fffaf6;font-size:17px;color:#2f231d;outline:none;" />
+        <button type="submit" style="height:54px;border:none;border-radius:999px;background:#a85d3d;color:#fff;font-size:18px;font-weight:700;cursor:pointer;">進入後台</button>
+      </form>
+      <p id="adminPasswordError" style="display:none;margin:14px 0 0;color:#c43d2f;font-size:14px;font-weight:700;">密碼錯誤，請再試一次。</p>
+    </div>
+  </div>
+
+<div id="orderPanel" class="order-panel">
+  <h2 id="orderTitle">訂單</h2>
+  <div id="orderModeHint" style="margin-bottom:10px;color:#666;font-size:13px;"></div>
+  <div class="order-header-grid">
+    <div class="order-field">
+      <label for="customerName">姓名</label>
+      <input type="text" id="customerName">
+    </div>
+    <div class="order-field">
+      <label for="peopleCount">人數</label>
+      <input type="number" id="peopleCount" min="1" value="1">
+    </div>
+  </div>
+
+  <div class="order-section-label">餐點</div>
+  <div class="order-menu-layout">
+    <div class="order-menu-group">
+      <h4>主餐與飲品</h4>
+      <div id="menuItemList" class="order-menu-list">
+        <label style="display:flex;justify-content:space-between;gap:12px;align-items:center;"><span>起司火鍋 16000G</span><select class="menuItemQty" data-name="起司火鍋" data-price="16000"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
+        <label style="display:flex;justify-content:space-between;gap:12px;align-items:center;"><span>大河狸漢堡組合 16000G</span><select class="menuItemQty" data-name="大河狸漢堡組合" data-price="16000"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
+        <label style="display:flex;justify-content:space-between;gap:12px;align-items:center;"><span>早餐蛋包飯 16000G</span><select class="menuItemQty" data-name="早餐蛋包飯" data-price="16000"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
+        <label style="display:flex;justify-content:space-between;gap:12px;align-items:center;"><span>新世界午餐組合：卷餅 16000G</span><select class="menuItemQty" data-name="新世界午餐組合：卷餅" data-price="16000"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
+        <label style="display:flex;justify-content:space-between;gap:12px;align-items:center;"><span>鐵鍋番茄燉蛋 16000G</span><select class="menuItemQty" data-name="鐵鍋番茄燉蛋" data-price="16000"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
+        <label style="display:flex;justify-content:space-between;gap:12px;align-items:center;"><span>鬆軟鬆餅套餐 14000G</span><select class="menuItemQty" data-name="鬆軟鬆餅套餐" data-price="14000"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
+        <label style="display:flex;justify-content:space-between;gap:12px;align-items:center;"><span>哈利卡納蘇斯午茶組合 14000G</span><select class="menuItemQty" data-name="哈利卡納蘇斯午茶組合" data-price="14000"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
+        <label style="display:flex;justify-content:space-between;gap:12px;align-items:center;"><span>奇妙芭菲 14000G</span><select class="menuItemQty" data-name="奇妙芭菲" data-price="14000"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
+        <label style="display:flex;justify-content:space-between;gap:12px;align-items:center;"><span>雪頂莫古泡泡冰 14000G</span><select class="menuItemQty" data-name="雪頂莫古泡泡冰" data-price="14000"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
+        <label style="display:flex;justify-content:space-between;gap:12px;align-items:center;"><span>布丁布丁 14000G</span><select class="menuItemQty" data-name="布丁布丁" data-price="14000"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
+        <label style="display:flex;justify-content:space-between;gap:12px;align-items:center;"><span>冰鎮果汁 8000G</span><select class="menuItemQty" data-name="冰鎮果汁" data-price="8000"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
+        <label style="display:flex;justify-content:space-between;gap:12px;align-items:center;"><span>濾掛式咖啡 8000G</span><select class="menuItemQty" data-name="濾掛式咖啡" data-price="8000"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
+        <label style="display:flex;justify-content:space-between;gap:12px;align-items:center;"><span>巧克力馬克杯 8000G</span><select class="menuItemQty" data-name="巧克力馬克杯" data-price="8000"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
+      </div>
+    </div>
+    <div class="order-menu-group">
+      <h4>酒類紀錄區</h4>
+      <div class="order-menu-note">提供仕酒師追加登記使用，每杯統一 8000G，會一併計入追加訂單總金額。</div>
+      <div class="order-menu-list">
+        <label style="display:flex;justify-content:space-between;gap:12px;align-items:center;"><span>巨匠藥酒 8000G</span><select class="menuItemQty" data-name="巨匠藥酒" data-price="8000"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
+        <label style="display:flex;justify-content:space-between;gap:12px;align-items:center;"><span>凍霧雞尾酒 8000G</span><select class="menuItemQty" data-name="凍霧雞尾酒" data-price="8000"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
+        <label style="display:flex;justify-content:space-between;gap:12px;align-items:center;"><span>蒼天蛋奶酒 8000G</span><select class="menuItemQty" data-name="蒼天蛋奶酒" data-price="8000"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
+        <label style="display:flex;justify-content:space-between;gap:12px;align-items:center;"><span>馬薩拉奶茶 8000G</span><select class="menuItemQty" data-name="馬薩拉奶茶" data-price="8000"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
+        <label style="display:flex;justify-content:space-between;gap:12px;align-items:center;"><span>蕎麥茶 8000G</span><select class="menuItemQty" data-name="蕎麥茶" data-price="8000"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="order-footer">
+    <div class="order-total-box">總金額 <span id="totalPrice">0</span> G</div>
+    <div class="order-actions">
+      <button onclick="submitOrder()">送出訂單</button>
+      <button onclick="closeOrder()">取消</button>
+    </div>
+  </div>
+</div>
+
+<div class="title">座位狀態</div>
+
+<div class="toolbar">
+  <button onclick="toggleSopPanel()">員工SOP</button>
+  <button onclick="window.open('/gamble-admin.html','_blank')" style="background:#6a1b9a;color:#fff;">獎池後台</button>
+  <button id="storeStatusButton" onclick="toggleStoreStatus()" style="background:#616161;color:#fff;">目前休店中 / 點此開店</button>
+  <button onclick="resetAllSeats()">重置全部座位</button>
+  <button onclick="clearTestData()" style="background:#ffb300;color:#111;">清除測試資料</button>
+  <button onclick="loadLastSnapshot()">查看上次關閉前狀態</button>
+  <button onclick="confirmShutdown()" style="background:#c62828;color:#fff;">關閉伺服器</button>
+</div>
+
+<div class="summary-grid">
+  <div class="summary-card">
+    <div class="summary-label">今日營收</div>
+    <div class="summary-value" id="summaryRevenue">0 G</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-label">今日訂單數</div>
+    <div class="summary-value" id="summaryTodayOrders">0</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-label">今日客人數</div>
+    <div class="summary-value" id="summaryTodayPeople">0</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-label">當前訂單數</div>
+    <div class="summary-value" id="summaryCurrentOrders">0</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-label">當前客人數</div>
+    <div class="summary-value" id="summaryCurrentPeople">0</div>
+  </div>
+</div>
+
+<div class="snapshot-box" id="snapshotBox">尚未讀取上次關閉前的座位狀態</div>
+
+<div class="container" id="container"></div>
+
+<div class="sop-panel" id="sopPanel">
+  <h3>員工 SOP</h3>
+  <p class="sop-intro">這裡整理的是現場工作分工的簡要版本，方便員工在後台快速查看自己的流程與交接重點。</p>
+
+  <div class="sop-role">
+    <h4>廚師</h4>
+    <p>確認後台訂單內容與數量，依照順序製作餐點。完成後主動與送餐員工交接，確認餐點品項正確、份數完整，再交由送餐流程送出。</p>
+    <div class="sop-role-actions">
+      <a href="/sop/chef.html" target="_blank" rel="noopener noreferrer">查看詳細流程</a>
+    </div>
+  </div>
+
+  <div class="sop-role">
+    <h4>收銀</h4>
+    <p>確認顧客訂單內容、座位與金額，完成結帳後於後台按下確認收款，並通知帶客員工可帶領該組客人前往指定座位。</p>
+    <div class="sop-role-actions">
+      <a href="/sop/cashier.html" target="_blank" rel="noopener noreferrer">查看詳細流程</a>
+    </div>
+  </div>
+
+  <div class="sop-role">
+    <h4>帶客</h4>
+    <p>收到收銀確認後，核對訂單座位與人數，帶領客人前往指定座位。帶位完成後可再次口頭確認座位與動線，避免客人走錯位置。</p>
+    <div class="sop-role-actions">
+      <a href="/sop/host.html" target="_blank" rel="noopener noreferrer">查看詳細流程</a>
+    </div>
+  </div>
+
+  <div class="sop-role">
+    <h4>送餐</h4>
+    <p>向廚師確認交接完成後，將正確餐點送至對應桌位，放置於桌面並向客人確認餐點已送達，最後於後台按下餐點送達確認。</p>
+    <div class="sop-role-actions">
+      <a href="/sop/server.html" target="_blank" rel="noopener noreferrer">查看詳細流程</a>
+    </div>
+  </div>
+
+  <div class="sop-role">
+    <h4>仕酒師</h4>
+    <p>主要負責吧檯區域的酒水推薦、合作夥伴宣傳與顧客互動。依照客人口味與現場氣氛提供建議，盡可能讓顧客在吧檯區獲得完整且舒服的酒類體驗。</p>
+    <div class="sop-role-actions">
+      <a href="/sop/sommelier.html" target="_blank" rel="noopener noreferrer">查看詳細流程</a>
+    </div>
+  </div>
+
+  <div class="sop-close-row">
+    <button onclick="toggleSopPanel(false)">關閉</button>
+  </div>
+</div>
+
+<div class="seat-detail-panel" id="seatDetailPanel">
+  <h3 id="seatDetailTitle">座位訂單</h3>
+  <div class="seat-detail-grid">
+    <div class="seat-detail-card"><div class="seat-detail-line" id="seatDetailTicket"></div></div>
+    <div class="seat-detail-card"><div class="seat-detail-line" id="seatDetailCustomer"></div></div>
+    <div class="seat-detail-card"><div class="seat-detail-line" id="seatDetailPeople"></div></div>
+    <div class="seat-detail-card"><div class="seat-detail-line" id="seatDetailTime"></div></div>
+    <div class="seat-detail-card wide"><div class="seat-detail-line" id="seatDetailItems"></div></div>
+    <div class="seat-detail-card"><div class="seat-detail-line" id="seatDetailSubtotal"></div></div>
+    <div class="seat-detail-card"><div class="seat-detail-line" id="seatDetailTotal"></div></div>
+    <div class="seat-detail-card"><div class="seat-detail-line" id="seatDetailDiscount"></div></div>
+    <div class="seat-detail-card"><div class="seat-detail-line" id="seatDetailDiscountReason"></div></div>
+    <div class="seat-detail-card"><div class="seat-detail-line" id="seatDetailPaidStatus"></div></div>
+    <div class="seat-detail-card"><div class="seat-detail-line" id="seatDetailDeliveryStatus"></div></div>
+    <div class="seat-detail-card wide"><div class="seat-detail-line" id="seatDetailElapsed"></div></div>
+    <div class="seat-detail-card wide"><div class="seat-detail-line" id="seatDetailRaffle"></div></div>
+    <div class="seat-detail-card wide"><div class="seat-detail-line" id="seatDetailCoupon"></div></div>
+    <div class="seat-detail-card wide"><div class="seat-detail-line" id="seatDetailNote"></div></div>
+    <div class="seat-detail-card wide">
+      <div class="seat-detail-line" id="seatDetailInternalNoteLabel">內部備註：</div>
+      <textarea class="seat-detail-note-input" id="seatDetailInternalNoteInput" placeholder="例如：不要香菜（因餐點晚到折抵 100G）"></textarea>
+    </div>
+    <div class="seat-detail-card wide">
+      <div class="seat-detail-line" id="seatDetailDiscountEditorLabel">折扣設定：</div>
+      <div class="seat-detail-discount-row">
+        <select id="seatDetailDiscountType">
+          <option value="none">不折扣</option>
+          <option value="percent">折扣百分比</option>
+          <option value="fixed">直接折抵金額</option>
+        </select>
+        <input type="number" id="seatDetailDiscountValue" min="0" value="0" placeholder="折扣數值">
+      </div>
+      <div class="discount-quick-list">
+        <button type="button" onclick="applyQuickDiscount('percent', 20, '合作夥伴折價卷八折')">合作夥伴折價卷八折</button>
+        <button type="button" onclick="applyQuickDiscount('percent', 30, '餐點晚到七折')">餐點晚到七折</button>
+        <button type="button" onclick="applyQuickDiscount('percent', 20, '餐點不足折抵八折')">餐點不足折抵八折</button>
+        <button type="button" onclick="applyQuickDiscount('percent', 20, '全場優惠八折')">全場優惠八折</button>
+      </div>
+      <textarea class="seat-detail-note-input" id="seatDetailDiscountReasonInput" placeholder="例如：優惠券折抵 / 餐點延遲補償"></textarea>
+    </div>
+    <div class="seat-detail-card wide seat-detail-action-card">
+      <div class="seat-detail-actions">
+        <button onclick="openAppendOrder()" style="background:#ef6c00;color:#fff;">追加訂單</button>
+        <button onclick="openGambleForCurrentSeat()" style="background:#6a1b9a;color:#fff;">打開抽獎頁</button>
+        <button onclick="markOrderPaid()" style="background:#2e7d32;color:#fff;">確認收款</button>
+        <button onclick="markOrderDelivered()" style="background:#c62828;color:#fff;">餐點送達確認</button>
+        <button onclick="saveDiscount()">儲存折扣</button>
+        <button onclick="saveInternalNote()">儲存內部備註</button>
+        <button onclick="closeSeatDetail()">關閉</button>
+        <button onclick="releaseSeatFromDetail()" style="background:#d93025;color:#fff;">確認離席</button>
+      </div>
+      <div class="seat-detail-status" id="seatDetailInternalNoteStatus"></div>
+    </div>
+  </div>
+  <div class="macro-panel">
+    <div class="macro-panel-note">收銀巨集會依目前訂單自動帶入金額，點一下即可複製。</div>
+    <div class="macro-card">
+      <div class="macro-card-head">
+        <div class="macro-card-title" id="cashierMacroTitle1">巨集 1：可出示折價卷</div>
+        <button type="button" onclick="copyCashierMacro(1)">複製巨集</button>
+      </div>
+      <textarea id="cashierMacro1" readonly></textarea>
+    </div>
+    <div class="macro-card">
+      <div class="macro-card-head">
+        <div class="macro-card-title" id="cashierMacroTitle2">巨集 2：折價後總額</div>
+        <button type="button" onclick="copyCashierMacro(2)">複製巨集</button>
+      </div>
+      <textarea id="cashierMacro2" readonly></textarea>
+    </div>
+      <div class="macro-card">
+        <div class="macro-card-head">
+          <div class="macro-card-title" id="cashierMacroTitle3">巨集 3：一般總額</div>
+          <button type="button" onclick="copyCashierMacro(3)">複製巨集</button>
+        </div>
+        <textarea id="cashierMacro3" readonly></textarea>
+      </div>
+      <div class="macro-card">
+        <div class="macro-card-head">
+          <div class="macro-card-title" id="cashierMacroTitle4">巨集 4：追加訂單總額</div>
+          <button type="button" onclick="copyCashierMacro(4)">複製巨集</button>
+        </div>
+        <textarea id="cashierMacro4" readonly></textarea>
+      </div>
+      <div class="macro-card">
+        <div class="macro-card-head">
+          <div class="macro-card-title" id="cashierMacroTitle5">巨集 5：抽獎頁面</div>
+          <button type="button" onclick="copyCashierMacro(5)">複製巨集</button>
+        </div>
+        <textarea id="cashierMacro5" readonly></textarea>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var PASSWORD_KEY = 'cloudflare-admin-auth';
+      var PASSWORD_VALUE = 'fuckoff';
+      function unlockAdmin() {
+        document.body.classList.remove('admin-locked');
+        var gate = document.getElementById('adminPasswordGate');
+        if (gate) gate.remove();
+      }
+      function setupAdminPasswordGate() {
+        if (sessionStorage.getItem(PASSWORD_KEY) === PASSWORD_VALUE) {
+          unlockAdmin();
+          return;
+        }
+        var form = document.getElementById('adminPasswordForm');
+        var input = document.getElementById('adminPasswordInput');
+        var error = document.getElementById('adminPasswordError');
+        if (!form || !input || !error) return;
+        form.addEventListener('submit', function (event) {
+          event.preventDefault();
+          if (input.value === PASSWORD_VALUE) {
+            sessionStorage.setItem(PASSWORD_KEY, PASSWORD_VALUE);
+            unlockAdmin();
+            return;
+          }
+          error.style.display = 'block';
+          input.value = '';
+          input.focus();
+        });
+        input.focus();
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupAdminPasswordGate, { once: true });
+      } else {
+        setupAdminPasswordGate();
+      }
+    })();
+  </script>
+  <script>
+let currentTable = "";
+let isLoadingSeats = false;
+let seatRefreshTimer = null;
+let currentDetailSeat = "";
+let currentDetailOrderId = 0;
+let currentDetailOrderData = null;
+let detailTimer = null;
+let currentOrderMode = "new";
+let currentAppendSourceOrderId = 0;
+let currentAppendDiscountConfig = {
+  discountType: "none",
+  discountValue: 0,
+  discountReason: ""
+};
+let currentAppendBaseSubtotal = 0;
+let currentAppendBaseTotal = 0;
+let realtimeSource = null;
+let currentStoreOpen = false;
+let refreshQueued = false;
+
+function getMenuPriceMap() {
+  const priceMap = {};
+
+  document.querySelectorAll(".menuItemQty").forEach(item => {
+    const name = (item.dataset.name || "").trim();
+    const price = Number(item.dataset.price || 0);
+
+    if (name) {
+      priceMap[name] = price;
+    }
+  });
+
+  return priceMap;
+}
+
+function calculateItemsAmount(itemsText) {
+  if (!itemsText) return 0;
+
+  const priceMap = getMenuPriceMap();
+
+  return String(itemsText)
+    .split(",")
+    .map(part => part.trim())
+    .filter(Boolean)
+    .reduce((sum, itemText) => {
+      const match = itemText.match(/^(.*?)\s*x\s*(\d+)$/i);
+
+      if (!match) {
+        return sum;
+      }
+
+      const itemName = match[1].trim();
+      const qty = Number(match[2] || 0);
+      const price = Number(priceMap[itemName] || 0);
+
+      return sum + (price * qty);
+    }, 0);
+}
+
+function buildAmountDisplay(totalAmount, latestAmount) {
+  const safeTotal = Number(totalAmount || 0);
+  const safeLatest = Number(latestAmount || 0);
+  const previousAmount = Math.max(safeTotal - safeLatest, 0);
+
+  if (previousAmount > 0 && safeLatest > 0) {
+    return `${previousAmount}+${safeLatest}`;
+  }
+
+  return `${safeTotal}`;
+}
+
+function resetOrderPanelState() {
+  document.getElementById("customerName").value = "";
+  document.getElementById("customerName").disabled = false;
+  document.getElementById("peopleCount").value = 1;
+  document.getElementById("peopleCount").disabled = false;
+  document.getElementById("peopleCount").max = 6;
+  document.getElementById("orderModeHint").innerText = "";
+  document.querySelectorAll(".menuItemQty").forEach(item => item.value = "0");
+  document.getElementById("totalPrice").innerText = 0;
+  currentOrderMode = "new";
+  currentAppendSourceOrderId = 0;
+  currentAppendDiscountConfig = {
+    discountType: "none",
+    discountValue: 0,
+    discountReason: ""
+  };
+  currentAppendBaseSubtotal = 0;
+  currentAppendBaseTotal = 0;
+}
+
+function getElapsedMinutes(createdAt) {
+  if (!createdAt) return 0;
+  const safeValue = String(createdAt).replace(" ", "T");
+  const createdDate = new Date(safeValue);
+
+  if (Number.isNaN(createdDate.getTime())) {
+    return 0;
+  }
+
+  return Math.max(Math.floor((Date.now() - createdDate.getTime()) / 60000), 0);
+}
+
+function getSeatVisualStatus(seat) {
+  if (seat.status !== "occupied" || !seat.order_id) {
+    return "empty";
+  }
+
+  if (Number(seat.order_delivered || 0) === 1) {
+    return "served";
+  }
+
+  const elapsedMinutes = getElapsedMinutes(seat.order_created_at);
+
+  if (elapsedMinutes >= 10) {
+    return "overdue";
+  }
+
+  if (elapsedMinutes >= 5) {
+    return "warning";
+  }
+
+  return "preparing";
+}
+
+function getOrderElapsedText(order) {
+  if (!order || !order.created_at) {
+    return "下單經過時間：無";
+  }
+
+  const elapsedMinutes = getElapsedMinutes(order.created_at);
+  const delivered = Number(order.delivered || 0) === 1;
+
+  if (delivered) {
+    return `下單經過時間：${elapsedMinutes} 分鐘（已送達）`;
+  }
+
+  if (elapsedMinutes >= 10) {
+    return `下單經過時間：${elapsedMinutes} 分鐘（已超過 10 分鐘）`;
+  }
+
+  if (elapsedMinutes >= 5) {
+    return `下單經過時間：${elapsedMinutes} 分鐘（已超過 5 分鐘）`;
+  }
+
+  return `下單經過時間：${elapsedMinutes} 分鐘`;
+}
+
+function renderDeliveryInfo(order) {
+  const delivered = Number(order?.delivered || 0) === 1;
+  const deliveredAt = order?.delivered_at || "無";
+
+  document.getElementById("seatDetailDeliveryStatus").innerText =
+    "送達狀態：" + (delivered ? `已送達（${deliveredAt}）` : "尚未送達");
+  document.getElementById("seatDetailElapsed").innerText =
+    getOrderElapsedText(order);
+}
+
+function renderRaffleInfo(order) {
+  const raffle = order?.raffle || {};
+  const unit = Number(raffle.unit || 50000);
+  const basis = Number(raffle.basisAmount || order?.total || 0);
+  const baseEligible = Number(raffle.baseEligible || 0);
+  const manualAdjustment = Number(raffle.manualAdjustment || 0);
+  const eligible = Number(raffle.eligible || 0);
+  const used = Number(raffle.used || 0);
+  const remaining = Number(raffle.remaining || 0);
+  const manualText = manualAdjustment === 0 ? "無" : (manualAdjustment > 0 ? `+${manualAdjustment}` : String(manualAdjustment));
+
+  document.getElementById("seatDetailRaffle").innerHTML =
+    `<div>抽獎資格：${basis} G / 每 ${unit} G 1 次｜基本 ${baseEligible} 次｜人工調整 ${manualText}｜可抽 ${eligible} 次｜已抽 ${used} 次｜剩餘 ${remaining} 次</div>` +
+    `<div class="raffle-adjust-actions"><button type="button" onclick="adjustRaffleChance(1)">抽獎 +1</button><button type="button" onclick="adjustRaffleChance(100)">抽獎 +100</button><button type="button" onclick="adjustRaffleChance(-1)">抽獎 -1</button></div>`;
+}
+
+function renderCouponInfo(order) {
+  const coupon = order?.coupon || {};
+  const threshold = Number(coupon.threshold || 10000);
+  const basis = Number(coupon.basisAmount || order?.subtotal || 0);
+  const eligible = Boolean(coupon.eligible);
+
+  document.getElementById("seatDetailCoupon").innerText =
+    `折價卷資格：${eligible ? "有" : "無"}（折扣前合計 ${basis} G / 門檻 ${threshold} G）`;
+}
+
+async function adjustRaffleChance(delta) {
+  if (!currentDetailSeat || !currentDetailOrderData) {
+    alert("目前沒有可調整的座位訂單資料");
+    return;
+  }
+
+  const status = document.getElementById("seatDetailInternalNoteStatus");
+  status.innerText = delta > 0 ? "正在增加抽獎次數..." : "正在減少抽獎次數...";
+
+  const res = await fetch(`/seat-raffle/${encodeURIComponent(currentDetailSeat)}/adjust`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ delta })
+  });
+  const data = await res.json();
+
+  if (!data.success) {
+    status.innerText = data.message || "調整抽獎次數失敗";
+    return;
+  }
+
+  currentDetailOrderData.raffle = data.raffle;
+  renderRaffleInfo(currentDetailOrderData);
+  status.innerText = delta > 0 ? `已增加 ${delta} 次抽獎資格` : `已減少 ${Math.abs(delta)} 次抽獎資格`;
+}
+
+function openGambleForCurrentSeat() {
+  if (!currentDetailSeat || !currentDetailOrderData) {
+    alert("目前沒有可抽獎的座位訂單資料");
+    return;
+  }
+  window.open(`/Gamble/?seat=${encodeURIComponent(currentDetailSeat)}`, "_blank");
+}
+
+function renderPaidInfo(order) {
+  const paid = Number(order?.paid || 0) === 1;
+  const paidAt = order?.paid_at || "無";
+
+  document.getElementById("seatDetailPaidStatus").innerText =
+    "收款狀態：" + (paid ? `已收款（${paidAt}）` : "尚未收款");
+}
+
+function startDetailTimer() {
+  if (detailTimer) {
+    clearInterval(detailTimer);
+  }
+
+  detailTimer = setInterval(() => {
+    if (!currentDetailOrderData) {
+      return;
+    }
+
+    renderDeliveryInfo(currentDetailOrderData);
+  }, 1000);
+}
+
+async function loadDashboardSummary() {
+  const res = await fetch(`/dashboard-summary?_=${Date.now()}`, {
+    cache: "no-store"
+  });
+  const data = await res.json();
+
+  if (!data.success) {
+    return;
+  }
+
+  document.getElementById("summaryRevenue").innerText =
+    `${data.todayRevenue || 0} G`;
+  document.getElementById("summaryTodayOrders").innerText =
+    `${data.todayOrderCount || 0}`;
+  document.getElementById("summaryTodayPeople").innerText =
+    `${data.todayPeopleCount || 0}`;
+  document.getElementById("summaryCurrentOrders").innerText =
+    `${data.currentOrderCount || 0}`;
+  document.getElementById("summaryCurrentPeople").innerText =
+    `${data.currentPeopleCount || 0}`;
+}
+
+async function refreshAdminView() {
+  await loadSeats();
+  await loadDashboardSummary();
+}
+
+function queueRefreshAdminView(delay = 0) {
+  if (refreshQueued) {
+    return;
+  }
+
+  refreshQueued = true;
+
+  setTimeout(async () => {
+    try {
+      await refreshAdminView();
+    } finally {
+      refreshQueued = false;
+    }
+  }, delay);
+}
+
+function startRealtimeUpdates() {
+  if (realtimeSource) {
+    realtimeSource.close();
+  }
+
+  realtimeSource = new EventSource("/events");
+
+  realtimeSource.onmessage = event => {
+    try {
+      const data = JSON.parse(event.data || "{}");
+
+      if (data.type === "store-status") {
+        currentStoreOpen = !!data.isOpen;
+        renderStoreStatus();
+        return;
+      }
+
+      if (data.type && data.type !== "connected") {
+        queueRefreshAdminView();
+      }
+    } catch (error) {
+      console.error("Realtime event parse error:", error);
+    }
+  };
+
+  realtimeSource.onerror = () => {
+    try {
+      realtimeSource?.close();
+    } catch (error) {
+      console.error("Realtime source close error:", error);
+    }
+
+    realtimeSource = null;
+    setTimeout(() => {
+      if (!realtimeSource) {
+        startRealtimeUpdates();
+      }
+    }, 1500);
+  };
+}
+
+function openOrder(tableName) {
+  closeSeatDetail();
+  currentTable = tableName;
+  currentOrderMode = "new";
+  document.getElementById("orderTitle").innerText = "訂單 - " + tableName;
+  document.getElementById("orderModeHint").innerText = "建立新訂單";
+
+  const peopleInput = document.getElementById("peopleCount");
+  const customerInput = document.getElementById("customerName");
+  customerInput.disabled = false;
+
+  if (tableName.startsWith("BAR")) {
+    peopleInput.value = 1;
+    peopleInput.max = 1;
+    peopleInput.disabled = true;
+  } else {
+    peopleInput.value = 1;
+    peopleInput.max = 6;
+    peopleInput.disabled = false;
+  }
+
+  document.getElementById("orderPanel").style.display = "block";
+}
+
+function closeOrder() {
+  resetOrderPanelState();
+  document.getElementById("orderPanel").style.display = "none";
+}
+
+async function checkoutSeat(name) {
+  const ok = confirm("確認客人已離席並重新開放這個座位嗎？");
+
+  if (ok) {
+    await toggleSeat(name);
+    loadSeats();
+  }
+
+  closeOrder();
+}
+
+function closeSeatDetail() {
+  document.getElementById("seatDetailPanel").style.display = "none";
+  currentDetailSeat = "";
+  currentDetailOrderId = 0;
+  currentDetailOrderData = null;
+  document.getElementById("seatDetailDiscountType").value = "none";
+  document.getElementById("seatDetailDiscountValue").value = 0;
+  document.getElementById("seatDetailDiscountReasonInput").value = "";
+  document.getElementById("seatDetailInternalNoteInput").value = "";
+  document.getElementById("seatDetailInternalNoteInput").disabled = false;
+  document.getElementById("seatDetailInternalNoteStatus").innerText = "";
+  document.getElementById("seatDetailPaidStatus").innerText = "";
+  document.getElementById("seatDetailDeliveryStatus").innerText = "";
+  document.getElementById("seatDetailElapsed").innerText = "";
+
+  if (detailTimer) {
+    clearInterval(detailTimer);
+    detailTimer = null;
+  }
+}
+
+async function releaseSeatFromDetail() {
+  if (!currentDetailSeat) {
+    return;
+  }
+
+  const seatName = currentDetailSeat;
+
+  const ok = confirm("確認客人已離席並重新開放這個座位嗎？");
+
+  if (!ok) return;
+
+  closeSeatDetail();
+  toggleSeat(seatName);
+}
+
+async function openSeatDetail(seatName) {
+  const [orderRes, itemsRes] = await Promise.all([
+    fetch(`/seat-order/${seatName}?_=${Date.now()}`, {
+      cache: "no-store"
+    }),
+    fetch(`/seat-order-items/${seatName}?_=${Date.now()}`, {
+      cache: "no-store"
+    })
+  ]);
+  const data = await orderRes.json();
+  const itemsData = await itemsRes.json();
+
+  currentDetailSeat = seatName;
+  currentDetailOrderId = 0;
+  currentDetailOrderData = null;
+
+  document.getElementById("seatDetailTitle").innerText =
+    `座位訂單 - ${seatName}`;
+
+  if (!data.success || !data.order) {
+    document.getElementById("seatDetailTicket").innerText = "號碼牌：查無資料";
+    document.getElementById("seatDetailCustomer").innerText = "";
+    document.getElementById("seatDetailPeople").innerText = "";
+    document.getElementById("seatDetailItems").innerText = "";
+    document.getElementById("seatDetailSubtotal").innerText = "";
+    document.getElementById("seatDetailDiscount").innerText = "";
+    document.getElementById("seatDetailDiscountReason").innerText = "";
+    document.getElementById("seatDetailTotal").innerText = "";
+    document.getElementById("seatDetailNote").innerText = "";
+    document.getElementById("seatDetailPaidStatus").innerText = "";
+    document.getElementById("seatDetailDeliveryStatus").innerText = "";
+    document.getElementById("seatDetailDiscountType").value = "none";
+    document.getElementById("seatDetailDiscountValue").value = 0;
+    document.getElementById("seatDetailDiscountReasonInput").value = "";
+    document.getElementById("seatDetailInternalNoteInput").value = "";
+    document.getElementById("seatDetailInternalNoteInput").disabled = true;
+    document.getElementById("seatDetailInternalNoteStatus").innerText = "查無可編輯的訂單資料";
+    document.getElementById("seatDetailTime").innerText = "";
+    document.getElementById("seatDetailElapsed").innerText = "";
+    document.getElementById("seatDetailRaffle").innerText = "";
+    document.getElementById("seatDetailCoupon").innerText = "";
+    renderCashierMacros(null);
+  } else {
+    const order = data.order;
+    const sessionSummary =
+      itemsData && itemsData.success && itemsData.summary
+        ? itemsData.summary
+        : null;
+    const mergedItemsText =
+      ((sessionSummary ? (sessionSummary.detailedItemsText || sessionSummary.itemsText) : "") || (itemsData.success ? itemsData.itemsText : "") || order.items || "");
+    const mergedSubtotal =
+      Number(sessionSummary?.subtotal) ||
+      calculateItemsAmount(mergedItemsText);
+    const mergedTotal =
+      Number(sessionSummary?.total) ||
+      Number(order.total || 0);
+    const mergedDiscountAmount =
+      Number(sessionSummary?.discountAmount) ||
+      Number(order.discount_amount || 0);
+    const mergedDiscountReason =
+      sessionSummary?.discountReason || order.discount_reason || "";
+    const initialAmount =
+      Number(sessionSummary?.initialAmount) ||
+      Number(order.subtotal ?? order.total) ||
+      0;
+    const appendFoodAmount =
+      Number(sessionSummary?.appendFoodAmount) || 0;
+    const appendAlcoholAmount =
+      Number(sessionSummary?.appendAlcoholAmount) || 0;
+
+    currentDetailOrderId = order.id || 0;
+      currentDetailOrderData = {
+        ...order,
+        subtotal: mergedSubtotal,
+        discount_amount: mergedDiscountAmount,
+        discount_reason: mergedDiscountReason,
+        total: mergedTotal,
+        initial_amount: initialAmount,
+        append_food_amount: appendFoodAmount,
+        append_alcohol_amount: appendAlcoholAmount,
+        raffle: sessionSummary?.raffle || null,
+        coupon: sessionSummary?.coupon || null,
+        unpaid_append_total: Number(sessionSummary?.unpaidAppendTotal) || 0,
+        unpaid_append_subtotal: Number(sessionSummary?.unpaidAppendSubtotal) || 0,
+        latest_order_subtotal: Number(order.subtotal ?? order.total) || 0,
+        latest_order_total: Number(order.total || 0) || 0,
+        latest_order_discount_amount: Number(order.discount_amount || 0) || 0,
+        display_subtotal_text: buildSeatAmountSummaryText({
+          subtotal: mergedSubtotal,
+          initial_amount: initialAmount,
+          append_food_amount: appendFoodAmount,
+        append_alcohol_amount: appendAlcoholAmount
+      }),
+      display_total_text: `${mergedTotal}`
+    };
+
+    document.getElementById("seatDetailTicket").innerText =
+      "號碼牌：" + order.id;
+    document.getElementById("seatDetailCustomer").innerText =
+      "姓名：" + (order.customer || "");
+    document.getElementById("seatDetailPeople").innerText =
+      "人數：" + (order.people || "");
+    document.getElementById("seatDetailItems").innerText =
+      "餐點：" + mergedItemsText;
+    renderSeatDetailTotals(currentDetailOrderData);
+    renderCashierMacros(currentDetailOrderData);
+    renderRaffleInfo(currentDetailOrderData);
+    renderCouponInfo(currentDetailOrderData);
+    document.getElementById("seatDetailNote").innerText =
+      "客人備註：" + (order.note || "無");
+    document.getElementById("seatDetailInternalNoteInput").disabled = false;
+    document.getElementById("seatDetailInternalNoteInput").value =
+      order.internal_note || "";
+    document.getElementById("seatDetailDiscountType").value =
+      getDiscountType(currentDetailOrderData);
+    document.getElementById("seatDetailDiscountValue").value =
+      getDiscountInputValue(currentDetailOrderData);
+    document.getElementById("seatDetailDiscountReasonInput").value =
+      currentDetailOrderData.discount_reason || "";
+    document.getElementById("seatDetailInternalNoteStatus").innerText = "";
+    document.getElementById("seatDetailTime").innerText =
+      "下單時間：" + (order.created_at || "");
+    renderPaidInfo(order);
+    renderDeliveryInfo(order);
+    startDetailTimer();
+  }
+
+  document.getElementById("seatDetailPanel").style.display = "block";
+}
+
+function openAppendOrder() {
+  if (!currentDetailSeat || !currentDetailOrderData) {
+    alert("目前沒有可追加的訂單資料");
+    return;
+  }
+
+  const appendSeat = currentDetailSeat;
+  const appendOrder = { ...currentDetailOrderData };
+
+  closeSeatDetail();
+  currentTable = appendSeat;
+  currentOrderMode = "append";
+  currentAppendSourceOrderId = Number(appendOrder.id || 0);
+  currentAppendDiscountConfig = {
+    discountType: getDiscountType(appendOrder),
+    discountValue: getDiscountInputValue(appendOrder),
+    discountReason: String(appendOrder.discount_reason || "").trim()
+  };
+  currentAppendBaseSubtotal = Number(appendOrder.subtotal ?? appendOrder.total) || 0;
+  currentAppendBaseTotal = Number(appendOrder.total || 0) || 0;
+  document.getElementById("orderTitle").innerText = "追加訂單 - " + appendSeat;
+  document.getElementById("orderModeHint").innerText = "追加餐點後會建立一張新的未送達訂單，時間重新開始計算；下方顯示的是本次追加折扣後應收";
+  document.getElementById("customerName").value = appendOrder.customer || "";
+  document.getElementById("customerName").disabled = true;
+  document.getElementById("peopleCount").value = appendOrder.people || 1;
+  document.getElementById("peopleCount").disabled = true;
+  document.querySelectorAll(".menuItemQty").forEach(item => item.value = "0");
+  recalculateOrderPanelTotal();
+  document.getElementById("orderPanel").style.display = "block";
+}
+
+async function saveInternalNote() {
+  if (!currentDetailOrderId) {
+    alert("目前沒有可儲存備註的訂單");
+    return;
+  }
+
+  const input = document.getElementById("seatDetailInternalNoteInput");
+  const status = document.getElementById("seatDetailInternalNoteStatus");
+  const internalNote = input.value.trim();
+
+  status.innerText = "儲存中...";
+
+  const res = await fetch(`/order/${currentDetailOrderId}/internal-note`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      internal_note: internalNote
+    })
+  });
+
+  const data = await res.json();
+
+  if (!data.success) {
+    status.innerText = data.message || "內部備註儲存失敗";
+    return;
+  }
+
+  status.innerText = "內部備註已儲存";
+}
+
+function getDiscountType(order) {
+  const subtotal = Number(order.subtotal ?? order.total) || 0;
+  const discountAmount = Number(order.discount_amount || 0);
+
+  if (!discountAmount || subtotal <= 0) {
+    return "none";
+  }
+
+  const percentValue = Math.round((discountAmount / subtotal) * 100);
+  if (Math.round(subtotal * (percentValue / 100)) === discountAmount) {
+    return "percent";
+  }
+
+  return "fixed";
+}
+
+function getDiscountInputValue(order) {
+  const subtotal = Number(order.subtotal ?? order.total) || 0;
+  const discountAmount = Number(order.discount_amount || 0);
+  const discountType = getDiscountType(order);
+
+  if (discountType === "percent" && subtotal > 0) {
+    return Math.round((discountAmount / subtotal) * 100);
+  }
+
+  if (discountType === "fixed") {
+    return discountAmount;
+  }
+
+  return 0;
+}
+
+function buildSeatAmountSummaryText(order) {
+  const subtotal = Number(order.subtotal ?? order.total) || 0;
+  const initialAmount = Number(order.initial_amount || 0) || 0;
+  const appendFoodAmount = Number(order.append_food_amount || 0) || 0;
+  const appendAlcoholAmount = Number(order.append_alcohol_amount || 0) || 0;
+
+  return `${subtotal}（首次 ${initialAmount} / 追加餐點 ${appendFoodAmount} / 追加酒類 ${appendAlcoholAmount}）`;
+}
+
+function renderSeatDetailTotals(order) {
+  const subtotal = Number(order.subtotal ?? order.total) || 0;
+  const discountAmount = Number(order.discount_amount || 0);
+  const total = Number(order.total || 0);
+  const subtotalText = order.display_subtotal_text || buildSeatAmountSummaryText(order);
+  const totalText = order.display_total_text || `${total}`;
+
+  document.getElementById("seatDetailSubtotal").innerText =
+    "原始金額：" + subtotalText + " G";
+  document.getElementById("seatDetailDiscount").innerText =
+    "折扣金額：" + discountAmount + " G";
+  document.getElementById("seatDetailDiscountReason").innerText =
+    "折扣原因：" + (order.discount_reason || "無");
+  document.getElementById("seatDetailTotal").innerText =
+    "總金額：" + totalText + " G";
+}
+
+function calculateDiscountAmount(subtotal, discountType, discountValue) {
+  const safeSubtotal = Math.max(Number(subtotal) || 0, 0);
+  const safeValue = Math.max(Number(discountValue) || 0, 0);
+
+  if (discountType === "percent") {
+    return Math.min(Math.round(safeSubtotal * (safeValue / 100)), safeSubtotal);
+  }
+
+  if (discountType === "fixed") {
+    return Math.min(safeValue, safeSubtotal);
+  }
+
+  return 0;
+}
+
+function getSelectedOrderPanelSubtotal() {
+  let total = 0;
+
+  document.querySelectorAll(".menuItemQty").forEach(item => {
+    total += parseInt(item.dataset.price, 10) * parseInt(item.value || 0, 10);
+  });
+
+  return total;
+}
+
+function getAppendPayableTotal(rawSelectedTotal) {
+  const selectedSubtotal = Math.max(Number(rawSelectedTotal) || 0, 0);
+
+  if (currentOrderMode !== "append") {
+    return selectedSubtotal;
+  }
+
+  const newSessionSubtotal = currentAppendBaseSubtotal + selectedSubtotal;
+  const totalDiscount = calculateDiscountAmount(
+    newSessionSubtotal,
+    currentAppendDiscountConfig.discountType,
+    currentAppendDiscountConfig.discountValue
+  );
+  const newSessionTotal = Math.max(newSessionSubtotal - totalDiscount, 0);
+
+  return Math.max(newSessionTotal - currentAppendBaseTotal, 0);
+}
+
+function recalculateOrderPanelTotal() {
+  const rawSelectedTotal = getSelectedOrderPanelSubtotal();
+  const payableTotal =
+    currentOrderMode === "append"
+      ? getAppendPayableTotal(rawSelectedTotal)
+      : rawSelectedTotal;
+
+  document.getElementById("totalPrice").innerText = payableTotal;
+}
+
+function getOrderAppendPayableTotal(order) {
+  const unpaidAppendTotal = Number(order?.unpaid_append_total || 0) || 0;
+  const mergedSubtotal = Number(order?.subtotal ?? order?.total) || 0;
+  const mergedTotal = Number(order?.total || 0) || 0;
+  const latestSubtotal =
+    Number(order?.latest_order_subtotal ?? order?.subtotal ?? order?.total) || 0;
+  const latestTotal =
+    Number(order?.latest_order_total ?? order?.total) || 0;
+
+  if (Number(order?.is_append) !== 1) {
+    return latestSubtotal;
+  }
+
+  if (unpaidAppendTotal > 0) {
+    return unpaidAppendTotal;
+  }
+
+  const discountType = getDiscountType(order);
+  const discountValue = getDiscountInputValue(order);
+
+  if (discountType === "percent" && discountValue > 0) {
+    return Math.max(
+      latestSubtotal - calculateDiscountAmount(latestSubtotal, discountType, discountValue),
+      0
+    );
+  }
+
+  if (latestTotal > 0 && latestTotal <= latestSubtotal) {
+    return latestTotal;
+  }
+
+  const previousSubtotal = Math.max(mergedSubtotal - latestSubtotal, 0);
+  const previousDiscount = calculateDiscountAmount(
+    previousSubtotal,
+    discountType,
+    discountValue
+  );
+  const previousTotal = Math.max(previousSubtotal - previousDiscount, 0);
+
+  return Math.max(mergedTotal - previousTotal, 0);
+}
+
+function buildCashierMacroText(order, mode) {
+  const subtotal = Number(order?.subtotal ?? order?.total) || 0;
+  const total = Number(order?.total || 0) || 0;
+  const latestSubtotal =
+    Number(order?.latest_order_subtotal ?? order?.subtotal ?? order?.total) || 0;
+  const latestTotal =
+    Number(order?.latest_order_total ?? order?.total) || 0;
+
+  if (mode === 1) {
+    return `/say 客人<t> 你好，你的訂單總共 ${subtotal}G，如有折價卷可以出示給我`;
+  }
+
+  if (mode === 2) {
+    return `/say 客人<t> 你好，你的訂單折價後總共 ${total}G`;
+  }
+
+  if (mode === 4) {
+    const appendAmount = getOrderAppendPayableTotal(order);
+    return `/say 客人<t> 你好，這是追加訂單的餐點，總共 ${appendAmount}G`;
+  }
+
+  if (mode === 5) {
+    const customerName = String(order?.customer || "").trim() || "客人";
+    const seatName = String(currentDetailSeat || order?.table_name || "").trim();
+    const gambleUrl = seatName
+      ? `https://menu.squirrel-you-self.com/Gamble/?seat=${encodeURIComponent(seatName)}`
+      : "https://menu.squirrel-you-self.com/Gamble/";
+    return `/tell 客人 <t> 您好，這是您的抽獎頁面：${gambleUrl}`;
+  }
+
+  return `/say 客人<t> 你好，你的訂單總共 ${total}G`;
+}
+
+function renderCashierMacros(order) {
+  const title1 = document.getElementById("cashierMacroTitle1");
+  const title2 = document.getElementById("cashierMacroTitle2");
+  const title3 = document.getElementById("cashierMacroTitle3");
+  const title4 = document.getElementById("cashierMacroTitle4");
+  const title5 = document.getElementById("cashierMacroTitle5");
+  const macro1 = document.getElementById("cashierMacro1");
+  const macro2 = document.getElementById("cashierMacro2");
+  const macro3 = document.getElementById("cashierMacro3");
+  const macro4 = document.getElementById("cashierMacro4");
+  const macro5 = document.getElementById("cashierMacro5");
+
+  if (!order) {
+    title1.innerText = "巨集 1：可出示折價卷";
+    title2.innerText = "巨集 2：折價後總額";
+    title3.innerText = "巨集 3：一般總額";
+    title4.innerText = "巨集 4：追加訂單總額";
+    title5.innerText = "巨集 5：抽獎頁面";
+    macro1.value = "";
+    macro2.value = "";
+    macro3.value = "";
+    macro4.value = "";
+    macro5.value = "";
+    return;
+  }
+
+  const customerName = String(order.customer || "").trim() || "未命名客人";
+  title1.innerText = `巨集 1：${customerName} / 可出示折價卷`;
+  title2.innerText = `巨集 2：${customerName} / 折價後總額`;
+  title3.innerText = `巨集 3：${customerName} / 一般總額`;
+  title4.innerText = `巨集 4：${customerName} / 追加訂單`;
+  title5.innerText = `巨集 5：${customerName} / 抽獎頁面`;
+  macro1.value = buildCashierMacroText(order, 1);
+  macro2.value = buildCashierMacroText(order, 2);
+  macro3.value = buildCashierMacroText(order, 3);
+  macro4.value = buildCashierMacroText(order, 4);
+  macro5.value = buildCashierMacroText(order, 5);
+}
+
+async function copyCashierMacro(index) {
+  const target = document.getElementById(`cashierMacro${index}`);
+  const status = document.getElementById("seatDetailInternalNoteStatus");
+
+  if (!target || !target.value.trim()) {
+    status.innerText = "目前沒有可複製的巨集內容";
+    return;
+  }
+
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(target.value);
+    } else {
+      target.focus();
+      target.select();
+      document.execCommand("copy");
+    }
+    status.innerText = `巨集 ${index} 已複製`;
+  } catch (error) {
+    target.focus();
+    target.select();
+    document.execCommand("copy");
+    status.innerText = `巨集 ${index} 已複製`;
+  }
+}
+
+function applyQuickDiscount(type, value, reason) {
+  document.getElementById("seatDetailDiscountType").value = type;
+  document.getElementById("seatDetailDiscountValue").value = value;
+  document.getElementById("seatDetailDiscountReasonInput").value = reason;
+}
+
+async function saveDiscount() {
+  if (!currentDetailOrderId || !currentDetailOrderData) {
+    alert("目前沒有可儲存折扣的訂單");
+    return;
+  }
+
+  const status = document.getElementById("seatDetailInternalNoteStatus");
+  const discountType = document.getElementById("seatDetailDiscountType").value;
+  const discountValue = Number(document.getElementById("seatDetailDiscountValue").value || 0);
+  const discountReason = document.getElementById("seatDetailDiscountReasonInput").value.trim();
+
+  status.innerText = "儲存折扣中...";
+
+  const res = await fetch(`/order/${currentDetailOrderId}/discount`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      discount_type: discountType,
+      discount_value: discountValue,
+      discount_reason: discountReason
+    })
+  });
+
+  const data = await res.json();
+
+  if (!data.success) {
+    status.innerText = data.message || "折扣儲存失敗";
+    return;
+  }
+
+  currentDetailOrderData = {
+    ...currentDetailOrderData,
+    subtotal: data.subtotal,
+    discount_amount: data.discount_amount,
+    discount_reason: data.discount_reason,
+    total: data.total,
+    initial_amount: data.initial_amount ?? currentDetailOrderData.initial_amount ?? 0,
+    append_food_amount: data.append_food_amount ?? currentDetailOrderData.append_food_amount ?? 0,
+    append_alcohol_amount: data.append_alcohol_amount ?? currentDetailOrderData.append_alcohol_amount ?? 0,
+    unpaid_append_subtotal: data.unpaid_append_subtotal ?? currentDetailOrderData.unpaid_append_subtotal ?? 0,
+    unpaid_append_total: data.unpaid_append_total ?? currentDetailOrderData.unpaid_append_total ?? 0,
+    display_subtotal_text: buildSeatAmountSummaryText({
+      subtotal: data.subtotal,
+      initial_amount: data.initial_amount ?? currentDetailOrderData.initial_amount ?? 0,
+      append_food_amount: data.append_food_amount ?? currentDetailOrderData.append_food_amount ?? 0,
+      append_alcohol_amount: data.append_alcohol_amount ?? currentDetailOrderData.append_alcohol_amount ?? 0
+    }),
+    display_total_text: `${data.total}`
+  };
+
+  renderSeatDetailTotals(currentDetailOrderData);
+  renderCashierMacros(currentDetailOrderData);
+  status.innerText = "折扣已儲存";
+  loadDashboardSummary();
+}
+
+async function markOrderDelivered() {
+  if (!currentDetailOrderId || !currentDetailOrderData) {
+    alert("目前沒有可確認送達的訂單");
+    return;
+  }
+
+  if (Number(currentDetailOrderData.delivered || 0) === 1) {
+    alert("這張訂單已經標記為送達");
+    return;
+  }
+
+  const ok = confirm("確認餐點已送達嗎？");
+  if (!ok) return;
+
+  const status = document.getElementById("seatDetailInternalNoteStatus");
+  status.innerText = "更新送達狀態中...";
+
+  const res = await fetch(`/order/${currentDetailOrderId}/delivered`, {
+    method: "POST"
+  });
+
+  const data = await res.json();
+
+  if (!data.success) {
+    status.innerText = data.message || "送達狀態更新失敗";
+    return;
+  }
+
+  currentDetailOrderData = {
+    ...currentDetailOrderData,
+    delivered: 1,
+    delivered_at: data.delivered_at
+  };
+
+  renderDeliveryInfo(currentDetailOrderData);
+  status.innerText = "已標記為送達";
+  loadSeats();
+}
+
+async function markOrderPaid() {
+  if (!currentDetailOrderId || !currentDetailOrderData) {
+    alert("目前沒有可確認收款的訂單");
+    return;
+  }
+
+  if (Number(currentDetailOrderData.paid || 0) === 1) {
+    alert("這張訂單已經標記為收款");
+    return;
+  }
+
+  const ok = confirm("確認這張訂單已完成收款嗎？");
+  if (!ok) return;
+
+  const status = document.getElementById("seatDetailInternalNoteStatus");
+  status.innerText = "更新收款狀態中...";
+
+  const res = await fetch(`/order/${currentDetailOrderId}/paid`, {
+    method: "POST"
+  });
+
+  const data = await res.json();
+
+  if (!data.success) {
+    status.innerText = data.message || "收款狀態更新失敗";
+    return;
+  }
+
+  currentDetailOrderData = {
+    ...currentDetailOrderData,
+    paid: 1,
+    paid_at: data.paid_at,
+    unpaid_append_subtotal: 0,
+    unpaid_append_total: 0
+  };
+
+  renderPaidInfo(currentDetailOrderData);
+  renderCashierMacros(currentDetailOrderData);
+  status.innerText = "已標記為收款";
+}
+
+function toggleSopPanel(forceState) {
+  const panel = document.getElementById("sopPanel");
+  const shouldOpen =
+    typeof forceState === "boolean"
+      ? forceState
+      : panel.style.display !== "block";
+
+  panel.style.display = shouldOpen ? "block" : "none";
+}
+
+document.querySelectorAll(".menuItemQty").forEach(item => {
+  item.addEventListener("change", recalculateOrderPanelTotal);
+});
+
+async function resetAllSeats() {
+  const ok = confirm("要把所有座位重置成空位嗎？");
+  if (!ok) return;
+
+  const res = await fetch("/reset-seats", { method: "POST" });
+  const data = await res.json();
+
+  if (!data.success) {
+    alert("重置失敗，請查看伺服器訊息");
+    return;
+  }
+
+  alert("全部座位已重置為空位");
+  loadSeats();
+  loadDashboardSummary();
+}
+
+async function clearTestData() {
+  const firstConfirm = confirm("要清除本機測試資料嗎？這會清空目前訂單並重開所有座位。");
+  if (!firstConfirm) return;
+
+  const password = prompt("請輸入清除測試資料密碼：");
+  if (password === null) return;
+
+  const secondConfirm = confirm("請再次確認：輸入正確密碼後就會清除本機測試資料。");
+  if (!secondConfirm) return;
+
+  const res = await fetch("/clear-test-data", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ password })
+  });
+
+  const data = await res.json();
+
+  if (!data.success) {
+    alert(data.message || "清除測試資料失敗");
+    return;
+  }
+
+  alert("本機測試資料已清除，Google 表單座位也已重新開放。");
+  loadSeats();
+  loadDashboardSummary();
+}
+
+async function loadLastSnapshot() {
+  const box = document.getElementById("snapshotBox");
+  box.innerText = "讀取中...";
+
+  const res = await fetch("/last-seat-snapshot");
+  const data = await res.json();
+
+  if (!data.success) {
+    box.innerText = "讀取失敗";
+    return;
+  }
+
+  if (!data.snapshot) {
+    box.innerText = "目前還沒有上次關閉前的紀錄";
+    return;
+  }
+
+  const occupiedSeats = data.snapshot.seats
+    .filter(seat => seat.status === "occupied")
+    .map(seat => seat.name);
+
+  box.innerText =
+    "上次關閉時間：" + data.snapshot.savedAt + "\n" +
+    "關閉原因：" + data.snapshot.reason + "\n" +
+    "當時紅色座位：" +
+    (occupiedSeats.length > 0 ? occupiedSeats.join(", ") : "沒有");
+}
+
+function renderStoreStatus() {
+  const button = document.getElementById("storeStatusButton");
+
+  if (!button) {
+    return;
+  }
+
+  if (currentStoreOpen) {
+    button.innerText = "目前營業中 / 點此休店";
+    button.style.background = "#2e7d32";
+    button.style.color = "#fff";
+  } else {
+    button.innerText = "目前休店中 / 點此開店";
+    button.style.background = "#616161";
+    button.style.color = "#fff";
+  }
+}
+
+async function loadStoreStatus() {
+  const res = await fetch(`/store-status?_=${Date.now()}`, { cache: "no-store" });
+  const data = await res.json();
+  currentStoreOpen = !!(data && data.isOpen);
+  renderStoreStatus();
+}
+
+async function toggleStoreStatus() {
+  const nextOpen = !currentStoreOpen;
+  const ok = confirm(nextOpen ? "要改成營業中嗎？" : "要改成休店中嗎？");
+  if (!ok) return;
+
+  const res = await fetch("/store-status", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ isOpen: nextOpen })
+  });
+  const data = await res.json();
+
+  if (!data.success) {
+    alert(data.message || "營業狀態更新失敗");
+    return;
+  }
+
+  currentStoreOpen = !!data.status.isOpen;
+  renderStoreStatus();
+}
+
+async function confirmShutdown() {
+  const firstConfirm = confirm("真的要關閉伺服器嗎？關閉前會先輸出今日訂單。");
+  if (!firstConfirm) return;
+
+  const secondConfirm = confirm("請再次確認：按下確定後，伺服器會封存訂單並關閉。");
+  if (!secondConfirm) return;
+
+  const res = await fetch("/shutdown", { method: "POST" });
+  const data = await res.json();
+
+  if (!data.success) {
+    alert(data.message || "關閉伺服器失敗");
+    return;
+  }
+
+  const archiveMessage =
+    data.archive && data.archive.archived
+      ? "今日訂單已輸出到 orders 資料夾。"
+      : "今天沒有訂單需要輸出。";
+
+  alert("伺服器即將關閉。\n" + archiveMessage);
+}
+
+async function loadSeats() {
+  if (isLoadingSeats) {
+    return;
+  }
+
+  isLoadingSeats = true;
+
+  try {
+    const res = await fetch(`/tables?_=${Date.now()}`, {
+      cache: "no-store"
+    });
+    const data = await res.json();
+
+    const container = document.getElementById("container");
+    container.innerHTML = "";
+
+    data.forEach(seat => {
+      const div = document.createElement("div");
+      div.id = seat.name;
+
+      const seatType = seat.name.startsWith("BAR") ? "bar" : "table";
+      const seatStatus = getSeatVisualStatus(seat);
+
+      div.className = `${seatType} ${seatStatus}`;
+      div.innerText = seat.name;
+
+      div.onclick = () => {
+        if (seat.status === "occupied") {
+          openSeatDetail(seat.name);
+        }
+      };
+
+      container.appendChild(div);
+    });
+  } finally {
+    isLoadingSeats = false;
+  }
+}
+
+async function toggleSeat(name) {
+  await fetch("/toggle/" + name);
+  queueRefreshAdminView();
+}
+
+async function submitOrder() {
+  const orderMode = currentOrderMode;
+  const customer = document.getElementById("customerName").value;
+  const people = document.getElementById("peopleCount").value;
+  const items = [];
+  let total = 0;
+  const seatName = currentTable;
+  const appendPayload =
+    orderMode === "append"
+      ? {
+          append_from_order_id: currentAppendSourceOrderId || currentDetailOrderId || 0,
+          inherit_discount_type: currentAppendDiscountConfig.discountType || "none",
+          inherit_discount_value: Number(currentAppendDiscountConfig.discountValue || 0),
+          inherit_discount_reason: currentAppendDiscountConfig.discountReason || ""
+        }
+      : {};
+
+  document.querySelectorAll(".menuItemQty").forEach(item => {
+    const qty = parseInt(item.value || 0, 10);
+
+    if (qty > 0) {
+      items.push(`${item.dataset.name} x${qty}`);
+      total += parseInt(item.dataset.price, 10) * qty;
+    }
+  });
+
+  const res = await fetch("/order", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      customer,
+      people,
+      table_name: seatName,
+      items: items.join(", "),
+      is_append: orderMode === "append",
+      total,
+      ...appendPayload
+    })
+  });
+
+  const data = await res.json();
+
+  if (!data.success) {
+    alert(data.message || "訂單送出失敗");
+    return;
+  }
+
+  if (orderMode === "new") {
+    await toggleSeat(seatName);
+    alert("訂單已送出，編號 #" + data.orderId);
+  } else {
+    alert("追加訂單已送出，編號 #" + data.orderId);
+  }
+
+  closeOrder();
+  await loadDashboardSummary();
+
+  if (orderMode === "append") {
+    await loadSeats();
+    await openSeatDetail(seatName);
+  }
+}
+
+function startSeatAutoRefresh() {
+  if (seatRefreshTimer) {
+    clearInterval(seatRefreshTimer);
+  }
+
+  seatRefreshTimer = setInterval(() => {
+    if (!document.hidden) {
+      queueRefreshAdminView();
+    }
+  }, 2000);
+}
+
+loadStoreStatus();
+loadSeats();
+loadDashboardSummary();
+loadLastSnapshot();
+startRealtimeUpdates();
+startSeatAutoRefresh();
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
