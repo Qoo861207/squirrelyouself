@@ -9,11 +9,11 @@
     "reason": "admin-reset"
   },
   "totals": {
-    "recordedDraws": 103,
-    "sessionDraws": 103,
-    "totalSpent": 4960000,
-    "totalWins": 54,
-    "players": 10
+    "recordedDraws": 202,
+    "sessionDraws": 202,
+    "totalSpent": 9830000,
+    "totalWins": 108,
+    "players": 20
   },
   "players": [
     {
@@ -115,8 +115,108 @@
       "wins": 2,
       "latestAt": "2026/9/13 23:54:46",
       "latestAtMs": 1789314886433
+    },
+    {
+      "key": "測試-花凜",
+      "name": "測試-花凜",
+      "totalDraws": 20,
+      "sessionDraws": 20,
+      "totalSpent": 920000,
+      "wins": 12,
+      "latestAt": "2026/9/13 23:54:56",
+      "latestAtMs": 1789314896201
+    },
+    {
+      "key": "測試-朝霧",
+      "name": "測試-朝霧",
+      "totalDraws": 17,
+      "sessionDraws": 17,
+      "totalSpent": 790000,
+      "wins": 9,
+      "latestAt": "2026/9/13 23:54:57",
+      "latestAtMs": 1789314897198
+    },
+    {
+      "key": "測試-銀河",
+      "name": "測試-銀河",
+      "totalDraws": 14,
+      "sessionDraws": 14,
+      "totalSpent": 670000,
+      "wins": 8,
+      "latestAt": "2026/9/13 23:54:58",
+      "latestAtMs": 1789314898195
+    },
+    {
+      "key": "測試-春燈",
+      "name": "測試-春燈",
+      "totalDraws": 11,
+      "sessionDraws": 11,
+      "totalSpent": 560000,
+      "wins": 6,
+      "latestAt": "2026/9/13 23:54:59",
+      "latestAtMs": 1789314899192
+    },
+    {
+      "key": "測試-紫苑",
+      "name": "測試-紫苑",
+      "totalDraws": 9,
+      "sessionDraws": 9,
+      "totalSpent": 480000,
+      "wins": 5,
+      "latestAt": "2026/9/13 23:55:00",
+      "latestAtMs": 1789314900190
+    },
+    {
+      "key": "測試-風見",
+      "name": "測試-風見",
+      "totalDraws": 8,
+      "sessionDraws": 8,
+      "totalSpent": 410000,
+      "wins": 4,
+      "latestAt": "2026/9/13 23:55:01",
+      "latestAtMs": 1789314901189
+    },
+    {
+      "key": "測試-雨宮",
+      "name": "測試-雨宮",
+      "totalDraws": 7,
+      "sessionDraws": 7,
+      "totalSpent": 350000,
+      "wins": 4,
+      "latestAt": "2026/9/13 23:55:02",
+      "latestAtMs": 1789314902188
+    },
+    {
+      "key": "測試-日向",
+      "name": "測試-日向",
+      "totalDraws": 6,
+      "sessionDraws": 6,
+      "totalSpent": 290000,
+      "wins": 3,
+      "latestAt": "2026/9/13 23:55:03",
+      "latestAtMs": 1789314903187
+    },
+    {
+      "key": "測試-海音",
+      "name": "測試-海音",
+      "totalDraws": 4,
+      "sessionDraws": 4,
+      "totalSpent": 230000,
+      "wins": 2,
+      "latestAt": "2026/9/13 23:55:04",
+      "latestAtMs": 1789314904185
+    },
+    {
+      "key": "測試-秋月",
+      "name": "測試-秋月",
+      "totalDraws": 3,
+      "sessionDraws": 3,
+      "totalSpent": 170000,
+      "wins": 1,
+      "latestAt": "2026/9/13 23:55:05",
+      "latestAtMs": 1789314905184
     }
   ],
-  "generatedAt": "2026/09/13 23:54:37",
-  "generatedAtMs": 1789314877711
+  "generatedAt": "2026/09/13 23:56:49",
+  "generatedAtMs": 1789315009747
 }
