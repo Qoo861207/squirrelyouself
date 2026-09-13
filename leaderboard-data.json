@@ -9,11 +9,11 @@
     "reason": "admin-reset"
   },
   "totals": {
-    "recordedDraws": 1960,
-    "sessionDraws": 1960,
-    "totalSpent": 70903198888,
-    "totalWins": 1378,
-    "players": 31
+    "recordedDraws": 2626,
+    "sessionDraws": 2626,
+    "totalSpent": 98403198888,
+    "totalWins": 1822,
+    "players": 32
   },
   "players": [
     {
@@ -325,8 +325,18 @@
       "wins": 555,
       "latestAt": "2026-09-13T17:26:25.487Z",
       "latestAtMs": 1789320385487
+    },
+    {
+      "key": "測試-琉璃星海",
+      "name": "測試-琉璃星海",
+      "totalDraws": 666,
+      "sessionDraws": 666,
+      "totalSpent": 27500000000,
+      "wins": 444,
+      "latestAt": "2026-09-13T17:30:36.144Z",
+      "latestAtMs": 1789320636144
     }
   ],
-  "generatedAt": "2026/09/14 01:28:05",
-  "generatedAtMs": 1789320485059
+  "generatedAt": "2026/09/14 01:33:11",
+  "generatedAtMs": 1789320791180
 }
