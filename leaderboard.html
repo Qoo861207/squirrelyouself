@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>排行榜｜松你去鼠</title>
+  <style>
+    :root { --ink:#382720; --muted:#806b61; --line:#e4d5cb; --paper:#fffaf6; --accent:#9a4d3a; --gold:#b67a2f; --green:#46715b; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:#f5efea; font-family:"Microsoft JhengHei","Noto Sans TC",sans-serif; letter-spacing:0; }
+    a { color:inherit; }
+    .topbar { position:sticky; top:0; z-index:10; display:flex; align-items:center; justify-content:space-between; gap:24px; padding:14px clamp(18px,4vw,54px); border-bottom:1px solid var(--line); background:rgba(255,250,246,.96); backdrop-filter:blur(12px); }
+    .brand strong { display:block; color:#7f3e31; font-size:1.22rem; }
+    .brand span { color:var(--muted); font-size:.78rem; }
+    nav { display:flex; flex-wrap:wrap; gap:8px; }
+    nav a { padding:9px 13px; border:1px solid var(--line); background:#fff; text-decoration:none; font-weight:800; }
+    nav a.primary { color:#fff; border-color:var(--accent); background:var(--accent); }
+    main { width:min(1180px,calc(100% - 32px)); margin:0 auto 56px; }
+    .intro { display:grid; grid-template-columns:112px 1fr; gap:24px; align-items:center; padding:34px 0 24px; }
+    .intro img { width:112px; aspect-ratio:1; object-fit:cover; border:5px solid #fff; box-shadow:0 8px 24px rgba(70,38,27,.16); }
+    h1 { margin:0 0 7px; font-size:clamp(1.8rem,4vw,2.8rem); }
+    .intro p { margin:0; color:var(--muted); line-height:1.7; }
+    .meta { margin-top:7px; color:var(--green); font-weight:800; font-size:.9rem; }
+    .stats { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; padding:18px 0 28px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+    .stat { min-width:0; padding:15px; border:1px solid var(--line); background:var(--paper); }
+    .stat span { display:block; color:var(--muted); font-size:.82rem; }
+    .stat strong { display:block; margin-top:7px; color:var(--accent); font-size:1.55rem; overflow-wrap:anywhere; }
+    .rankings { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; padding-top:28px; }
+    .ranking { min-width:0; border-top:4px solid var(--accent); background:var(--paper); }
+    .ranking.green { border-color:var(--green); }
+    .ranking.gold { border-color:var(--gold); }
+    .ranking-head { display:flex; align-items:end; justify-content:space-between; gap:12px; padding:16px 17px 12px; border-bottom:1px solid var(--line); }
+    .ranking h2 { margin:0; font-size:1.08rem; }
+    .ranking-head span { color:var(--muted); font-size:.78rem; }
+    .rows { min-height:188px; }
+    .row { display:grid; grid-template-columns:38px minmax(0,1fr) auto; align-items:center; gap:10px; padding:11px 16px; border-bottom:1px solid #eee3dc; }
+    .row:last-child { border-bottom:0; }
+    .place { color:var(--muted); font-weight:900; text-align:center; }
+    .row:nth-child(1) .place { color:#b06d13; }
+    .name { min-width:0; font-weight:900; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .value { color:var(--accent); font-weight:950; white-space:nowrap; }
+    .empty { display:grid; place-items:center; min-height:188px; padding:30px; color:var(--muted); text-align:center; }
+    .error { margin-top:24px; padding:14px 16px; border:1px solid #dfaaa0; background:#fff4f1; color:#8a3025; font-weight:800; }
+    footer { padding:0 20px 36px; color:var(--muted); text-align:center; font-size:.82rem; }
+    @media (max-width:820px) { .topbar { align-items:flex-start; flex-direction:column; } .stats { grid-template-columns:repeat(2,minmax(0,1fr)); } .rankings { grid-template-columns:1fr; } }
+    @media (max-width:520px) { main { width:min(100% - 20px,1180px); } .intro { grid-template-columns:76px 1fr; gap:14px; } .intro img { width:76px; } .stats { grid-template-columns:1fr 1fr; } nav a { padding:8px 10px; font-size:.88rem; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><strong>松你去鼠</strong><span>Cafe &amp; Dining House</span></div>
+    <nav><a href="index.html">回到官網</a><a href="staff.html">員工介紹</a><a class="primary" href="menu.html">立即點餐</a></nav>
+  </header>
+  <main>
+    <section class="intro">
+      <img src="Gamble/Bside-lite.jpg" alt="松你去鼠抽獎箱">
+      <div><h1>松你去鼠排行榜</h1><p>記錄從排行榜啟用後開始累計。公開資料以最近一次上傳為準。</p><div class="meta" id="updatedAt">正在讀取排行榜...</div></div>
+    </section>
+    <section class="stats" aria-label="排行榜總覽">
+      <div class="stat"><span>紀錄抽獎次數</span><strong id="totalDraws">0</strong></div>
+      <div class="stat"><span>本次開店抽獎</span><strong id="sessionDraws">0</strong></div>
+      <div class="stat"><span>全部中獎次數</span><strong id="totalWins">0</strong></div>
+      <div class="stat"><span>累計消費金額</span><strong id="totalSpent">0 G</strong></div>
+      <div class="stat"><span>上榜客人</span><strong id="playerCount">0</strong></div>
+    </section>
+    <div id="errorBox" class="error" hidden></div>
+    <section class="rankings">
+      <section class="ranking"><div class="ranking-head"><h2>個人抽獎次數</h2><span>累計</span></div><div class="rows" id="drawRows"></div></section>
+      <section class="ranking green"><div class="ranking-head"><h2>個人單次開店抽獎次數</h2><span id="sessionStarted">本次開店</span></div><div class="rows" id="sessionRows"></div></section>
+      <section class="ranking gold"><div class="ranking-head"><h2>個人總消費</h2><span>確認收款後計入</span></div><div class="rows" id="spendRows"></div></section>
+      <section class="ranking"><div class="ranking-head"><h2>個人中獎次數</h2><span>不含銘謝惠顧</span></div><div class="rows" id="winRows"></div></section>
+    </section>
+  </main>
+  <footer>排行榜資料不會顯示訂單內容，只公開客人名稱與統計數字。</footer>
+  <script>
+    const $ = id => document.getElementById(id);
+    const number = value => new Intl.NumberFormat('zh-TW').format(Number(value || 0));
+    const gil = value => `${number(value)} G`;
+
+    function renderRows(targetId, players, field, formatter = number) {
+      const target = $(targetId);
+      const ranked = players.filter(player => Number(player[field] || 0) > 0)
+        .sort((a, b) => Number(b[field] || 0) - Number(a[field] || 0) || String(a.name).localeCompare(String(b.name), 'zh-Hant'))
+        .slice(0, 30);
+      target.replaceChildren();
+      if (!ranked.length) {
+        const empty = document.createElement('div');
+        empty.className = 'empty';
+        empty.textContent = '排行榜還沒有紀錄';
+        target.append(empty);
+        return;
+      }
+      ranked.forEach((player, index) => {
+        const row = document.createElement('div');
+        row.className = 'row';
+        const place = document.createElement('div');
+        place.className = 'place';
+        place.textContent = String(index + 1).padStart(2, '0');
+        const name = document.createElement('div');
+        name.className = 'name';
+        name.textContent = player.name;
+        const value = document.createElement('div');
+        value.className = 'value';
+        value.textContent = formatter(player[field]);
+        row.append(place, name, value);
+        target.append(row);
+      });
+    }
+
+    function render(data, source) {
+      const totals = data.totals || {};
+      const players = Array.isArray(data.players) ? data.players : [];
+      $('totalDraws').textContent = number(totals.recordedDraws);
+      $('sessionDraws').textContent = number(totals.sessionDraws);
+      $('totalWins').textContent = number(totals.totalWins);
+      $('totalSpent').textContent = gil(totals.totalSpent);
+      $('playerCount').textContent = number(totals.players);
+      $('updatedAt').textContent = `${source}｜更新時間：${data.generatedAt || new Date().toLocaleString('zh-TW')}`;
+      $('sessionStarted').textContent = data.currentSession?.startedAt ? `開始：${data.currentSession.startedAt}` : '本次開店';
+      renderRows('drawRows', players, 'totalDraws');
+      renderRows('sessionRows', players, 'sessionDraws');
+      renderRows('spendRows', players, 'totalSpent', gil);
+      renderRows('winRows', players, 'wins');
+    }
+
+    async function fetchJson(url) {
+      const response = await fetch(url, { cache: 'no-store' });
+      if (!response.ok || !(response.headers.get('content-type') || '').includes('application/json')) throw new Error(`HTTP ${response.status}`);
+      return response.json();
+    }
+
+    async function load() {
+      try {
+        const live = await fetchJson(`/leaderboard?_=${Date.now()}`);
+        render(live, '即時資料');
+        return;
+      } catch {}
+      try {
+        const snapshot = await fetchJson(`leaderboard-data.json?_=${Date.now()}`);
+        render(snapshot, '官網快照');
+      } catch (err) {
+        $('errorBox').hidden = false;
+        $('errorBox').textContent = '排行榜資料尚未發布，請稍後再查看。';
+        render({ totals:{}, players:[] }, '尚無資料');
+      }
+    }
+    load();
+  </script>
+</body>
+</html>

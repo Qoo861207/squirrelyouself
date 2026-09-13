@@ -1,0 +1,21 @@
+{
+  "success": true,
+  "startedAt": "2026/09/13 23:20:28",
+  "startedAtMs": 1789312828883,
+  "currentSession": {
+    "id": "session-1789312828883-kxr6p2",
+    "startedAt": "2026/09/13 23:20:28",
+    "startedAtMs": 1789312828883,
+    "reason": "admin-reset"
+  },
+  "totals": {
+    "recordedDraws": 0,
+    "sessionDraws": 0,
+    "totalSpent": 0,
+    "totalWins": 0,
+    "players": 0
+  },
+  "players": [],
+  "generatedAt": "2026/09/13 23:20:45",
+  "generatedAtMs": 1789312845333
+}
