@@ -158,11 +158,19 @@
     const $ = id => document.getElementById(id);
     const number = value => new Intl.NumberFormat('zh-TW').format(Number(value || 0));
     const gil = value => `${number(value)} G`;
+    const compactNumber = value => {
+      const amount = Number(value || 0);
+      const format = scaled => new Intl.NumberFormat('zh-TW', { maximumFractionDigits:1 }).format(scaled);
+      if (Math.abs(amount) >= 100000000) return `${format(amount / 100000000)}億`;
+      if (Math.abs(amount) >= 10000) return `${format(amount / 10000)}萬`;
+      return number(amount);
+    };
+    const compactGil = value => `${compactNumber(value)} G`;
     const chartMetrics = {
-      totalDraws: { label:'個人抽獎次數', format:number },
-      sessionDraws: { label:'個人單日抽獎次數', format:number },
-      totalSpent: { label:'個人總消費', format:gil },
-      wins: { label:'個人中獎次數', format:number }
+      totalDraws: { label:'個人抽獎次數', format:number, chartFormat:compactNumber },
+      sessionDraws: { label:'個人單日抽獎次數', format:number, chartFormat:compactNumber },
+      totalSpent: { label:'個人總消費', format:gil, chartFormat:compactGil },
+      wins: { label:'個人中獎次數', format:number, chartFormat:compactNumber }
     };
     let chartPlayers = [];
     let activeChartField = 'totalDraws';
@@ -195,14 +203,15 @@
     function renderChart(players, field = activeChartField) {
       activeChartField = field;
       const metric = chartMetrics[field];
+      const chartFormat = metric.chartFormat || metric.format;
       const ranked = players.filter(player => Number(player[field] || 0) > 0)
         .sort((a, b) => Number(b[field] || 0) - Number(a[field] || 0) || String(a.name).localeCompare(String(b.name), 'zh-Hant'))
         .slice(0, 20);
       const top = ranked.slice(0, 10);
       const rest = ranked.slice(10, 20);
       const maxValue = top.length ? Number(top[0][field] || 0) : 0;
-      $('chartMax').textContent = metric.format(maxValue);
-      $('chartMid').textContent = metric.format(Math.round(maxValue / 2));
+      $('chartMax').textContent = chartFormat(maxValue);
+      $('chartMid').textContent = chartFormat(Math.round(maxValue / 2));
       $('chartBars').replaceChildren();
       $('chartRest').replaceChildren();
 
@@ -227,7 +236,7 @@
           bar.setAttribute('aria-label', `第 ${index + 1} 名 ${player.name}，${metric.label} ${metric.format(player[field])}`);
           const value = document.createElement('span');
           value.className = 'chart-value';
-          value.textContent = metric.format(player[field]);
+          value.textContent = chartFormat(player[field]);
           bar.append(value);
           bar.addEventListener('click', () => {
             $('chartBars').querySelectorAll('.chart-bar').forEach(item => item.classList.remove('selected'));
