@@ -9,23 +9,13 @@
     "reason": "admin-reset"
   },
   "totals": {
-    "recordedDraws": 202,
-    "sessionDraws": 202,
-    "totalSpent": 9830000,
-    "totalWins": 108,
-    "players": 20
+    "recordedDraws": 184,
+    "sessionDraws": 184,
+    "totalSpent": 8980000,
+    "totalWins": 97,
+    "players": 19
   },
   "players": [
-    {
-      "key": "測試-青葉",
-      "name": "測試-青葉",
-      "totalDraws": 18,
-      "sessionDraws": 18,
-      "totalSpent": 850000,
-      "wins": 11,
-      "latestAt": "2026/9/13 23:54:37",
-      "latestAtMs": 1789314877446
-    },
     {
       "key": "測試-月鈴",
       "name": "測試-月鈴",
@@ -217,6 +207,6 @@
       "latestAtMs": 1789314905184
     }
   ],
-  "generatedAt": "2026/09/13 23:56:49",
-  "generatedAtMs": 1789315009747
+  "generatedAt": "2026/09/13 23:57:49",
+  "generatedAtMs": 1789315069178
 }
