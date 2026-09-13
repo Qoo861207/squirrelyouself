@@ -9,11 +9,11 @@
     "reason": "admin-reset"
   },
   "totals": {
-    "recordedDraws": 1183,
-    "sessionDraws": 1183,
-    "totalSpent": 38903198888,
-    "totalWins": 823,
-    "players": 30
+    "recordedDraws": 1960,
+    "sessionDraws": 1960,
+    "totalSpent": 70903198888,
+    "totalWins": 1378,
+    "players": 31
   },
   "players": [
     {
@@ -315,8 +315,18 @@
       "wins": 666,
       "latestAt": "2026-09-13T16:55:09.373Z",
       "latestAtMs": 1789318509373
+    },
+    {
+      "key": "測試-黃金天際",
+      "name": "測試-黃金天際",
+      "totalDraws": 777,
+      "sessionDraws": 777,
+      "totalSpent": 32000000000,
+      "wins": 555,
+      "latestAt": "2026-09-13T17:26:25.487Z",
+      "latestAtMs": 1789320385487
     }
   ],
-  "generatedAt": "2026/09/14 01:12:40",
-  "generatedAtMs": 1789319560261
+  "generatedAt": "2026/09/14 01:28:05",
+  "generatedAtMs": 1789320485059
 }
