@@ -25,6 +25,58 @@
     .stat { min-width:0; padding:15px; border:1px solid var(--line); background:var(--paper); }
     .stat span { display:block; color:var(--muted); font-size:.82rem; }
     .stat strong { display:block; margin-top:7px; color:var(--accent); font-size:1.55rem; overflow-wrap:anywhere; }
+    .chart-section { margin-top:28px; overflow:hidden; border:1px solid var(--line); border-radius:8px; background:var(--paper); box-shadow:0 16px 36px rgba(74,45,34,.09); }
+    .chart-header { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:20px 22px; border-bottom:1px solid var(--line); background:#fffdfb; }
+    .chart-header h2 { margin:0; font-size:1.22rem; }
+    .chart-header p { margin:5px 0 0; color:var(--muted); font-size:.82rem; }
+    .chart-tabs { display:inline-grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:4px; padding:4px; border:1px solid #dfd0c7; border-radius:8px; background:#f3e9e3; }
+    .chart-tab { min-height:38px; padding:8px 13px; border:0; border-radius:5px; color:var(--ink); background:transparent; font:inherit; font-size:.82rem; font-weight:900; cursor:pointer; transition:color .18s ease,background .18s ease,box-shadow .18s ease,transform .18s ease; }
+    .chart-tab:hover { background:#fff; }
+    .chart-tab:active { transform:translateY(1px); }
+    .chart-tab:focus-visible { outline:3px solid rgba(154,77,58,.24); outline-offset:2px; }
+    .chart-tab[aria-pressed="true"] { color:#fff; background:var(--accent); box-shadow:0 3px 10px rgba(128,57,42,.2); }
+    .chart-detail { display:grid; grid-template-columns:54px minmax(0,1fr) auto; align-items:center; gap:14px; min-height:76px; padding:13px 22px; border-bottom:1px solid var(--line); background:#fff8f3; transition:background .2s ease; }
+    .chart-detail-rank { display:grid; place-items:center; width:48px; height:48px; border:1px solid #d4b188; border-radius:8px; color:#8b571d; background:#fff; font-size:1.05rem; font-weight:950; }
+    .chart-detail-copy { min-width:0; }
+    .chart-detail-label { display:block; margin-bottom:3px; color:var(--muted); font-size:.72rem; font-weight:800; }
+    .chart-detail-name { display:block; min-width:0; font-size:1.08rem; font-weight:950; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .chart-detail-value { color:var(--accent); font-size:1.42rem; font-weight:950; white-space:nowrap; }
+    .chart-detail.flash { animation:detail-flash .3s ease; }
+    .chart-scroll { overflow-x:auto; padding:28px 22px 12px; scroll-behavior:smooth; scroll-snap-type:x proximity; scrollbar-color:#c7a99a transparent; }
+    .chart-scroll::-webkit-scrollbar { height:9px; }
+    .chart-scroll::-webkit-scrollbar-thumb { border:2px solid var(--paper); border-radius:8px; background:#c7a99a; }
+    .chart-plot { position:relative; min-width:840px; height:380px; margin-left:52px; border-left:2px solid #95827a; border-bottom:2px solid #95827a; background:repeating-linear-gradient(to bottom,transparent 0,transparent calc(25% - 1px),#e9ddd5 25%); }
+    .chart-axis { position:absolute; right:calc(100% + 11px); color:var(--muted); font-size:.7rem; font-weight:850; white-space:nowrap; }
+    .chart-axis.max { top:-7px; }
+    .chart-axis.mid { top:calc(50% - 7px); }
+    .chart-axis.zero { bottom:-7px; }
+    .chart-bars { position:absolute; inset:16px 15px 0; display:grid; grid-template-columns:repeat(10,minmax(60px,1fr)); gap:11px; }
+    .chart-column { min-width:0; display:grid; grid-template-rows:minmax(0,1fr) 56px; scroll-snap-align:center; }
+    .bar-track { min-height:0; display:flex; align-items:flex-end; justify-content:center; }
+    .chart-bar { position:relative; width:min(64px,82%); height:0; min-height:5px; padding:0; border:0; border-radius:6px 6px 0 0; background:#9a4d3a; box-shadow:inset 0 0 0 1px rgba(56,39,32,.08); cursor:pointer; transition:height .62s cubic-bezier(.22,.8,.24,1),filter .18s ease,transform .18s ease,box-shadow .18s ease; transition-delay:var(--bar-delay),0s,0s,0s; transform-origin:bottom; }
+    .chart-bar:hover,.chart-bar:focus-visible { filter:brightness(1.07); transform:scaleX(1.08); outline:3px solid rgba(154,77,58,.18); outline-offset:3px; }
+    .chart-bar.selected { box-shadow:inset 0 0 0 3px #fff,0 0 0 3px #714438,0 8px 18px rgba(75,44,33,.18); }
+    .chart-column:nth-child(4n) .chart-bar { background:#597b8b; }
+    .chart-column:nth-child(4n + 1) .chart-bar { background:#a66d3f; }
+    .chart-column:nth-child(4n + 2) .chart-bar { background:#66865a; }
+    .chart-column:nth-child(4n + 3) .chart-bar { background:#9a596c; }
+    .chart-column:nth-child(1) .chart-bar { background:#b67a2f; }
+    .chart-column:nth-child(2) .chart-bar { background:#6f7f88; }
+    .chart-column:nth-child(3) .chart-bar { background:#a96b4f; }
+    .chart-value { position:absolute; left:50%; bottom:calc(100% + 7px); color:var(--ink); font-size:.72rem; font-weight:950; white-space:nowrap; transform:translateX(-50%); }
+    .chart-name { min-width:0; padding:10px 3px 0; color:#6f5b52; font-size:.76rem; font-weight:900; line-height:1.25; text-align:center; overflow-wrap:anywhere; }
+    .chart-rest-wrap { padding:15px 22px 22px; border-top:1px solid var(--line); background:#fffdfb; }
+    .chart-rest-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
+    .chart-rest-title { margin:0; color:var(--ink); font-size:.88rem; }
+    .chart-rest-note { color:var(--muted); font-size:.72rem; }
+    .chart-rest { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; }
+    .chart-rest-item { display:grid; grid-template-columns:auto minmax(0,1fr); gap:3px 8px; min-width:0; padding:9px 10px; border:1px solid var(--line); border-radius:6px; color:var(--ink); background:#fff; font:inherit; text-align:left; cursor:pointer; transition:border-color .18s ease,background .18s ease,transform .18s ease,box-shadow .18s ease; }
+    .chart-rest-item:hover { border-color:#c99f8d; background:#fff7f2; transform:translateY(-1px); box-shadow:0 5px 12px rgba(74,45,34,.08); }
+    .chart-rest-item:focus-visible { outline:3px solid rgba(154,77,58,.2); outline-offset:2px; }
+    .chart-rest-item.selected { border-color:var(--accent); background:#fff3ed; }
+    .chart-rest-rank { grid-row:1 / 3; align-self:center; color:var(--gold); font-weight:950; }
+    .chart-rest-name { min-width:0; font-size:.78rem; font-weight:900; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .chart-rest-value { color:var(--accent); font-size:.78rem; font-weight:950; }
     .rankings { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; padding-top:28px; }
     .ranking { min-width:0; border-top:4px solid var(--accent); background:var(--paper); }
     .ranking.green { border-color:var(--green); }
@@ -42,8 +94,10 @@
     .empty { display:grid; place-items:center; min-height:188px; padding:30px; color:var(--muted); text-align:center; }
     .error { margin-top:24px; padding:14px 16px; border:1px solid #dfaaa0; background:#fff4f1; color:#8a3025; font-weight:800; }
     footer { padding:0 20px 36px; color:var(--muted); text-align:center; font-size:.82rem; }
-    @media (max-width:820px) { .topbar { align-items:flex-start; flex-direction:column; } .stats { grid-template-columns:repeat(2,minmax(0,1fr)); } .rankings { grid-template-columns:1fr; } }
-    @media (max-width:520px) { main { width:min(100% - 20px,1180px); } .intro { grid-template-columns:76px 1fr; gap:14px; } .intro img { width:76px; } .stats { grid-template-columns:1fr 1fr; } nav a { padding:8px 10px; font-size:.88rem; } }
+    @keyframes detail-flash { 0% { background:#f7e7dc; } 100% { background:#fff8f3; } }
+    @media (prefers-reduced-motion:reduce) { .chart-tab,.chart-bar,.chart-rest-item { transition:none; } .chart-detail.flash { animation:none; } .chart-scroll { scroll-behavior:auto; } }
+    @media (max-width:820px) { .topbar { align-items:flex-start; flex-direction:column; } .stats { grid-template-columns:repeat(2,minmax(0,1fr)); } .chart-header { align-items:stretch; flex-direction:column; } .chart-tabs { width:100%; } .chart-rest { grid-template-columns:repeat(2,minmax(0,1fr)); } .rankings { grid-template-columns:1fr; } }
+    @media (max-width:520px) { main { width:min(100% - 20px,1180px); } .intro { grid-template-columns:76px 1fr; gap:14px; } .intro img { width:76px; } .stats { grid-template-columns:1fr 1fr; } nav a { padding:8px 10px; font-size:.88rem; } .chart-tabs { grid-template-columns:repeat(2,minmax(0,1fr)); } .chart-detail { grid-template-columns:46px minmax(0,1fr); padding:12px 14px; } .chart-detail-rank { width:42px; height:42px; } .chart-detail-value { grid-column:1 / -1; padding-top:4px; font-size:1.22rem; } .chart-scroll { padding-right:14px; padding-left:14px; } .chart-rest-wrap { padding-right:14px; padding-left:14px; } .chart-rest-heading { align-items:flex-start; flex-direction:column; gap:3px; } .chart-rest { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
@@ -58,15 +112,43 @@
     </section>
     <section class="stats" aria-label="排行榜總覽">
       <div class="stat"><span>紀錄抽獎次數</span><strong id="totalDraws">0</strong></div>
-      <div class="stat"><span>本次開店抽獎</span><strong id="sessionDraws">0</strong></div>
+      <div class="stat"><span>單日抽獎次數</span><strong id="sessionDraws">0</strong></div>
       <div class="stat"><span>全部中獎次數</span><strong id="totalWins">0</strong></div>
       <div class="stat"><span>累計消費金額</span><strong id="totalSpent">0 G</strong></div>
       <div class="stat"><span>上榜客人</span><strong id="playerCount">0</strong></div>
     </section>
     <div id="errorBox" class="error" hidden></div>
+    <section class="chart-section" aria-labelledby="chartTitle">
+      <div class="chart-header">
+        <div><h2 id="chartTitle">排行榜圖表</h2><p>切換統計項目，點擊直條查看紀錄。</p></div>
+        <div class="chart-tabs" id="chartTabs" role="group" aria-label="圖表統計項目">
+          <button class="chart-tab" type="button" data-field="totalDraws" aria-pressed="true">抽獎次數</button>
+          <button class="chart-tab" type="button" data-field="sessionDraws" aria-pressed="false">單日抽獎次數</button>
+          <button class="chart-tab" type="button" data-field="totalSpent" aria-pressed="false">總消費</button>
+          <button class="chart-tab" type="button" data-field="wins" aria-pressed="false">中獎次數</button>
+        </div>
+      </div>
+      <div class="chart-detail" id="chartDetail" aria-live="polite">
+        <span class="chart-detail-rank">01</span>
+        <span class="chart-detail-name">尚無資料</span>
+        <strong class="chart-detail-value">0</strong>
+      </div>
+      <div class="chart-scroll" id="chartScroll">
+        <div class="chart-plot">
+          <span class="chart-axis max" id="chartMax">0</span>
+          <span class="chart-axis mid" id="chartMid">0</span>
+          <span class="chart-axis zero">0</span>
+          <div class="chart-bars" id="chartBars"></div>
+        </div>
+      </div>
+      <div class="chart-rest-wrap">
+        <div class="chart-rest-heading"><h3 class="chart-rest-title">第 11–20 名</h3><span class="chart-rest-note">點擊排名也能查看完整紀錄</span></div>
+        <div class="chart-rest" id="chartRest"></div>
+      </div>
+    </section>
     <section class="rankings">
       <section class="ranking"><div class="ranking-head"><h2>個人抽獎次數</h2><span>累計</span></div><div class="rows" id="drawRows"></div></section>
-      <section class="ranking green"><div class="ranking-head"><h2>個人單次開店抽獎次數</h2><span id="sessionStarted">本次開店</span></div><div class="rows" id="sessionRows"></div></section>
+      <section class="ranking green"><div class="ranking-head"><h2>個人單日抽獎次數</h2><span id="sessionStarted">單日統計</span></div><div class="rows" id="sessionRows"></div></section>
       <section class="ranking gold"><div class="ranking-head"><h2>個人總消費</h2><span>確認收款後計入</span></div><div class="rows" id="spendRows"></div></section>
       <section class="ranking"><div class="ranking-head"><h2>個人中獎次數</h2><span>不含銘謝惠顧</span></div><div class="rows" id="winRows"></div></section>
     </section>
@@ -76,6 +158,125 @@
     const $ = id => document.getElementById(id);
     const number = value => new Intl.NumberFormat('zh-TW').format(Number(value || 0));
     const gil = value => `${number(value)} G`;
+    const chartMetrics = {
+      totalDraws: { label:'個人抽獎次數', format:number },
+      sessionDraws: { label:'個人單日抽獎次數', format:number },
+      totalSpent: { label:'個人總消費', format:gil },
+      wins: { label:'個人中獎次數', format:number }
+    };
+    let chartPlayers = [];
+    let activeChartField = 'totalDraws';
+
+    function setChartDetail(player, rank, field) {
+      const metric = chartMetrics[field];
+      const detail = $('chartDetail');
+      detail.replaceChildren();
+      const rankText = document.createElement('span');
+      rankText.className = 'chart-detail-rank';
+      rankText.textContent = String(rank).padStart(2, '0');
+      const copy = document.createElement('span');
+      copy.className = 'chart-detail-copy';
+      const label = document.createElement('span');
+      label.className = 'chart-detail-label';
+      label.textContent = `${metric.label}｜第 ${rank} 名`;
+      const name = document.createElement('strong');
+      name.className = 'chart-detail-name';
+      name.textContent = player.name;
+      copy.append(label, name);
+      const value = document.createElement('strong');
+      value.className = 'chart-detail-value';
+      value.textContent = metric.format(player[field]);
+      detail.append(rankText, copy, value);
+      detail.classList.remove('flash');
+      void detail.offsetWidth;
+      detail.classList.add('flash');
+    }
+
+    function renderChart(players, field = activeChartField) {
+      activeChartField = field;
+      const metric = chartMetrics[field];
+      const ranked = players.filter(player => Number(player[field] || 0) > 0)
+        .sort((a, b) => Number(b[field] || 0) - Number(a[field] || 0) || String(a.name).localeCompare(String(b.name), 'zh-Hant'))
+        .slice(0, 20);
+      const top = ranked.slice(0, 10);
+      const rest = ranked.slice(10, 20);
+      const maxValue = top.length ? Number(top[0][field] || 0) : 0;
+      $('chartMax').textContent = metric.format(maxValue);
+      $('chartMid').textContent = metric.format(Math.round(maxValue / 2));
+      $('chartBars').replaceChildren();
+      $('chartRest').replaceChildren();
+
+      if (!top.length) {
+        const empty = document.createElement('div');
+        empty.className = 'empty';
+        empty.textContent = '這個項目還沒有紀錄';
+        empty.style.gridColumn = '1 / -1';
+        $('chartBars').append(empty);
+        $('chartDetail').innerHTML = '<span class="chart-detail-name">這個項目還沒有紀錄</span>';
+      } else {
+        top.forEach((player, index) => {
+          const column = document.createElement('div');
+          column.className = 'chart-column';
+          const track = document.createElement('div');
+          track.className = 'bar-track';
+          const bar = document.createElement('button');
+          bar.className = `chart-bar${index === 0 ? ' selected' : ''}`;
+          bar.type = 'button';
+          const ratio = maxValue ? Math.max((Number(player[field] || 0) / maxValue) * 100, 3) : 3;
+          bar.style.setProperty('--bar-delay', `${index * 35}ms`);
+          bar.setAttribute('aria-label', `第 ${index + 1} 名 ${player.name}，${metric.label} ${metric.format(player[field])}`);
+          const value = document.createElement('span');
+          value.className = 'chart-value';
+          value.textContent = metric.format(player[field]);
+          bar.append(value);
+          bar.addEventListener('click', () => {
+            $('chartBars').querySelectorAll('.chart-bar').forEach(item => item.classList.remove('selected'));
+            $('chartRest').querySelectorAll('.chart-rest-item').forEach(item => item.classList.remove('selected'));
+            bar.classList.add('selected');
+            setChartDetail(player, index + 1, field);
+          });
+          const name = document.createElement('div');
+          name.className = 'chart-name';
+          name.textContent = player.name;
+          track.append(bar);
+          column.append(track, name);
+          $('chartBars').append(column);
+          requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.height = `${ratio}%`; }));
+        });
+        setChartDetail(top[0], 1, field);
+      }
+
+      if (!rest.length) {
+        const empty = document.createElement('div');
+        empty.className = 'chart-rest-item';
+        empty.textContent = '目前尚未有第 11–20 名';
+        $('chartRest').append(empty);
+      } else {
+        rest.forEach((player, index) => {
+          const item = document.createElement('button');
+          item.className = 'chart-rest-item';
+          item.type = 'button';
+          item.setAttribute('aria-label', `第 ${index + 11} 名 ${player.name}，${metric.label} ${metric.format(player[field])}`);
+          const rank = document.createElement('span');
+          rank.className = 'chart-rest-rank';
+          rank.textContent = String(index + 11).padStart(2, '0');
+          const name = document.createElement('span');
+          name.className = 'chart-rest-name';
+          name.textContent = player.name;
+          const value = document.createElement('span');
+          value.className = 'chart-rest-value';
+          value.textContent = metric.format(player[field]);
+          item.append(rank, name, value);
+          item.addEventListener('click', () => {
+            $('chartBars').querySelectorAll('.chart-bar').forEach(bar => bar.classList.remove('selected'));
+            $('chartRest').querySelectorAll('.chart-rest-item').forEach(entry => entry.classList.remove('selected'));
+            item.classList.add('selected');
+            setChartDetail(player, index + 11, field);
+          });
+          $('chartRest').append(item);
+        });
+      }
+    }
 
     function renderRows(targetId, players, field, formatter = number) {
       const target = $(targetId);
@@ -116,12 +317,22 @@
       $('totalSpent').textContent = gil(totals.totalSpent);
       $('playerCount').textContent = number(totals.players);
       $('updatedAt').textContent = `${source}｜更新時間：${data.generatedAt || new Date().toLocaleString('zh-TW')}`;
-      $('sessionStarted').textContent = data.currentSession?.startedAt ? `開始：${data.currentSession.startedAt}` : '本次開店';
+      $('sessionStarted').textContent = data.currentSession?.startedAt ? `開始：${data.currentSession.startedAt}` : '單日統計';
+      chartPlayers = players;
+      renderChart(chartPlayers, activeChartField);
       renderRows('drawRows', players, 'totalDraws');
       renderRows('sessionRows', players, 'sessionDraws');
       renderRows('spendRows', players, 'totalSpent', gil);
       renderRows('winRows', players, 'wins');
     }
+
+    $('chartTabs').addEventListener('click', event => {
+      const button = event.target.closest('.chart-tab');
+      if (!button || !chartMetrics[button.dataset.field]) return;
+      $('chartTabs').querySelectorAll('.chart-tab').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      $('chartScroll').scrollTo({ left:0, behavior:'smooth' });
+      renderChart(chartPlayers, button.dataset.field);
+    });
 
     async function fetchJson(url) {
       const response = await fetch(url, { cache: 'no-store' });
