@@ -9,13 +9,164 @@
     "reason": "admin-reset"
   },
   "totals": {
-    "recordedDraws": 0,
-    "sessionDraws": 0,
-    "totalSpent": 0,
-    "totalWins": 0,
-    "players": 0
+    "recordedDraws": 125,
+    "sessionDraws": 125,
+    "totalSpent": 6418000,
+    "totalWins": 77,
+    "players": 15
   },
-  "players": [],
-  "generatedAt": "2026/09/14 14:47:32",
-  "generatedAtMs": 1789368452740
+  "players": [
+    {
+      "key": "希珞",
+      "name": "希珞",
+      "totalDraws": 56,
+      "sessionDraws": 56,
+      "totalSpent": 2338000,
+      "wins": 29,
+      "latestAt": "2026/09/20 19:00:40",
+      "latestAtMs": 1789902040716
+    },
+    {
+      "key": "夜蛾",
+      "name": "夜蛾",
+      "totalDraws": 13,
+      "sessionDraws": 13,
+      "totalSpent": 600000,
+      "wins": 10,
+      "latestAt": "2026/09/20 18:20:37",
+      "latestAtMs": 1789899637943
+    },
+    {
+      "key": "睏棉",
+      "name": "睏棉",
+      "totalDraws": 1,
+      "sessionDraws": 1,
+      "totalSpent": 30000,
+      "wins": 0,
+      "latestAt": "2026/09/20 18:20:40",
+      "latestAtMs": 1789899640024
+    },
+    {
+      "key": "脆果",
+      "name": "脆果",
+      "totalDraws": 0,
+      "sessionDraws": 0,
+      "totalSpent": 414000,
+      "wins": 0,
+      "latestAt": "2026/09/20 18:23:28",
+      "latestAtMs": 1789899808443
+    },
+    {
+      "key": "seiko@巴哈姆特",
+      "name": "Seiko@巴哈姆特",
+      "totalDraws": 1,
+      "sessionDraws": 1,
+      "totalSpent": 16000,
+      "wins": 1,
+      "latestAt": "2026/09/20 18:44:12",
+      "latestAtMs": 1789901052558
+    },
+    {
+      "key": "卡夫卡@巴哈姆特",
+      "name": "卡夫卡@巴哈姆特",
+      "totalDraws": 23,
+      "sessionDraws": 23,
+      "totalSpent": 1000000,
+      "wins": 16,
+      "latestAt": "2026/09/20 18:35:35",
+      "latestAtMs": 1789900535322
+    },
+    {
+      "key": "格林＠火神",
+      "name": "格林＠火神",
+      "totalDraws": 0,
+      "sessionDraws": 0,
+      "totalSpent": 400000,
+      "wins": 0,
+      "latestAt": "2026/09/20 18:34:31",
+      "latestAtMs": 1789900471266
+    },
+    {
+      "key": "鹹魚",
+      "name": "鹹魚",
+      "totalDraws": 2,
+      "sessionDraws": 2,
+      "totalSpent": 74000,
+      "wins": 1,
+      "latestAt": "2026/09/20 18:49:22",
+      "latestAtMs": 1789901362318
+    },
+    {
+      "key": "狄暄@利維坦",
+      "name": "狄暄@利維坦",
+      "totalDraws": 0,
+      "sessionDraws": 0,
+      "totalSpent": 414000,
+      "wins": 0,
+      "latestAt": "2026/09/20 18:46:15",
+      "latestAtMs": 1789901175296
+    },
+    {
+      "key": "阿爾克納",
+      "name": "阿爾克納",
+      "totalDraws": 10,
+      "sessionDraws": 10,
+      "totalSpent": 450000,
+      "wins": 6,
+      "latestAt": "2026/09/20 18:59:10",
+      "latestAtMs": 1789901950088
+    },
+    {
+      "key": "蘭花@巴哈姆特",
+      "name": "蘭花@巴哈姆特",
+      "totalDraws": 1,
+      "sessionDraws": 1,
+      "totalSpent": 8000,
+      "wins": 1,
+      "latestAt": "2026/09/20 19:02:59",
+      "latestAtMs": 1789902179953
+    },
+    {
+      "key": "歪娜兒蒂珈",
+      "name": "歪娜兒蒂珈",
+      "totalDraws": 0,
+      "sessionDraws": 0,
+      "totalSpent": 14000,
+      "wins": 0,
+      "latestAt": "2026/09/20 19:10:40",
+      "latestAtMs": 1789902640082
+    },
+    {
+      "key": "tada@奧汀",
+      "name": "Tada@奧汀",
+      "totalDraws": 15,
+      "sessionDraws": 15,
+      "totalSpent": 558000,
+      "wins": 11,
+      "latestAt": "2026/09/20 19:21:53",
+      "latestAtMs": 1789903313012
+    },
+    {
+      "key": "otan@鳳凰",
+      "name": "Otan@鳳凰",
+      "totalDraws": 2,
+      "sessionDraws": 2,
+      "totalSpent": 80000,
+      "wins": 2,
+      "latestAt": "2026/09/20 19:20:01",
+      "latestAtMs": 1789903201148
+    },
+    {
+      "key": "arkham",
+      "name": "Arkham",
+      "totalDraws": 1,
+      "sessionDraws": 1,
+      "totalSpent": 22000,
+      "wins": 0,
+      "latestAt": "2026/09/20 19:39:18",
+      "latestAtMs": 1789904358973
+    }
+  ],
+  "generatedAt": "2026/09/20 19:41:11",
+  "generatedAtMs": 1789904471861
 }
