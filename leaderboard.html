@@ -127,6 +127,7 @@
       <div class="stat"><span>單日抽獎次數</span><strong id="sessionDraws">0</strong></div>
       <div class="stat"><span>全部中獎次數</span><strong id="totalWins">0</strong></div>
       <div class="stat"><span>累計消費金額</span><strong id="totalSpent">0 G</strong></div>
+      <div class="stat"><span>單日消費</span><strong id="maxDailySpent">0 G</strong></div>
       <div class="stat"><span>上榜客人</span><strong id="playerCount">0</strong></div>
     </section>
     <div id="errorBox" class="error" hidden></div>
@@ -137,6 +138,7 @@
           <button class="chart-tab" type="button" data-field="totalDraws" aria-pressed="true">抽獎次數</button>
           <button class="chart-tab" type="button" data-field="sessionDraws" aria-pressed="false">單日抽獎次數</button>
           <button class="chart-tab" type="button" data-field="totalSpent" aria-pressed="false">總消費</button>
+          <button class="chart-tab" type="button" data-field="maxDailySpent" aria-pressed="false">單日消費</button>
           <button class="chart-tab" type="button" data-field="wins" aria-pressed="false">中獎次數</button>
         </div>
       </div>
@@ -162,6 +164,7 @@
       <section class="ranking"><div class="ranking-head"><h2>個人抽獎次數</h2><span>累計</span></div><div class="rows" id="drawRows"></div></section>
       <section class="ranking green"><div class="ranking-head"><h2>個人單日抽獎次數</h2><span id="sessionStarted">單日統計</span></div><div class="rows" id="sessionRows"></div></section>
       <section class="ranking gold"><div class="ranking-head"><h2>個人總消費</h2><span>確認收款後計入</span></div><div class="rows" id="spendRows"></div></section>
+      <section class="ranking gold"><div class="ranking-head"><h2>個人單日消費</h2><span>單日最高確認收款金額</span></div><div class="rows" id="dailySpendRows"></div></section>
       <section class="ranking"><div class="ranking-head"><h2>個人中獎次數</h2><span>不含銘謝惠顧</span></div><div class="rows" id="winRows"></div></section>
     </section>
   </main>
@@ -182,6 +185,7 @@
       totalDraws: { label:'個人抽獎次數', format:number, chartFormat:compactNumber },
       sessionDraws: { label:'個人單日抽獎次數', format:number, chartFormat:compactNumber },
       totalSpent: { label:'個人總消費', format:gil, chartFormat:compactGil },
+      maxDailySpent: { label:'個人單日消費', format:gil, chartFormat:compactGil },
       wins: { label:'個人中獎次數', format:number, chartFormat:compactNumber }
     };
     let chartPlayers = [];
@@ -196,7 +200,7 @@
         data.generatedAtMs || 0,
         data.currentSession?.id || '',
         data.totals || {},
-        players.map(player => [player.key, player.name, player.totalDraws, player.sessionDraws, player.totalSpent, player.wins, player.latestAtMs])
+        players.map(player => [player.key, player.name, player.totalDraws, player.sessionDraws, player.totalSpent, player.maxDailySpent, player.wins, player.latestAtMs])
       ]);
     }
 
@@ -352,6 +356,7 @@
       $('sessionDraws').textContent = number(totals.sessionDraws);
       $('totalWins').textContent = number(totals.totalWins);
       $('totalSpent').textContent = gil(totals.totalSpent);
+      $('maxDailySpent').textContent = gil(totals.maxDailySpent);
       $('playerCount').textContent = number(totals.players);
       $('updatedAt').textContent = `${source}｜更新時間：${data.generatedAt || new Date().toLocaleString('zh-TW')}`;
       $('sessionStarted').textContent = data.currentSession?.startedAt ? `開始：${data.currentSession.startedAt}` : '單日統計';
@@ -360,6 +365,7 @@
       renderRows('drawRows', players, 'totalDraws');
       renderRows('sessionRows', players, 'sessionDraws');
       renderRows('spendRows', players, 'totalSpent', gil);
+      renderRows('dailySpendRows', players, 'maxDailySpent', gil);
       renderRows('winRows', players, 'wins');
     }
 
