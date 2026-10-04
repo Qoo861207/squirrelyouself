@@ -11,9 +11,9 @@
   "totals": {
     "recordedDraws": 636,
     "sessionDraws": 390,
-    "totalSpent": 11225200,
+    "totalSpent": 27998800,
     "totalWins": 368,
-    "players": 43
+    "players": 44
   },
   "players": [
     {
@@ -21,7 +21,7 @@
       "name": "希珞",
       "totalDraws": 58,
       "sessionDraws": 2,
-      "totalSpent": 2338000,
+      "totalSpent": 2396000,
       "wins": 30,
       "latestAt": "2026/10/04 20:52:22",
       "latestAtMs": 1791118342520
@@ -41,17 +41,17 @@
       "name": "睏棉",
       "totalDraws": 1,
       "sessionDraws": 0,
-      "totalSpent": 30000,
+      "totalSpent": 260000,
       "wins": 0,
-      "latestAt": "2026/09/20 18:20:40",
-      "latestAtMs": 1789899640024
+      "latestAt": "2026/10/04 18:38:49",
+      "latestAtMs": 1791110329000
     },
     {
       "key": "脆果",
       "name": "脆果",
       "totalDraws": 10,
       "sessionDraws": 10,
-      "totalSpent": 414000,
+      "totalSpent": 878000,
       "wins": 7,
       "latestAt": "2026/10/04 18:34:39",
       "latestAtMs": 1791110079410
@@ -161,7 +161,7 @@
       "name": "Arkham",
       "totalDraws": 3,
       "sessionDraws": 1,
-      "totalSpent": 46000,
+      "totalSpent": 70000,
       "wins": 2,
       "latestAt": "2026/10/04 20:49:32",
       "latestAtMs": 1791118172398
@@ -311,7 +311,7 @@
       "name": "柚香月芽",
       "totalDraws": 179,
       "sessionDraws": 179,
-      "totalSpent": 16000,
+      "totalSpent": 7032000,
       "wins": 103,
       "latestAt": "2026/10/04 20:11:07",
       "latestAtMs": 1791115867383
@@ -341,17 +341,17 @@
       "name": "偌佈津楓@鳳凰",
       "totalDraws": 1,
       "sessionDraws": 0,
-      "totalSpent": 14000,
+      "totalSpent": 25200,
       "wins": 1,
-      "latestAt": "2026/09/27 20:38:08",
-      "latestAtMs": 1790512688108
+      "latestAt": "2026/10/04 18:23:20",
+      "latestAtMs": 1791109400000
     },
     {
       "key": "參參@巴哈姆特",
       "name": "參參@巴哈姆特",
       "totalDraws": 1,
       "sessionDraws": 0,
-      "totalSpent": 0,
+      "totalSpent": 16000,
       "wins": 0,
       "latestAt": "2026/09/27 20:48:48",
       "latestAtMs": 1790513328614
@@ -361,7 +361,7 @@
       "name": "米姆總統",
       "totalDraws": 9,
       "sessionDraws": 0,
-      "totalSpent": 0,
+      "totalSpent": 366400,
       "wins": 4,
       "latestAt": "2026/09/27 20:57:28",
       "latestAtMs": 1790513848047
@@ -371,7 +371,7 @@
       "name": "蒼崎雷",
       "totalDraws": 6,
       "sessionDraws": 0,
-      "totalSpent": 0,
+      "totalSpent": 258000,
       "wins": 4,
       "latestAt": "2026/09/27 21:10:44",
       "latestAtMs": 1790514644686
@@ -391,7 +391,7 @@
       "name": "無望月喵",
       "totalDraws": 1,
       "sessionDraws": 1,
-      "totalSpent": 0,
+      "totalSpent": 14000,
       "wins": 1,
       "latestAt": "2026/10/04 18:15:01",
       "latestAtMs": 1791108901710
@@ -401,7 +401,7 @@
       "name": "朝霧",
       "totalDraws": 1,
       "sessionDraws": 1,
-      "totalSpent": 0,
+      "totalSpent": 36000,
       "wins": 0,
       "latestAt": "2026/10/04 18:27:29",
       "latestAtMs": 1791109649874
@@ -411,7 +411,7 @@
       "name": "狄暄",
       "totalDraws": 21,
       "sessionDraws": 21,
-      "totalSpent": 0,
+      "totalSpent": 900000,
       "wins": 11,
       "latestAt": "2026/10/04 19:03:02",
       "latestAtMs": 1791111782063
@@ -421,17 +421,17 @@
       "name": "鹿鳴月芽",
       "totalDraws": 168,
       "sessionDraws": 168,
-      "totalSpent": 0,
+      "totalSpent": 7100000,
       "wins": 97,
-      "latestAt": "2026/10/04 20:19:04",
-      "latestAtMs": 1791116344591
+      "latestAt": "2026/10/04 20:19:24",
+      "latestAtMs": 1791116364000
     },
     {
       "key": "精彩的鳳火@鳳凰",
       "name": "精彩的鳳火@鳳凰",
       "totalDraws": 6,
       "sessionDraws": 6,
-      "totalSpent": 0,
+      "totalSpent": 250000,
       "wins": 4,
       "latestAt": "2026/10/04 20:00:04",
       "latestAtMs": 1791115204202
@@ -441,12 +441,22 @@
       "name": "雲斯頓姐姐",
       "totalDraws": 1,
       "sessionDraws": 1,
-      "totalSpent": 0,
+      "totalSpent": 16000,
       "wins": 0,
       "latestAt": "2026/10/04 20:31:51",
       "latestAtMs": 1791117111165
+    },
+    {
+      "key": "諾亞氣泡水",
+      "name": "諾亞氣泡水",
+      "totalDraws": 0,
+      "sessionDraws": 0,
+      "totalSpent": 14000,
+      "wins": 0,
+      "latestAt": "2026/10/04 18:23:16",
+      "latestAtMs": 1791109396000
     }
   ],
-  "generatedAt": "2026/10/04 21:13:29",
-  "generatedAtMs": 1791119609146
+  "generatedAt": "2026/10/04 21:22:51",
+  "generatedAtMs": 1791120171688
 }
