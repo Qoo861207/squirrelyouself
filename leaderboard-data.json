@@ -3,32 +3,32 @@
   "startedAt": "2026/09/14 14:17:57",
   "startedAtMs": 1789366677096,
   "currentSession": {
-    "id": "session-1792317986252-75bejl",
-    "startedAt": "2026/10/18 18:06:26",
-    "startedAtMs": 1792317986252,
+    "id": "session-1793526308959-rx99kj",
+    "startedAt": "2026/11/01 17:45:08",
+    "startedAtMs": 1793526308959,
     "reason": "store-open"
   },
   "totals": {
-    "recordedDraws": 788,
+    "recordedDraws": 882,
     "sessionDraws": 390,
     "maxDailyDraws": 390,
-    "totalSpent": 34892000,
+    "totalSpent": 38717600,
     "maxDailySpent": 15955200,
-    "totalWins": 451,
-    "players": 65
+    "totalWins": 508,
+    "players": 75
   },
   "players": [
     {
       "key": "希珞",
       "name": "希珞",
-      "totalDraws": 68,
+      "totalDraws": 87,
       "sessionDraws": 56,
       "maxDailyDraws": 56,
-      "totalSpent": 2826000,
+      "totalSpent": 3364000,
       "maxDailySpent": 2338000,
-      "wins": 37,
-      "latestAt": "2026/10/11 19:51:13",
-      "latestAtMs": 1791719473802
+      "wins": 45,
+      "latestAt": "2026/11/01 20:02:04",
+      "latestAtMs": 1793534524942
     },
     {
       "key": "夜蛾",
@@ -45,14 +45,14 @@
     {
       "key": "睏棉",
       "name": "睏棉",
-      "totalDraws": 2,
-      "sessionDraws": 1,
-      "maxDailyDraws": 1,
-      "totalSpent": 290000,
+      "totalDraws": 7,
+      "sessionDraws": 5,
+      "maxDailyDraws": 5,
+      "totalSpent": 520000,
       "maxDailySpent": 230000,
-      "wins": 0,
-      "latestAt": "2026/10/11 19:05:54",
-      "latestAtMs": 1791716754385
+      "wins": 4,
+      "latestAt": "2026/11/01 18:47:39",
+      "latestAtMs": 1793530059974
     },
     {
       "key": "脆果",
@@ -189,26 +189,26 @@
     {
       "key": "arkham",
       "name": "Arkham",
-      "totalDraws": 16,
+      "totalDraws": 17,
       "sessionDraws": 11,
       "maxDailyDraws": 11,
-      "totalSpent": 521200,
+      "totalSpent": 545200,
       "maxDailySpent": 432000,
-      "wins": 9,
-      "latestAt": "2026/10/18 20:58:34",
-      "latestAtMs": 1792328314574
+      "wins": 10,
+      "latestAt": "2026/11/01 19:03:28",
+      "latestAtMs": 1793531008200
     },
     {
       "key": "本本",
       "name": "本本",
-      "totalDraws": 13,
+      "totalDraws": 14,
       "sessionDraws": 10,
       "maxDailyDraws": 10,
-      "totalSpent": 556000,
+      "totalSpent": 620000,
       "maxDailySpent": 414000,
       "wins": 7,
-      "latestAt": "2026/10/11 19:16:04",
-      "latestAtMs": 1791717364595
+      "latestAt": "2026/11/01 20:29:59",
+      "latestAtMs": 1793536199113
     },
     {
       "key": "墨染心",
@@ -372,11 +372,11 @@
       "totalDraws": 179,
       "sessionDraws": 179,
       "maxDailyDraws": 179,
-      "totalSpent": 7032000,
+      "totalSpent": 7062000,
       "maxDailySpent": 6816000,
       "wins": 103,
-      "latestAt": "2026/10/04 20:11:07",
-      "latestAtMs": 1791115867383
+      "latestAt": "2026/11/01 19:56:10",
+      "latestAtMs": 1793534170447
     },
     {
       "key": "月月虎@迦樓羅",
@@ -408,11 +408,11 @@
       "totalDraws": 1,
       "sessionDraws": 1,
       "maxDailyDraws": 1,
-      "totalSpent": 53200,
-      "maxDailySpent": 14000,
+      "totalSpent": 69200,
+      "maxDailySpent": 16000,
       "wins": 1,
-      "latestAt": "2026/10/18 18:35:33",
-      "latestAtMs": 1792319733861
+      "latestAt": "2026/11/01 18:46:09",
+      "latestAtMs": 1793529969441
     },
     {
       "key": "參參@巴哈姆特",
@@ -513,14 +513,14 @@
     {
       "key": "精彩的鳳火@鳳凰",
       "name": "精彩的鳳火@鳳凰",
-      "totalDraws": 13,
+      "totalDraws": 20,
       "sessionDraws": 7,
       "maxDailyDraws": 7,
-      "totalSpent": 550000,
+      "totalSpent": 850000,
       "maxDailySpent": 300000,
-      "wins": 7,
-      "latestAt": "2026/10/18 18:47:19",
-      "latestAtMs": 1792320439358
+      "wins": 12,
+      "latestAt": "2026/11/01 19:33:31",
+      "latestAtMs": 1793532811461
     },
     {
       "key": "雲斯頓姐姐",
@@ -585,14 +585,14 @@
     {
       "key": "碳烤玉米@風神",
       "name": "碳烤玉米@風神",
-      "totalDraws": 2,
+      "totalDraws": 3,
       "sessionDraws": 2,
       "maxDailyDraws": 2,
-      "totalSpent": 58000,
+      "totalSpent": 82000,
       "maxDailySpent": 58000,
-      "wins": 1,
-      "latestAt": "2026/10/11 19:01:37",
-      "latestAtMs": 1791716497496
+      "wins": 2,
+      "latestAt": "2026/11/01 18:33:52",
+      "latestAtMs": 1793529232887
     },
     {
       "key": "fqpig@迦樓羅",
@@ -648,11 +648,11 @@
       "totalDraws": 2,
       "sessionDraws": 2,
       "maxDailyDraws": 2,
-      "totalSpent": 266000,
+      "totalSpent": 290000,
       "maxDailySpent": 266000,
       "wins": 0,
-      "latestAt": "2026/10/11 20:15:36",
-      "latestAtMs": 1791720936762
+      "latestAt": "2026/11/01 19:17:02",
+      "latestAtMs": 1793531822550
     },
     {
       "key": "莫布",
@@ -756,11 +756,11 @@
       "totalDraws": 2,
       "sessionDraws": 2,
       "maxDailyDraws": 2,
-      "totalSpent": 22000,
-      "maxDailySpent": 22000,
+      "totalSpent": 244000,
+      "maxDailySpent": 222000,
       "wins": 2,
-      "latestAt": "2026/10/18 19:46:38",
-      "latestAtMs": 1792323998688
+      "latestAt": "2026/11/01 18:41:56",
+      "latestAtMs": 1793529716049
     },
     {
       "key": "緹歐",
@@ -777,14 +777,14 @@
     {
       "key": "脆果@利維坦",
       "name": "脆果@利維坦",
-      "totalDraws": 9,
-      "sessionDraws": 9,
-      "maxDailyDraws": 9,
-      "totalSpent": 414000,
+      "totalDraws": 21,
+      "sessionDraws": 12,
+      "maxDailyDraws": 12,
+      "totalSpent": 785200,
       "maxDailySpent": 414000,
-      "wins": 6,
-      "latestAt": "2026/10/18 19:53:34",
-      "latestAtMs": 1792324414700
+      "wins": 14,
+      "latestAt": "2026/11/01 20:00:56",
+      "latestAtMs": 1793534456332
     },
     {
       "key": "愛德華@風神",
@@ -797,8 +797,128 @@
       "wins": 0,
       "latestAt": "2026/10/18 19:50:18",
       "latestAtMs": 1792324218301
+    },
+    {
+      "key": "粗線條小狗@奧汀",
+      "name": "粗線條小狗@奧汀",
+      "totalDraws": 5,
+      "sessionDraws": 5,
+      "maxDailyDraws": 5,
+      "totalSpent": 264000,
+      "maxDailySpent": 264000,
+      "wins": 5,
+      "latestAt": "2026/11/01 19:53:34",
+      "latestAtMs": 1793534014617
+    },
+    {
+      "key": "mutta@奧汀",
+      "name": "MUTTA@奧汀",
+      "totalDraws": 1,
+      "sessionDraws": 1,
+      "maxDailyDraws": 1,
+      "totalSpent": 58000,
+      "maxDailySpent": 58000,
+      "wins": 0,
+      "latestAt": "2026/11/01 18:57:27",
+      "latestAtMs": 1793530647825
+    },
+    {
+      "key": "里恩@利維坦",
+      "name": "里恩@利維坦",
+      "totalDraws": 0,
+      "sessionDraws": 0,
+      "maxDailyDraws": 0,
+      "totalSpent": 38000,
+      "maxDailySpent": 38000,
+      "wins": 0,
+      "latestAt": "2026/11/01 19:07:21",
+      "latestAtMs": 1793531241237
+    },
+    {
+      "key": "猴吱",
+      "name": "猴吱",
+      "totalDraws": 0,
+      "sessionDraws": 0,
+      "maxDailyDraws": 0,
+      "totalSpent": 16000,
+      "maxDailySpent": 16000,
+      "wins": 0,
+      "latestAt": "2026/11/01 19:19:06",
+      "latestAtMs": 1793531946465
+    },
+    {
+      "key": "美極",
+      "name": "美極",
+      "totalDraws": 2,
+      "sessionDraws": 2,
+      "maxDailyDraws": 2,
+      "totalSpent": 8000,
+      "maxDailySpent": 8000,
+      "wins": 2,
+      "latestAt": "2026/11/01 19:24:36",
+      "latestAtMs": 1793532276380
+    },
+    {
+      "key": "實祿玖",
+      "name": "實祿玖",
+      "totalDraws": 1,
+      "sessionDraws": 1,
+      "maxDailyDraws": 1,
+      "totalSpent": 72000,
+      "maxDailySpent": 72000,
+      "wins": 1,
+      "latestAt": "2026/11/01 19:47:35",
+      "latestAtMs": 1793533655562
+    },
+    {
+      "key": "墨染心@鳳凰",
+      "name": "墨染心@鳳凰",
+      "totalDraws": 1,
+      "sessionDraws": 1,
+      "maxDailyDraws": 1,
+      "totalSpent": 16000,
+      "maxDailySpent": 16000,
+      "wins": 0,
+      "latestAt": "2026/11/01 19:50:50",
+      "latestAtMs": 1793533850781
+    },
+    {
+      "key": "雪花松露水水@火神",
+      "name": "雪花松露水水@火神",
+      "totalDraws": 22,
+      "sessionDraws": 22,
+      "maxDailyDraws": 22,
+      "totalSpent": 1080000,
+      "maxDailySpent": 1080000,
+      "wins": 12,
+      "latestAt": "2026/11/01 20:10:41",
+      "latestAtMs": 1793535041690
+    },
+    {
+      "key": "憂鬱少年",
+      "name": "憂鬱少年",
+      "totalDraws": 15,
+      "sessionDraws": 15,
+      "maxDailyDraws": 15,
+      "totalSpent": 406400,
+      "maxDailySpent": 406400,
+      "wins": 9,
+      "latestAt": "2026/11/01 20:21:33",
+      "latestAtMs": 1793535693964
+    },
+    {
+      "key": "龍蝦",
+      "name": "龍蝦",
+      "totalDraws": 1,
+      "sessionDraws": 1,
+      "maxDailyDraws": 1,
+      "totalSpent": 24000,
+      "maxDailySpent": 24000,
+      "wins": 1,
+      "latestAt": "2026/11/01 21:09:30",
+      "latestAtMs": 1793538570569
     }
   ],
-  "generatedAt": "2026/10/20 23:21:51",
-  "generatedAtMs": 1792509711320
+  "generatedAt": "2026/11/05 22:08:28",
+  "generatedAtMs": 1793887708720
 }
