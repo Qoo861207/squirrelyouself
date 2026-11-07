@@ -206,6 +206,9 @@
       background: rgba(255,253,249,0.95);
       border: 1px solid rgba(181,133,96,0.16);
     }
+    .menu-card-wide {
+      grid-column: 1 / -1;
+    }
     .menu-card img,
     .menu-image-placeholder {
       width: 92px;
@@ -674,7 +677,7 @@
         key: "main",
         title: TXT.main,
         items: [
-          { name: "栗鼠肉排", price: 15000, image: "/menu-assets-webp/栗鼠肉排.webp", desc: "嚴選松老闆親戚中吃得最香、跑得最慢的上等食材，香煎至外酥內嫩，淋上祖傳黑胡椒醬。每一口都是濃濃的親情，吃完請別問老闆最近怎麼少接幾通家族電話。" },
+          { name: "栗鼠肉排", price: 20000, image: "/menu-assets-webp/栗鼠肉排.webp", desc: "嚴選松老闆親戚中吃得最香、跑得最慢的上等食材，香煎至外酥內嫩，淋上祖傳黑胡椒醬。每一口都是濃濃的親情，吃完請別問老闆最近怎麼少接幾通家族電話。", fullWidth: true },
           { name: "\u8d77\u53f8\u706b\u934b", price: 16000, image: "/menu-assets-webp/\u8d77\u53f8\u934b.webp", desc: "\u6fc3\u90c1\u4e3b\u9910\uff0c\u9069\u5408\u6162\u6162\u5403\u4e0a\u4e00\u6bb5\u3002" },
           { name: "\u5927\u6cb3\u72f8\u6f22\u5821\u7d44\u5408", price: 16000, image: "/menu-assets-webp/\u5927\u6cb3\u72f8\u6f22\u5821\u7d44\u5408.webp", desc: "\u62db\u724c\u611f\u5f88\u5f37\u7684\u4ee3\u8868\u5957\u9910\u3002" },
           { name: "\u65e9\u9910\u86cb\u5305\u98ef", price: 16000, image: "/menu-assets-webp/\u86cb\u5305\u98ef.webp", desc: "\u756b\u9762\u67d4\u548c\uff0c\u4e0a\u684c\u5c31\u5f88\u6709\u8a18\u61b6\u9ede\u3002" },
@@ -842,6 +845,7 @@
       const card = document.createElement("article");
       card.className = "menu-card";
 
+      card.classList.toggle("menu-card-wide", item.fullWidth === true);
       const image = document.createElement(item.image ? "img" : "div");
       if (item.image) {
         image.src = item.image;
